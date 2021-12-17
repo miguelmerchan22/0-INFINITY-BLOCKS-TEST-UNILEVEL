@@ -693,8 +693,6 @@ contract UnilevelSystem is Context, Admin{
       
     }
 
-    rewardReferers(_msgSender(), _value, porcientosSalida, true);
-
     Investor storage usuario = investors[_msgSender()];
 
     usuario.amount -= _value;
@@ -725,8 +723,6 @@ contract UnilevelSystem is Context, Admin{
       USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
       
     }
-
-    rewardReferers(_msgSender(), _value, porcientosSalida, true);
 
     Investor storage usuario = investors[_msgSender()];
 
