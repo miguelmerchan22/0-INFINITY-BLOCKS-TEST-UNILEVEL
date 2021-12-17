@@ -139,7 +139,6 @@ export default class CrowdFunding extends Component {
 
     var texto = inicio+"..."+fin;
 
-    document.getElementById("contract").innerHTML = '<a href="https://bscscan.com/address/'+this.props.contractAddress+'">Contract V '+this.props.version+'</a>';
     document.getElementById("login").href = `https://bscscan.com/address/${accountAddress}`;
     document.getElementById("login-my-wallet").innerHTML = texto;
 
@@ -412,47 +411,55 @@ export default class CrowdFunding extends Component {
     var {options} = this.state;
 
     return (
-      <div className="card wow bounceInUp text-center col-md-7" >
-        <div className="card-body">
-          <h5 className="card-title" id="contract" >Contract V {this.props.version}</h5>
-
-          <table className="table borderless">
-            <tbody>
-            <tr>
-              <td><i className="fa fa-check-circle-o text-success"></i>ROI </td><td>{this.state.porcentaje}%</td>
-            </tr>
-            <tr>
-              <td><i className="fa fa-check-circle-o text-success"></i>Earn</td><td>{(this.state.porcentaje)-100}%</td>
-            </tr>
-            </tbody>
-          </table>
-
-          <div className="form-group">Wallet
-          <p className="card-text">
-            <strong>{this.state.accountAddress}</strong><br />
-          </p>
-          <p className="card-text ">
-        
-            USDT: <strong>{this.state.balanceSite}</strong><br />
-
-          </p>
-
-          <h4>Plan Staking</h4>
-          <div className="input-group sm-3 text-center">
-            <Select options={options}  onChange={this.handleChangeUSDT} className="form-control mb-20 h-auto" />
-          </div>
-
-            <p className="card-text">At least 0.03 BNB to make any transactions</p>
-            <p className="card-text">Partner:<br />
-            <strong className="text-danger">{this.state.partner}</strong></p>
-
-            <button className="btn btn-lg btn-success" onClick={() => this.deposit()}>{this.state.deposito}</button>
-
-          </div>
-
-        </div>
-      </div>
-
+      <div class="row">
+                <div class="col s12">
+                    <div class="container">
+                        <div class="row vertical-modern-dashboard">
+                            <div class="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
+                                <div class="row">
+                                    <div class="col s2 m2 center-align">
+                                        <i class="material-icons background-round mt-1 mb-0">perm_identity</i>
+                                        <p class="mb-0">Blocks</p>
+                                    </div>
+                                    <div class="col s3 m2 center-align">
+                                        <h5 class="mb-0 white-text">X</h5>
+                                    </div>
+                                    <div class="col s2 m2 center-align">
+                                        <input type="number" class="form-control center-align white-text" value="5" />
+                                        <p class="mb-0">Quantity</p>
+                                    </div>
+                                    <div class="col s2 m2 center-align">
+                                        <h5 class="mb-0 white-text">=</h5>
+                                    </div>
+                                    <div class="col s2 m2 center-align">
+                                        <input type="number" class="form-control center-align white-text" value="500" />
+                                        <p class="mb-0">Total</p>
+                                    </div>
+                                    <div class="col s2 m2 center-align mt-1">
+                                        <button class="mb-6 btn waves-effect waves-light cyan"  onClick={() => this.deposit()}>Buy</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col s12 m12 l12 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
+                                <div class="row">
+                                    
+                                    <div class="col s12 m6 center-align">
+                                        <i class="material-icons background-round mt-1 mb-0">perm_identity</i>
+                                        <p class="mb-0 center-align break">Upline: <br /> {this.state.partner}</p>
+                                    </div>
+                                    <div class="col s12 m6 center-align">
+                                        <i class="material-icons background-round mt-1 mb-4">perm_identity</i>
+                                        <br />
+                                        <button class="mb-6 btn waves-effect waves-light cyan">Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-overlay"></div>
+                </div>
+            </div>
 
     );
   }

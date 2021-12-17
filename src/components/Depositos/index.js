@@ -200,14 +200,31 @@ export default class Depositos extends Component {
         
 
         listaDepositos[depositos.amount.length-i] = (
-          <div className="box" key={"depsits-"+i}>
-          <h3 className="title">{(depositos.amount[i]/10**18)/porcent} USDT</h3>
-            Estimate time <b>{fecha}</b>
+          <div className="col s12 m12 l12" key={"depsits-"+i}>
+            <div id="basic-demo" class="card card-tabs">
+                <div class="card-content">
+                    <div class="card-title">
+                        <div class="row">
+                            <div class="col s12 m6 l10">
+                                <h4 class="card-title">{(depositos.amount[i]/10**18)/porcent} USDT |  Estimate time <b>{fecha} | {proceso}</b></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="view-basic-demo">
+                        <div class="row">
+                            <div class="col s12">
+                                <input type="range" id="range_01" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
           <div className="progress" style={{"height": "20px"}}>
             <div className="progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{"width": porcentiempo+"%"}} aria-valuenow={this.state.porcentiempo} aria-valuemin="0" aria-valuemax="100"></div>
           </div>
           <br></br>
-          {proceso}
+          
     
     
         </div>
@@ -320,26 +337,10 @@ export default class Depositos extends Component {
 
     return (
 
-      <div className="container">
+      <div className="row">
 
-        <header style={{'textAlign': 'center'}} className="section-header">
-          <h3 className="white">
-            <i className="fa fa-university mr-2" aria-hidden="true"></i>
-            <span style={{'fontWeight': 'bold'}}>
-              Deposits:
-            </span>
-          </h3>
-          <div className="row text-center">
-            <div className="col-md-12 col-lg-10 offset-lg-1 wow bounceInUp" data-wow-duration="1s">
               {this.state.depositos}
-              
-            </div>
-          </div>
-
-
-        </header>
-
-
+          
       </div>
 
     );

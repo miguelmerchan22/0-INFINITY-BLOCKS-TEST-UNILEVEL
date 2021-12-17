@@ -425,117 +425,154 @@ export default class Oficina extends Component {
 
     return (
 
-      <div className="container">
-
-        <header style={{'textAlign': 'center'}} className="section-header">
-          <h3 className="white">
-            <i className="fa fa-user mr-2" aria-hidden="true"></i>
-            <span style={{'fontWeight': 'bold'}}>
-              My Office:
-            </span>
-          </h3>
-          <div className="row text-center">
-            <div className="col-md-12 col-lg-10 offset-lg-1 wow bounceInUp" data-wow-duration="1s">
-              <div className="box">
-                <h4 className="title"><a href={"https://tronscan.io/#/address/"+direccion} style={{"wordWrap": "break-word"}}>{direccion}</a></h4>
-                <h3><b>Range:</b> {rango} <button className={"btn "+this.state.rangoEstilo} onClick={this.state.funcionRango}>{this.state.gananciasRango}</button></h3>
-                <br></br>
-                <b>{(this.state.withdrawn+available).toFixed(2)} USDT</b> Earning up to <b>{this.state.valorPlan} USDT</b>
-                <div className="progress" style={{"height": "20px"}}>
-                  <div className="progress-bar bg-info " role="progressbar" style={{"width": this.state.progresoUsdt+"%"}} aria-valuenow={this.state.progresoUsdt} aria-valuemin="0" aria-valuemax="100">{this.state.progresoUsdt+"%"}</div>
-                </div>
-    
-                <div className="progress" style={{"height": "20px"}}>
-                  <div className="progress-bar bg-warning " role="progressbar" style={{"width": this.state.progresoRetiro+"%"}} aria-valuenow={this.state.progresoRetiro} aria-valuemin="0" aria-valuemax="100">{this.state.progresoRetiro+"%"}</div>
-                </div>
-                Claimed <b>{(this.state.withdrawn).toFixed(2)} USDT</b>
-
-                <br></br>
-                <button type="button" className="btn btn-success d-block text-center mx-auto mt-1" onClick={() => document.getElementById("why-us").scrollIntoView({block: "end", behavior: "smooth"}) }>Upgrade Plan</button>
+      <div class="row">
+      <div class="content-wrapper-before blue-grey lighten-5"></div>
+      <div class="col s12">
+          <div class="container">
+              <div class="section">
 
 
+          
+                  <div class="row">
+
+                  <div class="col s12 m6 l6 card-width">
+                  <div class="card card-border center-align gradient-45deg-indigo-purple">
+                      <div class="card-content white-text">
+                          <div class="col s12"><i class="material-icons right">favorite</i></div>
+                          <h5 class="white-text mb-1">Membership</h5>
+                          <p class="m-0">13 Dec 2021</p>
+                          <a class="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">Buy $30/AN</a>
+                      </div>
+                  </div>
               </div>
-            </div>
+              <div class="col s12 s6 m6">
+                <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
+                  <div class="card-content center">
+                    <img src="app-assets/images/icon/apple-watch.png" alt="images" class="width-40" />
+                    <h5 class="m-0 white-text lighten-4 mt-6">Rank</h5>
+                    <p class="white-text lighten-4"></p>
+                  </div>
+                </div>
+              </div>
 
-            <div className="col-md-5 offset-lg-1" >
-              <h3 className="white" style={{'fontWeight': 'bold'}}><i className="fa fa-arrow-left mr-2" aria-hidden="true"></i>Left leg</h3>
-              <h6 className="white" style={{'padding': '1.5em', 'fontSize': '11px'}}><a href={link}>{link}</a> <br /><br />
-              <CopyToClipboard text={link}>
-                <button type="button" className="btn btn-info">COPY</button>
-              </CopyToClipboard>
-              </h6>
-              <hr></hr>
-            </div>
+                      <div class="col s12 m12 l12">
+                          <div class="card card-border center-align gradient-45deg-purple-deep-orange">
+                            <div class="card-content white-text">
+                                <img class="responsive-img circle z-depth-4" width="100" src="app-assets/images/user/2.jpg" alt="images" />
+                                <p class="m-0 break">{this.state.currentAccount}</p>
+                                <h4 class="white-text">Migel Merchan</h4>
+                                <div class="row mt-5">
+                                    <a href="#" class="col s4">
+                                        <h5 class="gradient-45deg-indigo-light-blue icon-background circle white-text z-depth-3 mx-auto">
+                                            <i class="fab fa-behance"></i>
+                                        </h5>
+                                        <p class="white-text">12.8k</p>
+                                        <p class="white-text">Profit</p>
+                                    </a>
+                                    <a href="#" class="col s4">
+                                        <h5 class="icon-background circle gradient-45deg-indigo-blue white-text z-depth-3 mx-auto">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </h5>
+                                        <p class="white-text">10.1k</p>
+                                        <p class="white-text">Infinity</p>
+                                    </a>
+                                    <a href="#" class="col s4">
+                                        <h5 class="icon-background circle gradient-45deg-red-pink white-text z-depth-3 mx-auto">
+                                            <i class="fab fa-pinterest-p"></i>
+                                        </h5>
+                                        <p class="white-text">8.23k</p>
+                                        <p class="white-text">Network</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
-            <div className="col-md-5 " >
-              <h3 className="white" style={{'fontWeight': 'bold'}}>Right leg <i className="fa fa-arrow-right mr-2" aria-hidden="true"></i></h3>
-              <h6 className="white" style={{'padding': '1.5em', 'fontSize': '11px'}}><a href={link2}>{link2}</a> <br /><br />
-              <CopyToClipboard text={link2}>
-                <button type="button" className="btn btn-info">COPY</button>
-              </CopyToClipboard>
-              </h6>
-              <hr></hr>
-            </div>
-          </div>
-
-        </header>
-
-        <div className="row text-center">
-          <div className="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1s">
-            <div className="box">
-              <div className="icon"><i className="ion-ios-paper-outline" style={{color: '#3fcdc7'}}></i></div>
-              <p className="description">Left team ({this.state.personasIzquierda})</p>
-              <h4 className="title"><a href="#services">Available {this.state.puntosEfectivosIzquierda/2} pts</a></h4>
-              <p className="description">Used {this.state.puntosReclamadosIzquierda/2} pts</p>
-              <hr />
-              <p className="description">Total {this.state.puntosIzquierda/2} pts</p>
-
-
-            </div>
-          </div>
-          <div className="col-md-6 col-lg-5 wow bounceInUp" data-wow-delay="0.1s" data-wow-duration="1s">
-            <div className="box">
-              <div className="icon"><i className="ion-ios-paper-outline" style={{color: '#3fcdc7'}}></i></div>
-              <p className="description">Right team ({this.state.personasDerecha})</p>
-              <h4 className="title"><a href="#services">Available {this.state.puntosEfectivosDerecha/2} pts</a></h4>
-              <p className="description">Used {this.state.puntosReclamadosDerecha/2} pts</p>
-              <hr />
-              <p className="description">Total {this.state.puntosDerecha/2} pts</p>
-
-            </div>
-          </div>
-
-          <div className="col-md-6 col-lg-5 offset-lg-1 wow bounceInUp" data-wow-duration="1s">
-            <div className="box">
-              <div className="icon"><i className="ion-ios-speedometer-outline" style={{color: '#ff689b'}}></i></div>
+                      </div>
+                     
+                  </div>
+                  
+                  <div id="card-stats" class="pt-0">
+                      <div class="row">
+                          <div class="col s12 m6 l6 xl3">
+                              <div class="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text animate fadeLeft">
+                                  <div class="padding-4">
+                                      <div class="row">
+                                          <div class="col s7 m5">
+                                              <i class="material-icons background-round mt-5">add_shopping_cart</i>
+                                              <p>Account</p>
+                                          </div>
+                                          <div class="col s5 m7 right-align">
+                                              <h5 class="mb-0 white-text">{invested/50} BLKS</h5>
+                                              <p class="no-margin">Total invested</p>
+                                              <p>${invested}</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col s12 m6 l6 xl3">
+                              <div class="card gradient-45deg-red-pink gradient-shadow min-height-100 white-text animate fadeLeft">
+                                  <div class="padding-4">
+                                      <div class="row">
+                                          <div class="col s5 m5">
+                                              <i class="material-icons background-round mt-5">perm_identity</i>
+                                          </div>
+                                          <div class="col s7 m7 right-align mb-7">
+                                              <h5 class="mb-0 white-text">1885</h5>
+                                              <p class="no-margin">Passive Gain</p>
+                                          </div>
+                                          <div class="col s12 m12">
+                                            <button class="waves-effect waves-light btn mb-1 mr-1 ancho100">Withdraw</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col s12 m6 l6 xl3">
+                              <div class="card gradient-45deg-amber-amber gradient-shadow min-height-100 white-text animate fadeRight">
+                                  <div class="padding-4">
+                                      <div class="row">
+                                          <div class="col s5 m5">
+                                              <i class="material-icons background-round mt-5">timeline</i>
+                                          </div>
+                                          <div class="col s7 m7 left-align p-0 mb-6 pr-3">
+                                              <h5 class="mb-0 white-text">$80</h5>
+                                              <p class="no-margin">Network Bonus</p>
+                                          </div>
+                                          <div class="col s12 m12">
+                                            <button class="mb-2 btn waves-effect waves-light amber darken-4 ancho100">Withdraw</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col s12 m6 l6 xl3">
+                              <div class="card gradient-45deg-green-teal gradient-shadow min-height-100 white-text animate fadeRight">
+                                  <div class="padding-4">
+                                      <div class="row">
+                                          <div class="col s5 m5">
+                                              <i class="material-icons background-round mt-5">attach_money</i>
+                                              <p>Account</p>
+                                          </div>
+                                          <div class="col s7 m7 left-align p-0 pr-2">
+                                              <h5 class="mb-0 white-text">{(this.state.withdrawn).toFixed(2)/50} BLKS</h5>
+                                              <p class="no-margin">Infinity earned</p>
+                                              <p class="right-align pr-8">${(this.state.withdrawn).toFixed(2)}</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               
-              <h4 className="title"><a href="#services">Available {available} USDT</a></h4>
-                
-              <button type="button" className="btn btn-info d-block text-center mx-auto mt-1" onClick={() => this.withdraw()}>Withdrawable ~ {ret} USDT</button>
                  
-              
-              <hr></hr>
-              <p className="description">earned <b>{(this.state.withdrawn).toFixed(2)} USDT</b> </p>
-              <p className="description">Total invested <b>{invested} USDT</b> </p>
-            </div>
+              </div>
+            
           </div>
-          <div className="col-md-6 col-lg-5 wow bounceInUp" data-wow-duration="1s">
-            <div className="box">
-              <div className="icon"><i className="ion-ios-analytics-outline" style={{color: '#ff689b'}}></i></div>
-              <p className="description">Bonus </p>
-              <h4 className="title"><a href="#services">{(this.state.balanceRef+this.state.bonusBinario+this.state.balanceSal).toFixed(2)} USDT</a></h4>
-              <hr></hr>
-              <p className="description">({this.state.directos}) Referral direct <b>{(this.state.balanceRef).toFixed(2)} USDT</b> </p>
-              <p className="description">({(this.state.personasDerecha*1)+(this.state.personasIzquierda*1)}) Binary earn <b>{(this.state.bonusBinario).toFixed(2)} USDT</b> </p>
-              <p className="description">Earn over interest <b>{(balanceSal).toFixed(2)} USDT</b> </p>
-
-              
-            </div>
-          </div>
-
-        </div>
-
+          <div class="content-overlay"></div>
       </div>
+  </div>    
 
     );
   }
