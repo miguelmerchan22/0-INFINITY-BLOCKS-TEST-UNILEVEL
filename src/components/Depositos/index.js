@@ -186,15 +186,15 @@ export default class Depositos extends Component {
         var proceso;
         if (depositos.activo[i]  && ((depositos.amount[i]/10**18)*(porcentiempo/100)) < (depositos.amount[i]/10**18)) {
           if (depositos.pasivo[i]  ) {
-            proceso = <b>Plan Binary (ACTIVE)</b> 
+            proceso = <b> (ACTIVE)</b> 
           } else {
-            proceso = <b>Plan FREE Binary (ACTIVE)</b> 
+            proceso = <b> (ACTIVE)</b> 
           }
         }else{
           if (depositos.pasivo[i]  ) {
-            proceso = <b>Plan Binario (FINALIZED)</b> 
+            proceso = <b> (FINALIZED)</b> 
           }else{
-            proceso = <b>Plan FREE Binario (FINALIZED)</b> 
+            proceso = <b> (FINALIZED)</b> 
           }
         }
         
@@ -206,7 +206,7 @@ export default class Depositos extends Component {
                     <div className="card-title">
                         <div className="row">
                             <div className="col s12 m6 l10">
-                                <h4 className="card-title">{(depositos.amount[i]/10**18)/porcent} USDT |  Time <b>{fecha} | {proceso}</b></h4>
+                                <h4 className="card-title"><b>{((depositos.amount[i]/10**18)/porcent)/50}</b> BLKS |  Time <b>{fecha} | {proceso}</b></h4>
                             </div>
                         </div>
                     </div>
