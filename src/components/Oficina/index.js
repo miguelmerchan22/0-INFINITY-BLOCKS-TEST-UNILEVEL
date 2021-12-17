@@ -381,8 +381,11 @@ export default class Oficina extends Component {
   render() {
     var { available, invested,  direccion, rango, balanceSal} = this.state;
 
-    available = (available+balanceSal).toFixed(2);
+    available = (available).toFixed(2);
     available = parseFloat(available);
+
+    balanceSal = (balanceSal).toFixed(2);
+    balanceSal = parseFloat(balanceSal);
 
     invested = invested.toFixed(2);
     invested = parseFloat(invested);
@@ -402,8 +405,6 @@ export default class Oficina extends Component {
           <div className="container">
               <div className="section">
 
-
-          
                   <div className="row">
 
                   <div className="col s12 m6 l6">
@@ -412,29 +413,7 @@ export default class Oficina extends Component {
                                 <img className="responsive-img circle z-depth-4" width="100" src="app-assets/images/user/2.jpg" alt="images" />
                                 <p className="m-0 break">{this.state.currentAccount}</p>
                                 <h4 className="white-text">Migel Merchan</h4>
-                                <div className="row mt-5">
-                                    <a href="#" className="col s4">
-                                        <h5 className="gradient-45deg-indigo-light-blue icon-background circle white-text z-depth-3 mx-auto">
-                                            <i className="fab fa-behance"></i>
-                                        </h5>
-                                        <p className="white-text">12.8k</p>
-                                        <p className="white-text">Profit</p>
-                                    </a>
-                                    <a href="#" className="col s4">
-                                        <h5 className="icon-background circle gradient-45deg-indigo-blue white-text z-depth-3 mx-auto">
-                                            <i className="fab fa-linkedin-in"></i>
-                                        </h5>
-                                        <p className="white-text">10.1k</p>
-                                        <p className="white-text">Infinity</p>
-                                    </a>
-                                    <a href="#" className="col s4">
-                                        <h5 className="icon-background circle gradient-45deg-red-pink white-text z-depth-3 mx-auto">
-                                            <i className="fab fa-pinterest-p"></i>
-                                        </h5>
-                                        <p className="white-text">8.23k</p>
-                                        <p className="white-text">Network</p>
-                                    </a>
-                                </div>
+                                
                             </div>
                         </div>
 
@@ -444,9 +423,13 @@ export default class Oficina extends Component {
                     <div className="col s12 s6 m6">
                       <div className="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
                         <div className="card-content center">
-                          <img src="app-assets/images/icon/apple-watch.png" alt="images" className="width-40" />
+                          <img src="app-assets/images/icon/apple-watch.png" alt="images" className="width-20" />
                           <h5 className="m-0 white-text lighten-4 mt-6">Rank</h5>
-                          <p className="white-text lighten-4"></p>
+                          <p className="white-text lighten-4">
+
+                            <button className="mb-2 btn waves-effect waves-light amber darken-4 ancho100">Claim</button>
+                                       
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -482,11 +465,11 @@ export default class Oficina extends Component {
                                               <i className="material-icons background-round mt-5">perm_identity</i>
                                           </div>
                                           <div className="col s7 m7 right-align mb-7">
-                                              <h5 className="mb-0 white-text">1885</h5>
+                                              <h5 className="mb-0 white-text">$ {available}</h5>
                                               <p className="no-margin">Passive Gain</p>
                                           </div>
                                           <div className="col s12 m12">
-                                            <button className="waves-effect waves-light btn mb-1 mr-1 ancho100">Withdraw</button>
+                                            <button className="waves-effect waves-light btn mb-1 mr-1 ancho100" onClick={() => this.withdraw()}>Withdraw</button>
                                           </div>
                                       </div>
                                   </div>
@@ -500,7 +483,7 @@ export default class Oficina extends Component {
                                               <i className="material-icons background-round mt-5">timeline</i>
                                           </div>
                                           <div className="col s7 m7 left-align p-0 mb-6 pr-3">
-                                              <h5 className="mb-0 white-text">$80</h5>
+                                              <h5 className="mb-0 white-text">$ {balanceSal}</h5>
                                               <p className="no-margin">Network Bonus</p>
                                           </div>
                                           <div className="col s12 m12">
