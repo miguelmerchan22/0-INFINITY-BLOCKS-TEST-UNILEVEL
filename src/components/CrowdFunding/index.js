@@ -52,8 +52,6 @@ export default class CrowdFunding extends Component {
     });
   }
 
-
-
   async componentDidMount() {
     if (typeof window.ethereum !== 'undefined') {           
       var resultado = await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -297,9 +295,8 @@ export default class CrowdFunding extends Component {
       window.alert("Balance approval for exchange: successful");
       return;
     }
-
-    var amount = await this.props.wallet.contractBinary.methods.plans(valueUSDT).call({from:this.state.currentAccount});
-    amount = amount/10**18;
+    var blokes = document.getElementById("a").value;
+    var amount = blokes *50;
     amount = amount-balance;
 
     if ( aprovado > 0 && 
@@ -328,14 +325,6 @@ export default class CrowdFunding extends Component {
                 get[tmp[0]] = unescape(decodeURI(tmp[1]));
             }
 
-            if (get['hand']){
-              
-              tmp = get['hand'].split('#');
-  
-              if (tmp[0] === "right") {
-                hand = 1;
-              }
-            }
 
             if (get['ref']) {
               tmp = get['ref'].split('#');
@@ -353,8 +342,8 @@ export default class CrowdFunding extends Component {
           
         }
 
-        if(!investors.registered && sponsor !== "0x0000000000000000000000000000000000000000"){
-          var reg = this.props.wallet.contractBinary.methods.registro(sponsor, hand).send({from:this.state.currentAccount});
+        if(!investors.registered ){// && sponsor !== "0x0000000000000000000000000000000000000000"){
+          var reg = this.props.wallet.contractBinary.methods.registro(sponsor, "migel merchan").send({from:this.state.currentAccount});
           reg.then(() => window.alert("congratulation registration: successful"));
           return;
         }else{
@@ -365,7 +354,7 @@ export default class CrowdFunding extends Component {
           
         }
 
-        if(sponsor !== "0x0000000000000000000000000000000000000000" && investors.registered && await this.props.wallet.contractBinary.methods.active(valueUSDT).call({from:this.state.currentAccount}) ){
+        if(/*sponsor !== "0x0000000000000000000000000000000000000000" && */investors.registered ){
         
           var userWithdrable = await this.props.wallet.contractBinary.methods.withdrawable(this.state.currentAccount).call({from:this.state.currentAccount});
           var MIN_RETIRO = await this.props.wallet.contractBinary.methods.MIN_RETIRO().call({from:this.state.currentAccount});
@@ -391,22 +380,17 @@ export default class CrowdFunding extends Component {
             }
           
           }else{
-              this.props.wallet.contractBinary.methods.buyPlan(valueUSDT).send({from:this.state.currentAccount})
+              this.props.wallet.contractBinary.methods.buyBlocks(blokes).send({from:this.state.currentAccount})
               .then(() => {
                 window.alert("Felicidades inversión exitosa");
-                document.getElementById("services").scrollIntoView({block: "start", behavior: "smooth"})
               });
   
           }
           
         }else{
-          if (await this.props.wallet.contractBinary.methods.active(valueUSDT).call({from:this.state.currentAccount}) === false) {
-            window.alert("Please select an active plan");
-          } else {
+  
             window.alert("Please use referral link to buy a plan");
-          }
-
-          
+  
         }
           
     }else{
@@ -428,59 +412,59 @@ export default class CrowdFunding extends Component {
     var {options} = this.state;
 
     return (
-      <div class="row">
-                <div class="col s12">
-                    <div class="container">
-                        <div class="row vertical-modern-dashboard">
-                            <div class="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
-                                <div class="row">
-                                    <div class="col s2 m2 center-align">
-                                        <i class="material-icons background-round mt-1 mb-0">perm_identity</i>
-                                        <p class="mb-0">Blocks</p>
+      <div className="row">
+                <div className="col s12">
+                    <div className="container">
+                        <div className="row vertical-modern-dashboard">
+                            <div className="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
+                                <div className="row">
+                                    <div className="col s2 m2 center-align">
+                                        <i className="material-icons background-round mt-1 mb-0">perm_identity</i>
+                                        <p className="mb-0">Blocks</p>
                                     </div>
-                                    <div class="col s3 m2 center-align">
-                                        <h5 class="mb-0 white-text">X</h5>
+                                    <div className="col s3 m2 center-align">
+                                        <h5 className="mb-0 white-text">X</h5>
                                     </div>
-                                    <div class="col s2 m2 center-align">
-                                        <input id="a" type="number" class="form-control center-align white-text" value={this.state.cantidadBlokes} onChange={this.handleChangeA}  />
-                                        <p class="mb-0">Quantity</p>
+                                    <div className="col s2 m2 center-align">
+                                        <input id="a" type="number" className="form-control center-align white-text" value={this.state.cantidadBlokes} onChange={this.handleChangeA}  />
+                                        <p className="mb-0">Quantity</p>
                                     </div>
-                                    <div class="col s2 m2 center-align">
-                                        <h5 class="mb-0 white-text">=</h5>
+                                    <div className="col s2 m2 center-align">
+                                        <h5 className="mb-0 white-text">=</h5>
                                     </div>
-                                    <div class="col s2 m2 center-align">
-                                        <input id="b" type="number" class="form-control center-align white-text" value={this.state.valorBlokes} onChange={this.handleChangeB} />
-                                        <p class="mb-0">Total</p>
+                                    <div className="col s2 m2 center-align">
+                                        <input id="b" type="number" className="form-control center-align white-text" value={this.state.valorBlokes} onChange={this.handleChangeB} />
+                                        <p className="mb-0">Total</p>
                                     </div>
-                                    <div class="col s2 m2 center-align mt-1">
-                                        <button class="mb-6 btn waves-effect waves-light cyan"  onClick={() => this.deposit()}>Buy</button>
+                                    <div className="col s2 m2 center-align mt-1">
+                                        <button className="mb-6 btn waves-effect waves-light cyan"  onClick={() => this.deposit()}>Buy</button>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col s12 m6 l6 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
-                                <div class="row">
+                            <div className="col s12 m6 l6 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
+                                <div className="row">
                                     
-                                    <div class="col s12 m12 center-align">
-                                        <i class="material-icons background-round mt-1 mb-0">perm_identity</i>
-                                        <p class="mb-0 center-align break">Upline: <br /> {this.state.partner}</p>
+                                    <div className="col s12 m12 center-align">
+                                        <i className="material-icons background-round mt-1 mb-0">perm_identity</i>
+                                        <p className="mb-0 center-align break">Upline: <br /> {this.state.partner}</p>
                                     </div>
 
                                 </div>
                             </div>
-                            <div class="col s12 m6 l6 card-width">
-                              <div class="card card-border center-align gradient-45deg-indigo-purple">
-                                  <div class="card-content white-text">
-                                      <div class="col s12"><i class="material-icons right">favorite</i></div>
-                                      <h5 class="white-text mb-1">Membership</h5>
-                                      <p class="m-0">13 Dec 2021</p>
-                                      <a class="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">Buy $30/AN</a>
+                            <div className="col s12 m6 l6 card-width">
+                              <div className="card card-border center-align gradient-45deg-indigo-purple">
+                                  <div className="card-content white-text">
+                                      <div className="col s12"><i className="material-icons right">favorite</i></div>
+                                      <h5 className="white-text mb-1">Membership</h5>
+                                      <p className="m-0">13 Dec 2021</p>
+                                      <a className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">Buy $30/AN</a>
                                   </div>
                               </div>
                           </div>
                         </div>
                     </div>
-                    <div class="content-overlay"></div>
+                    <div className="content-overlay"></div>
                 </div>
             </div>
 

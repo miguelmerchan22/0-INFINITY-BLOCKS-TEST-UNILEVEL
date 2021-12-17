@@ -466,8 +466,8 @@ contract UnilevelSystem is Context, Admin{
 
     uint256 _value = plans[_plan];
 
-    usuario.depositos.push(Deposito(block.timestamp, _value.mul(porcent.div(100)), false));
-    usuario.amount += _value.mul(porcent.div(100));
+    usuario.depositos.push(Deposito(block.timestamp, (_value.mul(porcent)).div(100), false));
+    usuario.amount += (_value.mul(porcent)).div(100);
 
 
     return true;
@@ -536,9 +536,9 @@ contract UnilevelSystem is Context, Admin{
         }
       }
 
-      usuario.depositos.push(Deposito(block.timestamp,_value.mul(porcent.div(100)), true));
+      usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100), true));
       usuario.invested += _value;
-      usuario.amount += _value.mul(porcent.div(100));
+      usuario.amount += (_value.mul(porcent)).div(100);
 
       totalInvested += _value;
 
@@ -556,7 +556,7 @@ contract UnilevelSystem is Context, Admin{
    function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
 
-    amount = user.blokesDirectos;//canditad de blokesDirectos
+    amount = user.blokesDirectos*PRECIO_BLOCK;//canditad de blokesDirectos
   
   
   }

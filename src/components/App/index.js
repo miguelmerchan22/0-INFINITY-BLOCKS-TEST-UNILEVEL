@@ -7,7 +7,7 @@ import TronLinkGuide from "../TronLinkGuide";
 import cons from "../../cons"
 
 import abiToken from "../../token";
-import abiBinario from "../../binary";
+import abiBinario from "../../unilevel";
 
 const addressToken = cons.TOKEN;
 const addressBinary = cons.SC2;

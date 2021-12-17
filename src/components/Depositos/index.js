@@ -201,18 +201,18 @@ export default class Depositos extends Component {
 
         listaDepositos[depositos.amount.length-i] = (
           <div className="col s12 m12 l12" key={"depsits-"+i}>
-            <div id="basic-demo" class="card card-tabs">
-                <div class="card-content">
-                    <div class="card-title">
-                        <div class="row">
-                            <div class="col s12 m6 l10">
-                                <h4 class="card-title">{(depositos.amount[i]/10**18)/porcent} USDT |  Estimate time <b>{fecha} | {proceso}</b></h4>
+            <div id="basic-demo" className="card card-tabs">
+                <div className="card-content">
+                    <div className="card-title">
+                        <div className="row">
+                            <div className="col s12 m6 l10">
+                                <h4 className="card-title">{(depositos.amount[i]/10**18)/porcent} USDT |  Time <b>{fecha} | {proceso}</b></h4>
                             </div>
                         </div>
                     </div>
                     <div id="view-basic-demo">
-                        <div class="row">
-                            <div class="col s12">
+                        <div className="row">
+                            <div className="col s12">
                                 <input type="range" id="range_01" />
                             </div>
                         </div>
@@ -265,44 +265,7 @@ export default class Depositos extends Component {
 
   async Investors3() {
 
-    var {balanceRef, my, almacen, directos, valorPlan } = this.state;
-
-    //Personas y puntos totales
-    let puntos = await this.props.wallet.contractBinary.methods.personasBinary(this.state.currentAccount).call({from:this.state.currentAccount});
-
-    // monto de bonus y puntos efectivos
-    let bonusBinario = await this.props.wallet.contractBinary.methods.withdrawableBinary(this.state.currentAccount).call({from:this.state.currentAccount});
-  
-    var available = (balanceRef+my+almacen);
-
-    if(directos >= 2 && available < valorPlan ){
-      bonusBinario.amount = bonusBinario.amount/10**18;
-    }else{
-      bonusBinario.amount = 0;
-    }
-
-    let brazoIzquierdo = await this.props.wallet.contractBinary.methods.handLeft(this.state.currentAccount).call({from:this.state.currentAccount});
-
-    let brazoDerecho = await this.props.wallet.contractBinary.methods.handRigth(this.state.currentAccount).call({from:this.state.currentAccount});
-
-    //console.log(brazoDerecho);
-
-    this.setState({
-      personasIzquierda: puntos.pLeft,
-      personasDerecha: puntos.pRigth,
-
-      puntosIzquierda: puntos.left/10**18,
-      puntosDerecha: puntos.rigth/10**18,
-
-      bonusBinario: bonusBinario.amount,
-
-      puntosEfectivosIzquierda: bonusBinario.left/10**18,
-      puntosEfectivosDerecha: bonusBinario.rigth/10**18,
-
-      puntosReclamadosIzquierda: brazoIzquierdo.reclamados/10**18,
-      puntosReclamadosDerecha: brazoDerecho.reclamados/10**18
-
-    });
+    
 
   };
 

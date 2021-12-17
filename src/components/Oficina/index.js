@@ -209,25 +209,9 @@ export default class Oficina extends Component {
 
     var {directos, valorPlan } = this.state;
 
-    //Personas y puntos totales
-    let puntos = await this.props.wallet.contractBinary.methods.personasBinary(this.state.currentAccount).call({from:this.state.currentAccount});
-
-    // monto de bonus y puntos efectivos
-    let bonusBinario = await this.props.wallet.contractBinary.methods.withdrawableBinary(this.state.currentAccount).call({from:this.state.currentAccount});
-  
     var available = await this.props.wallet.contractBinary.methods.withdrawable(this.state.currentAccount).call({from:this.state.currentAccount});
 
     available = available/10**18;
-
-    if(directos >= 2 && available < valorPlan ){
-      bonusBinario.amount = bonusBinario.amount/10**18;
-    }else{
-      bonusBinario.amount = 0;
-    }
-
-    let brazoIzquierdo = await this.props.wallet.contractBinary.methods.handLeft(this.state.currentAccount).call({from:this.state.currentAccount});
-
-    let brazoDerecho = await this.props.wallet.contractBinary.methods.handRigth(this.state.currentAccount).call({from:this.state.currentAccount});
 
     //console.log(brazoDerecho);
 
@@ -237,19 +221,6 @@ export default class Oficina extends Component {
 
 
     this.setState({
-      personasIzquierda: puntos.pLeft,
-      personasDerecha: puntos.pRigth,
-
-      bonusBinario: bonusBinario.amount,
-
-      puntosEfectivosIzquierda: bonusBinario.left/10**18,
-      puntosEfectivosDerecha: bonusBinario.rigth/10**18,
-
-      puntosReclamadosIzquierda: brazoIzquierdo.reclamados/10**18,
-      puntosReclamadosDerecha: brazoDerecho.reclamados/10**18,
-
-      puntosIzquierda: (bonusBinario.left/10**18)+(brazoIzquierdo.reclamados/10**18),
-      puntosDerecha: (bonusBinario.rigth/10**18)+(brazoDerecho.reclamados/10**18),
 
       available:available,
       MIN_RETIRO: MIN_RETIRO
@@ -425,43 +396,43 @@ export default class Oficina extends Component {
 
     return (
 
-      <div class="row">
-      <div class="content-wrapper-before blue-grey lighten-5"></div>
-      <div class="col s12">
-          <div class="container">
-              <div class="section">
+      <div className="row">
+      <div className="content-wrapper-before blue-grey lighten-5"></div>
+      <div className="col s12">
+          <div className="container">
+              <div className="section">
 
 
           
-                  <div class="row">
+                  <div className="row">
 
-                  <div class="col s12 m6 l6">
-                          <div class="card card-border center-align gradient-45deg-purple-deep-orange">
-                            <div class="card-content white-text">
-                                <img class="responsive-img circle z-depth-4" width="100" src="app-assets/images/user/2.jpg" alt="images" />
-                                <p class="m-0 break">{this.state.currentAccount}</p>
-                                <h4 class="white-text">Migel Merchan</h4>
-                                <div class="row mt-5">
-                                    <a href="#" class="col s4">
-                                        <h5 class="gradient-45deg-indigo-light-blue icon-background circle white-text z-depth-3 mx-auto">
-                                            <i class="fab fa-behance"></i>
+                  <div className="col s12 m6 l6">
+                          <div className="card card-border center-align gradient-45deg-purple-deep-orange">
+                            <div className="card-content white-text">
+                                <img className="responsive-img circle z-depth-4" width="100" src="app-assets/images/user/2.jpg" alt="images" />
+                                <p className="m-0 break">{this.state.currentAccount}</p>
+                                <h4 className="white-text">Migel Merchan</h4>
+                                <div className="row mt-5">
+                                    <a href="#" className="col s4">
+                                        <h5 className="gradient-45deg-indigo-light-blue icon-background circle white-text z-depth-3 mx-auto">
+                                            <i className="fab fa-behance"></i>
                                         </h5>
-                                        <p class="white-text">12.8k</p>
-                                        <p class="white-text">Profit</p>
+                                        <p className="white-text">12.8k</p>
+                                        <p className="white-text">Profit</p>
                                     </a>
-                                    <a href="#" class="col s4">
-                                        <h5 class="icon-background circle gradient-45deg-indigo-blue white-text z-depth-3 mx-auto">
-                                            <i class="fab fa-linkedin-in"></i>
+                                    <a href="#" className="col s4">
+                                        <h5 className="icon-background circle gradient-45deg-indigo-blue white-text z-depth-3 mx-auto">
+                                            <i className="fab fa-linkedin-in"></i>
                                         </h5>
-                                        <p class="white-text">10.1k</p>
-                                        <p class="white-text">Infinity</p>
+                                        <p className="white-text">10.1k</p>
+                                        <p className="white-text">Infinity</p>
                                     </a>
-                                    <a href="#" class="col s4">
-                                        <h5 class="icon-background circle gradient-45deg-red-pink white-text z-depth-3 mx-auto">
-                                            <i class="fab fa-pinterest-p"></i>
+                                    <a href="#" className="col s4">
+                                        <h5 className="icon-background circle gradient-45deg-red-pink white-text z-depth-3 mx-auto">
+                                            <i className="fab fa-pinterest-p"></i>
                                         </h5>
-                                        <p class="white-text">8.23k</p>
-                                        <p class="white-text">Network</p>
+                                        <p className="white-text">8.23k</p>
+                                        <p className="white-text">Network</p>
                                     </a>
                                 </div>
                             </div>
@@ -470,12 +441,12 @@ export default class Oficina extends Component {
                       </div>
 
                   
-                    <div class="col s12 s6 m6">
-                      <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
-                        <div class="card-content center">
-                          <img src="app-assets/images/icon/apple-watch.png" alt="images" class="width-40" />
-                          <h5 class="m-0 white-text lighten-4 mt-6">Rank</h5>
-                          <p class="white-text lighten-4"></p>
+                    <div className="col s12 s6 m6">
+                      <div className="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
+                        <div className="card-content center">
+                          <img src="app-assets/images/icon/apple-watch.png" alt="images" className="width-40" />
+                          <h5 className="m-0 white-text lighten-4 mt-6">Rank</h5>
+                          <p className="white-text lighten-4"></p>
                         </div>
                       </div>
                     </div>
@@ -484,73 +455,73 @@ export default class Oficina extends Component {
                      
                   </div>
                   
-                  <div id="card-stats" class="pt-0">
-                      <div class="row">
-                          <div class="col s12 m6 l6 xl3">
-                              <div class="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text animate fadeLeft">
-                                  <div class="padding-4">
-                                      <div class="row">
-                                          <div class="col s7 m5">
-                                              <i class="material-icons background-round mt-5">add_shopping_cart</i>
+                  <div id="card-stats" className="pt-0">
+                      <div className="row">
+                          <div className="col s12 m6 l6 xl3">
+                              <div className="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text animate fadeLeft">
+                                  <div className="padding-4">
+                                      <div className="row">
+                                          <div className="col s7 m5">
+                                              <i className="material-icons background-round mt-5">add_shopping_cart</i>
                                               <p>Account</p>
                                           </div>
-                                          <div class="col s5 m7 right-align">
-                                              <h5 class="mb-0 white-text">{invested/50} BLKS</h5>
-                                              <p class="no-margin">Total invested</p>
+                                          <div className="col s5 m7 right-align">
+                                              <h5 className="mb-0 white-text">{invested/50} BLKS</h5>
+                                              <p className="no-margin">Total invested</p>
                                               <p>${invested}</p>
                                           </div>
                                       </div>
                                   </div>
                               </div>
                           </div>
-                          <div class="col s12 m6 l6 xl3">
-                              <div class="card gradient-45deg-red-pink gradient-shadow min-height-100 white-text animate fadeLeft">
-                                  <div class="padding-4">
-                                      <div class="row">
-                                          <div class="col s5 m5">
-                                              <i class="material-icons background-round mt-5">perm_identity</i>
+                          <div className="col s12 m6 l6 xl3">
+                              <div className="card gradient-45deg-red-pink gradient-shadow min-height-100 white-text animate fadeLeft">
+                                  <div className="padding-4">
+                                      <div className="row">
+                                          <div className="col s5 m5">
+                                              <i className="material-icons background-round mt-5">perm_identity</i>
                                           </div>
-                                          <div class="col s7 m7 right-align mb-7">
-                                              <h5 class="mb-0 white-text">1885</h5>
-                                              <p class="no-margin">Passive Gain</p>
+                                          <div className="col s7 m7 right-align mb-7">
+                                              <h5 className="mb-0 white-text">1885</h5>
+                                              <p className="no-margin">Passive Gain</p>
                                           </div>
-                                          <div class="col s12 m12">
-                                            <button class="waves-effect waves-light btn mb-1 mr-1 ancho100">Withdraw</button>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col s12 m6 l6 xl3">
-                              <div class="card gradient-45deg-amber-amber gradient-shadow min-height-100 white-text animate fadeRight">
-                                  <div class="padding-4">
-                                      <div class="row">
-                                          <div class="col s5 m5">
-                                              <i class="material-icons background-round mt-5">timeline</i>
-                                          </div>
-                                          <div class="col s7 m7 left-align p-0 mb-6 pr-3">
-                                              <h5 class="mb-0 white-text">$80</h5>
-                                              <p class="no-margin">Network Bonus</p>
-                                          </div>
-                                          <div class="col s12 m12">
-                                            <button class="mb-2 btn waves-effect waves-light amber darken-4 ancho100">Withdraw</button>
+                                          <div className="col s12 m12">
+                                            <button className="waves-effect waves-light btn mb-1 mr-1 ancho100">Withdraw</button>
                                           </div>
                                       </div>
                                   </div>
                               </div>
                           </div>
-                          <div class="col s12 m6 l6 xl3">
-                              <div class="card gradient-45deg-green-teal gradient-shadow min-height-100 white-text animate fadeRight">
-                                  <div class="padding-4">
-                                      <div class="row">
-                                          <div class="col s5 m5">
-                                              <i class="material-icons background-round mt-5">attach_money</i>
+                          <div className="col s12 m6 l6 xl3">
+                              <div className="card gradient-45deg-amber-amber gradient-shadow min-height-100 white-text animate fadeRight">
+                                  <div className="padding-4">
+                                      <div className="row">
+                                          <div className="col s5 m5">
+                                              <i className="material-icons background-round mt-5">timeline</i>
+                                          </div>
+                                          <div className="col s7 m7 left-align p-0 mb-6 pr-3">
+                                              <h5 className="mb-0 white-text">$80</h5>
+                                              <p className="no-margin">Network Bonus</p>
+                                          </div>
+                                          <div className="col s12 m12">
+                                            <button className="mb-2 btn waves-effect waves-light amber darken-4 ancho100">Withdraw</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div className="col s12 m6 l6 xl3">
+                              <div className="card gradient-45deg-green-teal gradient-shadow min-height-100 white-text animate fadeRight">
+                                  <div className="padding-4">
+                                      <div className="row">
+                                          <div className="col s5 m5">
+                                              <i className="material-icons background-round mt-5">attach_money</i>
                                               <p>Account</p>
                                           </div>
-                                          <div class="col s7 m7 left-align p-0 pr-2">
-                                              <h5 class="mb-0 white-text">{(this.state.withdrawn).toFixed(2)/50} BLKS</h5>
-                                              <p class="no-margin">Infinity earned</p>
-                                              <p class="right-align pr-8">${(this.state.withdrawn).toFixed(2)}</p>
+                                          <div className="col s7 m7 left-align p-0 pr-2">
+                                              <h5 className="mb-0 white-text">{(this.state.withdrawn).toFixed(2)/50} BLKS</h5>
+                                              <p className="no-margin">Infinity earned</p>
+                                              <p className="right-align pr-8">${(this.state.withdrawn).toFixed(2)}</p>
                                           </div>
                                       </div>
                                   </div>
@@ -563,7 +534,7 @@ export default class Oficina extends Component {
               </div>
             
           </div>
-          <div class="content-overlay"></div>
+          <div className="content-overlay"></div>
       </div>
   </div>    
 
