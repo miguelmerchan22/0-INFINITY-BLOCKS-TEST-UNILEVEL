@@ -37,16 +37,15 @@
             <div class="navbar navbar-fixed">
                 <nav class="navbar-main navbar-color nav-collapsible sideNav-lock navbar-light">
                     <div class="nav-wrapper">
-                        <div class="header-search-wrapper hide-on-med-and-down">
+                        <div class="header-search-wrapper">
                             <i class="material-icons">accessibility</i>
-                            <input class="link_refer z-depth-2" type="text" value="https://domain.com/user_refer" readonly="readonly" />
-                            <ul class="search-list collection display-none"></ul>
+                            <input id="linkRefer" class="link_refer z-depth-2" type="text" value="https://domain.com/user_refer" readonly="readonly" />
+ 
                         </div>
                         <ul class="navbar-list right">
                             <li class="dropdown-language">
-                                <a class="waves-effect waves-block waves-light " href="#" data-target="translation-dropdown"><i class="material-icons dp48">content_copy</i></a>
+                                <a class="waves-effect waves-block waves-light " href="#" data-target="translation-dropdown" onclick="copiar('linkRefer')">Copy referal link<i class="material-icons dp48">content_copy</i></a>
                             </li>
-                            
                             
                             <li>
                                 <a class="waves-effect waves-block waves-light profile-button" href="javascript:void(0);" data-target="profile-dropdown">
@@ -73,11 +72,11 @@
         <aside class="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-dark gradient-45deg-deep-purple-blue sidenav-gradient sidenav-active-rounded">
             <div class="brand-sidebar">
                 <h1 class="logo-wrapper">
-                    <a class="brand-logo darken-1" href="home.html">
+                    <a class="brand-logo darken-1" href="index.html">
                         <img class="hide-on-med-and-down" src="app-assets/images/logo/materialize-logo.png" alt="materialize logo" />
                         <img class="show-on-medium-and-down hide-on-med-and-up" src="app-assets/images/logo/materialize-logo-color.png" alt="materialize logo" /><span class="logo-text hide-on-med-and-down">Infinity Blocks</span>
                     </a>
-                    <a class="navbar-toggler" href="#"><i class="material-icons">radio_button_checked</i></a>
+                    <a class="navbar-toggler" href="index.html"><i class="material-icons">radio_button_checked</i></a>
                 </h1>
             </div>
             <ul class="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow" id="slide-out" data-menu="menu-navigation" data-collapsible="menu-accordion">
@@ -115,6 +114,31 @@
                 </div>
             </div>
         </footer>
+
+        <script>
+            function copiar(id_elemento) {
+
+                // Crea un campo de texto "oculto"
+                var aux = document.createElement("input");
+
+                // Asigna el contenido del elemento especificado al valor del campo
+                aux.setAttribute("value", document.getElementById(id_elemento).value);
+
+                // Añade el campo a la página
+                document.body.appendChild(aux);
+
+                // Selecciona el contenido del campo
+                aux.select();
+
+                // Copia el texto seleccionado
+                document.execCommand("copy");
+
+                // Elimina el campo de la página
+                document.body.removeChild(aux);
+
+                console.log("texto copiado")
+            }
+        </script>
 
         <script src="app-assets/js/vendors.min.js"></script>
 

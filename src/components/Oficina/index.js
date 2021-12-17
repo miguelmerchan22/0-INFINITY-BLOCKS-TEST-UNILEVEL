@@ -130,19 +130,19 @@ export default class Oficina extends Component {
       if (this.props.version > 1) {
         ver = "?v"+this.props.version;
       }
-      mydireccion = loc+ver+'?ref='+mydireccion;
-      var link = mydireccion+"&hand=left";
-      var link2 = mydireccion+"&hand=right";
+      mydireccion = loc+'?ref='+mydireccion;
+      var link = mydireccion;
       this.setState({
         link: link,
-        link2: link2,
       });
     }else{
+      link = "Make an investment to get the referral LINK";
       this.setState({
-        link: "Make an investment to get the referral LINK",
-        link2: "Make an investment to get the referral LINK",
+        link: link,
       });
     }
+
+    document.getElementById("linkRefer").value = link;
   }
 
 
@@ -408,7 +408,7 @@ export default class Oficina extends Component {
   
 
   render() {
-    var { available, invested,  direccion, link, link2, rango, balanceSal} = this.state;
+    var { available, invested,  direccion, rango, balanceSal} = this.state;
 
     available = (available+balanceSal).toFixed(2);
     available = parseFloat(available);
@@ -435,27 +435,7 @@ export default class Oficina extends Component {
           
                   <div class="row">
 
-                  <div class="col s12 m6 l6 card-width">
-                  <div class="card card-border center-align gradient-45deg-indigo-purple">
-                      <div class="card-content white-text">
-                          <div class="col s12"><i class="material-icons right">favorite</i></div>
-                          <h5 class="white-text mb-1">Membership</h5>
-                          <p class="m-0">13 Dec 2021</p>
-                          <a class="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">Buy $30/AN</a>
-                      </div>
-                  </div>
-              </div>
-              <div class="col s12 s6 m6">
-                <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
-                  <div class="card-content center">
-                    <img src="app-assets/images/icon/apple-watch.png" alt="images" class="width-40" />
-                    <h5 class="m-0 white-text lighten-4 mt-6">Rank</h5>
-                    <p class="white-text lighten-4"></p>
-                  </div>
-                </div>
-              </div>
-
-                      <div class="col s12 m12 l12">
+                  <div class="col s12 m6 l6">
                           <div class="card card-border center-align gradient-45deg-purple-deep-orange">
                             <div class="card-content white-text">
                                 <img class="responsive-img circle z-depth-4" width="100" src="app-assets/images/user/2.jpg" alt="images" />
@@ -488,6 +468,19 @@ export default class Oficina extends Component {
                         </div>
 
                       </div>
+
+                  
+                    <div class="col s12 s6 m6">
+                      <div class="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
+                        <div class="card-content center">
+                          <img src="app-assets/images/icon/apple-watch.png" alt="images" class="width-40" />
+                          <h5 class="m-0 white-text lighten-4 mt-6">Rank</h5>
+                          <p class="white-text lighten-4"></p>
+                        </div>
+                      </div>
+                    </div>
+
+                      
                      
                   </div>
                   

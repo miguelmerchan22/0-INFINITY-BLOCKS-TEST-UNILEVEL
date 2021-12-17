@@ -20,7 +20,9 @@ export default class CrowdFunding extends Component {
       balanceUSDT: "Loading...",
       precioSITE: 1,
       valueUSDT: 0,
-      hand: 0
+      hand: 0,
+      cantidadBlokes: 1,
+      valorBlokes: 50
 
     };
 
@@ -29,13 +31,28 @@ export default class CrowdFunding extends Component {
     this.estado2 = this.estado2.bind(this);
 
     this.rateSITE = this.rateSITE.bind(this);
-    this.handleChangeUSDT = this.handleChangeUSDT.bind(this);
+    this.handleChangeA = this.handleChangeA.bind(this);
+    this.handleChangeB = this.handleChangeB.bind(this);
   }
 
-  handleChangeUSDT(event) {
-    //console.log(event)
-    this.setState({valueUSDT: event.value});
+  handleChangeA(event) {
+    var evento = event.target.value;
+    this.setState({
+      cantidadBlokes: evento,
+      valorBlokes: evento*50
+    });
   }
+
+
+  handleChangeB(event) {
+    var evento = event.target.value;
+    this.setState({
+      valorBlokes: evento,
+      cantidadBlokes: evento/50
+    });
+  }
+
+
 
   async componentDidMount() {
     if (typeof window.ethereum !== 'undefined') {           
@@ -425,14 +442,14 @@ export default class CrowdFunding extends Component {
                                         <h5 class="mb-0 white-text">X</h5>
                                     </div>
                                     <div class="col s2 m2 center-align">
-                                        <input type="number" class="form-control center-align white-text" value="5" />
+                                        <input id="a" type="number" class="form-control center-align white-text" value={this.state.cantidadBlokes} onChange={this.handleChangeA}  />
                                         <p class="mb-0">Quantity</p>
                                     </div>
                                     <div class="col s2 m2 center-align">
                                         <h5 class="mb-0 white-text">=</h5>
                                     </div>
                                     <div class="col s2 m2 center-align">
-                                        <input type="number" class="form-control center-align white-text" value="500" />
+                                        <input id="b" type="number" class="form-control center-align white-text" value={this.state.valorBlokes} onChange={this.handleChangeB} />
                                         <p class="mb-0">Total</p>
                                     </div>
                                     <div class="col s2 m2 center-align mt-1">
@@ -441,20 +458,26 @@ export default class CrowdFunding extends Component {
                                 </div>
                             </div>
                             
-                            <div class="col s12 m12 l12 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
+                            <div class="col s12 m6 l6 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
                                 <div class="row">
                                     
-                                    <div class="col s12 m6 center-align">
+                                    <div class="col s12 m12 center-align">
                                         <i class="material-icons background-round mt-1 mb-0">perm_identity</i>
                                         <p class="mb-0 center-align break">Upline: <br /> {this.state.partner}</p>
                                     </div>
-                                    <div class="col s12 m6 center-align">
-                                        <i class="material-icons background-round mt-1 mb-4">perm_identity</i>
-                                        <br />
-                                        <button class="mb-6 btn waves-effect waves-light cyan">Register</button>
-                                    </div>
+
                                 </div>
                             </div>
+                            <div class="col s12 m6 l6 card-width">
+                              <div class="card card-border center-align gradient-45deg-indigo-purple">
+                                  <div class="card-content white-text">
+                                      <div class="col s12"><i class="material-icons right">favorite</i></div>
+                                      <h5 class="white-text mb-1">Membership</h5>
+                                      <p class="m-0">13 Dec 2021</p>
+                                      <a class="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">Buy $30/AN</a>
+                                  </div>
+                              </div>
+                          </div>
                         </div>
                     </div>
                     <div class="content-overlay"></div>
