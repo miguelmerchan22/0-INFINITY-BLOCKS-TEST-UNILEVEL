@@ -107,7 +107,7 @@ contract Admin is Context, Ownable{
 
 }
 
-contract BinarySystem is Context, Admin{
+contract UnilevelSystem is Context, Admin{
   using SafeMath for uint256;
 
   address token = 0x55d398326f99059fF775485246999027B3197955;
@@ -140,12 +140,15 @@ contract BinarySystem is Context, Admin{
     uint256 amount;
     uint256 withdrawn;
     uint256 directos;
+    string data;
     Deposito[] depositos;
     Hand hands;
   }
 
-  uint256 public MIN_RETIRO = 30*10**18;
+  uint256 public MIN_RETIRO = 30 * 10**18;
   uint256 public MIN_RETIRO_interno;
+
+  uint256 public PRECIO_BLOCK = 50 * 10**18;
 
   address public tokenPricipal = token;
 
@@ -165,7 +168,7 @@ contract BinarySystem is Context, Admin{
   uint256 public dias = 200;
   uint256 public unidades = 86400;
 
-  uint256 public porcent = 200;
+  uint256 public porcent = 240;
 
   uint256 public porcentPuntosBinario = 5;
 
@@ -508,13 +511,11 @@ contract BinarySystem is Context, Admin{
     return true;
   }
 
-  function registro(address _sponsor, uint8 _hand) public{
-
-    if( _hand > 1) revert();
+  function registro(address _sponsor, string memory _datos) public{
     
     Investor storage usuario = investors[_msgSender()];
 
-    if(usuario.registered)revert();
+    if(usuario.registered)revert("ya estas registrado");
 
     if(precioRegistro > 0){
 
@@ -529,12 +530,12 @@ contract BinarySystem is Context, Admin{
       }
     }
         (usuario.registered, usuario.recompensa) = (true, true);
+        usuario.data = _datos;
         padre[_msgSender()] = _sponsor;
 
         if (_sponsor != address(0) ){
           Investor storage sponsor = investors[_sponsor];
           sponsor.directos++;
-          if ( _hand == 0 ) {
               
             if (sponsor.hands.lReferer == address(0) ) {
 
@@ -550,24 +551,7 @@ contract BinarySystem is Context, Admin{
               sponsor.hands.lReferer = _msgSender();
               
             }
-          }else{
-
-            if ( sponsor.hands.rReferer == address(0) ) {
-
-              sponsor.hands.rReferer = _msgSender();
-              
-            } else {
-
-              address[] memory network;
-              network = actualizarNetwork(network);
-              network[0] = sponsor.hands.rReferer;
-
-              sponsor = investors[insertionRigth(network)];
-              sponsor.hands.rReferer = _msgSender();
-              
-            
-            }
-          }
+          
           
         }
         
@@ -582,19 +566,18 @@ contract BinarySystem is Context, Admin{
 
   }
 
-  function buyPlan(uint256 _plan) public {
+  function buyBlocks(uint256 _bloks) public {
 
-    if(_plan >= plans.length)revert();
-    if(!active[_plan])revert();
+    if(_bloks <= 0)revert("cantidad minima de blokes es 1");
 
     Investor storage usuario = investors[_msgSender()];
 
     if ( usuario.registered) {
 
-      uint256 _value = plans[_plan];
+      uint256 _value = PRECIO_BLOCK*_bloks;
 
-      if( USDT_Contract.allowance(_msgSender(), address(this)) < _value)revert();
-      if( !USDT_Contract.transferFrom(_msgSender(), address(this), _value) )revert();
+      if( USDT_Contract.allowance(_msgSender(), address(this)) < _value)revert("saldo aprovado insuficiente");
+      if( !USDT_Contract.transferFrom(_msgSender(), address(this), _value) )revert("tranferencia fallida");
       
       if (padre[_msgSender()] != address(0) ){
         if (usuario.depositos.length < inversiones ){
@@ -638,7 +621,7 @@ contract BinarySystem is Context, Admin{
 
       
     } else {
-      revert();
+      revert("no esta registrado");
     }
     
   }

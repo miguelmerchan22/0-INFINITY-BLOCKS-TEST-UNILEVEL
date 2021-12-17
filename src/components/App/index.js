@@ -115,7 +115,7 @@ class App extends Component {
 
     if (!this.state.metamask) return (
       <>
-        <div className="container">
+        <div class="row">
           <TronLinkGuide />
         </div>
       </>
@@ -123,7 +123,7 @@ class App extends Component {
 
     if (!this.state.conectado) return (
       <>
-        <div className="container">
+        <div class="row">
           <TronLinkGuide installed />
         </div>
       </>
@@ -134,9 +134,16 @@ class App extends Component {
       case "test":
       case "v0":
       case "V0": 
-        return(<Home admin={this.state.admin} contractAddress={cons.SCtest} version="999" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
-      default:
-        return(<Home admin={this.state.admin} contractAddress={cons.SC2} version="5" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>);
+        return(
+          <div class="row">
+          <Home admin={this.state.admin} contractAddress={cons.SCtest} version="999" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
+          </div>);
+      
+        default:
+        return(
+          <div class="row">
+            <Home admin={this.state.admin} contractAddress={cons.SC2} version="5" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
+          </div>);
     }
 
 

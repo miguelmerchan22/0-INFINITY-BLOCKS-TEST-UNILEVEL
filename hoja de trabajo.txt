@@ -42,7 +42,7 @@ Formula 50$us X “x” = total
 	1.	RETIRO UNICAMENTE DEL 2 AL 5 SOBRE INVERSIONES Y EL BONO PASIVO DE INVERSIONES 
 
 
-	2.	RETIRO al instante sobre el plan de compensación 
+	2.	RETIRO al instante sobre el Recompensa directa
 
 
 ——-
@@ -50,12 +50,19 @@ Formula 50$us X “x” = total
 	1.	Pasivo :
 8%
 
-	2.	Pasivo upline 5niv. :
-Niv 1 : 0.5%
-Niv 2 : 0.3%
-Niv 3 : 0.2%
-Niv 4 : 0.1%
-Niv 5 : 0.1%
+	2.	Mini paquete Inifinit upline 5niv. :
+        Niv 1 : 0.5%
+        Niv 2 : 0.3%
+        Niv 3 : 0.2%
+        Niv 4 : 0.1%
+        Niv 5 : 0.1%
+
+    3. Bono Venta directa 5 niveles:
+        5%
+        3%
+        2%
+        1%
+        1%
 
 —-
 
