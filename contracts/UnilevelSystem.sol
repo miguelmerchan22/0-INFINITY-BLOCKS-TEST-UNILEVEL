@@ -114,15 +114,6 @@ contract UnilevelSystem is Context, Admin{
 
   TRC20_Interface USDT_Contract = TRC20_Interface(token);
 
-  struct Hand {
-    uint256 lReclamados;
-    uint256 lExtra;
-    address lReferer;
-    uint256 rReclamados;
-    uint256 rExtra;
-    address rReferer;
-  }
-
   struct Deposito {
     uint256 inicio;
     uint256 amount;
@@ -142,7 +133,7 @@ contract UnilevelSystem is Context, Admin{
     uint256 directos;
     string data;
     Deposito[] depositos;
-    Hand hands;
+    uint256 blokesDirectos;
   }
 
   uint256 public MIN_RETIRO = 30 * 10**18;
@@ -353,22 +344,6 @@ contract UnilevelSystem is Context, Admin{
     return res;
   }
 
-  function handLeft(address _user) public view returns(uint256 extra, uint256 reclamados, address referer) {
-
-    Investor storage usuario = investors[_user];
-    Hand storage hands = usuario.hands;
-
-    return (hands.lExtra, hands.lReclamados, hands.lReferer);
-  }
-
-  function handRigth(address _user) public view returns(uint256 extra, uint256 reclamados, address referer) {
-
-    Investor storage usuario = investors[_user];
-    Hand storage hands = usuario.hands;
-
-    return (hands.rExtra, hands.rReclamados, hands.rReferer);
-  }
-
   function depositos(address _user) public view returns(uint256[] memory, uint256[] memory, bool[] memory, bool[] memory, uint256 ){
     Investor storage usuario = investors[_user];
 
@@ -481,20 +456,7 @@ contract UnilevelSystem is Context, Admin{
     }
   }
 
-  function asignarPuntosBinarios(address _user ,uint256 _puntosLeft, uint256 _puntosRigth) public onlyOwner returns (bool){
-
-    Investor storage usuario = investors[_user];
-    require(usuario.registered, "el usuario no esta registrado");
-
-    usuario.hands.lExtra += _puntosLeft;
-    usuario.hands.rExtra += _puntosRigth;
-
-    return true;
-    
-
-  }
-
-  function asignarPlan(address _user ,uint256 _plan) public onlyAdmin returns (bool){
+  function asignarBloke(address _user ,uint256 _plan) public onlyAdmin returns (bool){
     if(_plan >= plans.length )revert();
     if(!active[_plan])revert();
 
@@ -536,22 +498,6 @@ contract UnilevelSystem is Context, Admin{
         if (_sponsor != address(0) ){
           Investor storage sponsor = investors[_sponsor];
           sponsor.directos++;
-              
-            if (sponsor.hands.lReferer == address(0) ) {
-
-              sponsor.hands.lReferer = _msgSender();
-              
-            } else {
-
-              address[] memory network;
-
-              network = actualizarNetwork(network);
-              network[0] = sponsor.hands.lReferer;
-              sponsor = investors[insertionLeft(network)];
-              sponsor.hands.lReferer = _msgSender();
-              
-            }
-          
           
         }
         
@@ -594,25 +540,6 @@ contract UnilevelSystem is Context, Admin{
       usuario.invested += _value;
       usuario.amount += _value.mul(porcent.div(100));
 
-      uint256 left;
-      uint256 rigth;
-      
-      (left, rigth) = corteBinario(_msgSender());
-    
-      if ( left != 0 && rigth != 0 ) {
-
-        if(left < rigth){
-          usuario.hands.lReclamados += left;
-          usuario.hands.rReclamados += left;
-            
-        }else{
-          usuario.hands.lReclamados += rigth;
-          usuario.hands.rReclamados += rigth;
-            
-        }
-        
-      }
-
       totalInvested += _value;
 
       for (uint256 i = 0; i < wallet.length; i++) {
@@ -625,94 +552,12 @@ contract UnilevelSystem is Context, Admin{
     }
     
   }
-  
-  function withdrawableBinary(address any_user) public view returns (uint256 left, uint256 rigth, uint256 amount) {
-    Investor storage user = investors[any_user];
-      
-    if ( user.hands.lReferer != address(0)) {
-        
-      address[] memory network;
-
-      network = actualizarNetwork(network);
-
-      network[0] = user.hands.lReferer;
-
-      network = allnetwork(network);
-      
-      for (uint i = 0; i < network.length; i++) {
-      
-        user = investors[network[i]];
-        left += user.invested;
-      }
-        
-    }
-    user = investors[any_user];
-
-    left += user.hands.lExtra;
-    left -= user.hands.lReclamados;
-      
-    if ( user.hands.rReferer != address(0)) {
-        
-        address[] memory network;
-
-        network = actualizarNetwork(network);
-
-        network[0] = user.hands.rReferer;
-
-        network = allnetwork(network);
-        
-        for (uint i = 0; i < network.length; i++) {
-        
-          user = investors[network[i]];
-          rigth += user.invested;
-        }
-        
-    }
-
-    user = investors[any_user];
-
-    rigth += user.hands.rExtra;
-    rigth -= user.hands.rReclamados;
-
-    if (left < rigth) {
-      if (left.mul(porcentPuntosBinario).div(100) <= user.amount ) {
-        amount = left.mul(porcentPuntosBinario).div(100) ;
-          
-      }else{
-        amount = user.amount;
-          
-      }
-      
-    }else{
-      if (rigth.mul(porcentPuntosBinario).div(100) <= user.amount ) {
-        amount = rigth.mul(porcentPuntosBinario).div(100) ;
-          
-      }else{
-        amount = user.amount;
-          
-      }
-    }
-  
-  }
 
    function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
 
-    uint256 left = user.hands.lReclamados;
-    left += user.hands.lExtra;
-
-    uint256 rigth = user.hands.rReclamados;
-    rigth += user.hands.rExtra;
-
-    if (left < rigth) {
-
-      amount = left ;
-      
-    }else{
-
-      amount = rigth;
-
-    }
+    amount = user.blokesDirectos;//canditad de blokesDirectos
+  
   
   }
 
@@ -730,50 +575,6 @@ contract UnilevelSystem is Context, Admin{
         rangoReclamado[_msgSender()][index] = true;
       }
       
-    }
-
-  }
-
-  function personasBinary(address any_user) public view returns (uint256 left, uint256 pLeft, uint256 rigth, uint256 pRigth) {
-    Investor memory referer = investors[any_user];
-
-    if ( referer.hands.lReferer != address(0)) {
-
-      address[] memory network;
-
-      network = actualizarNetwork(network);
-
-      network[0] = referer.hands.lReferer;
-
-      network = allnetwork(network);
-
-      for (uint i = 0; i < network.length; i++) {
-        
-        referer = investors[network[i]];
-        left += referer.invested;
-        pLeft++;
-      }
-        
-    }
-
-    referer = investors[any_user];
-    
-    if ( referer.hands.rReferer != address(0)) {
-        
-      address[] memory network;
-
-      network = actualizarNetwork(network);
-
-      network[0] = referer.hands.rReferer;
-
-      network = allnetwork(network);
-      
-      for (uint b = 0; b < network.length; b++) {
-        
-        referer = investors[network[b]];
-        rigth += referer.invested;
-        pRigth++;
-      }
     }
 
   }
@@ -816,15 +617,11 @@ contract UnilevelSystem is Context, Admin{
 
       user = investors[network[i]];
       
-      address userLeft = user.hands.lReferer;
-      address userRigth = user.hands.rReferer;
+      address userLeft = address(0);
 
       for (uint u = 0; u < network.length; u++) {
         if (userLeft == network[u]){
           userLeft = address(0);
-        }
-        if (userRigth == network[u]){
-          userRigth = address(0);
         }
       }
 
@@ -833,55 +630,11 @@ contract UnilevelSystem is Context, Admin{
         network[network.length-1] = userLeft;
       }
 
-      if( userRigth != address(0) ){
-        network = actualizarNetwork(network);
-        network[network.length-1] = userRigth;
-      }
-
     }
 
     return network;
   }
 
-  function insertionLeft(address[] memory network) public view returns ( address wallett) {
-
-    Investor memory user;
-
-    for (uint i = 0; i < network.length; i++) {
-
-      user = investors[network[i]];
-      
-      address userLeft = user.hands.lReferer;
-
-      if( userLeft == address(0) ){
-        return  network[i];
-      }
-
-      network = actualizarNetwork(network);
-      network[network.length-1] = userLeft;
-
-    }
-    insertionLeft(network);
-  }
-
-  function insertionRigth(address[] memory network) public view returns (address wallett) {
-    Investor memory user;
-
-    for (uint i = 0; i < network.length; i++) {
-      user = investors[network[i]];
-
-      address userRigth = user.hands.rReferer;
-
-      if( userRigth == address(0) ){
-        return network[i];
-      }
-
-      network = actualizarNetwork(network);
-      network[network.length-1] = userRigth;
-
-    }
-    insertionRigth(network);
-  }
 
   function withdrawable(address any_user) public view returns (uint256) {
 
@@ -889,17 +642,12 @@ contract UnilevelSystem is Context, Admin{
 
     uint256 binary;
     uint256 saldo = investor2.amount+investor2.balanceRef+investor2.balanceSal;
-    
-    uint256 left;
-    uint256 rigth;
 
     uint256[] memory amount;
     uint256[] memory time;
     bool[] memory pasive;
     bool[] memory activo;
     uint256 total;
-
-    (left, rigth, binary) = withdrawableBinary(any_user);
 
     (amount, time, pasive, activo, total) = depositos(any_user);
 
@@ -911,18 +659,6 @@ contract UnilevelSystem is Context, Admin{
     }else{
       return saldo;
     }
-
-  }
-
-  function corteBinario(address any_user) public view returns (uint256, uint256) {
-
-    uint256 binary;
-    uint256 left;
-    uint256 rigth;
-
-    (left, rigth, binary) = withdrawableBinary(any_user);
-
-    return (left, rigth);
 
   }
 
@@ -950,25 +686,6 @@ contract UnilevelSystem is Context, Admin{
     rewardReferers(_msgSender(), _value, porcientosSalida, true);
 
     Investor storage usuario = investors[_msgSender()];
- 
-    uint256 left;
-    uint256 rigth;
-
-    (left, rigth) = corteBinario(_msgSender());
-    
-    if ( left != 0 && rigth != 0 ) {
-
-      if(left < rigth){
-        usuario.hands.lReclamados += left;
-        usuario.hands.rReclamados += left;
-          
-      }else{
-        usuario.hands.lReclamados += rigth;
-        usuario.hands.rReclamados += rigth;
-          
-      }
-      
-    }
 
     usuario.amount -= _value.sub(usuario.balanceRef+usuario.balanceSal);
     usuario.withdrawn += _value;
