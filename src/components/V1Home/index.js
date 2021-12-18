@@ -11,11 +11,11 @@ export default class Home extends Component {
 
       return (
         <>
-          <CrowdFunding contractAddress={this.props.contractAddress} version={this.props.version} wallet={this.props.wallet} />
+          <Oficina contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
 
-          <Datos admin={this.props.admin} contractAddress={this.props.contractAddress} version={this.props.version} wallet={this.props.wallet} />
+          <CrowdFunding contractAddress={this.props.contractAddress}  wallet={this.props.wallet} />
 
-          <Oficina contractAddress={this.props.contractAddress} version={this.props.version} wallet={this.props.wallet} />
+          <Datos admin={this.props.admin} contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
 
           <Depositos contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
 
