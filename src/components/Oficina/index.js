@@ -33,7 +33,7 @@ export default class Oficina extends Component {
       puntosLostDerecha: 0,
       directos: 0,
       withdrawableInfinity: 0,
-      data: {nombre: "###### ######", bio: ""}
+      data: {nombre: "###### ######", bio: "Loading..."}
     };
 
     this.Investors = this.Investors.bind(this);
@@ -192,10 +192,10 @@ export default class Oficina extends Component {
     if(usuario.data){
       usuario.data = JSON.parse(usuario.data); 
     }else{
-      usuario.data = {nombre: "Migel Merchan", bio: "soy un mexicano carismatico"};
+      usuario.data = {nombre: "NAME NO SET", bio: "Plase Buy a Membership"};
     }
 
-    console.log(usuario.data)
+    //console.log(usuario.data)
 
     this.setState({
       registered: usuario.registered,
