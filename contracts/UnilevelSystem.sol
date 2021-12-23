@@ -116,8 +116,10 @@ contract UnilevelSystem is Context, Admin{
 
   struct Deposito {
     uint256 inicio;
+    uint256 value;
     uint256 amount;
     bool pasivo;
+    bool infinity;
   }
 
   struct Investor {
@@ -144,12 +146,9 @@ contract UnilevelSystem is Context, Admin{
   address public tokenPricipal = token;
 
   uint256 public inversiones = 1;
-  uint256[] public primervez = [70, 0, 0, 0, 0];
-  uint256[] public porcientos = [0, 0, 0, 0, 0];
-  uint256[] public porcientosSalida = [10, 4, 3, 2, 1];
-
-  uint256[] public plans = [0, 50*10**18, 100*10**18, 250*10**18, 500*10**18, 1000*10**18, 2500*10**18, 5000*10**18, 10000*10**18];
-  bool[] public active = [false, true, true, true, true, true, true, true, true];
+  uint256[] public primervez = [50, 30, 20, 10, 10];
+  uint256[] public porcientos = [50, 30, 20, 10, 10];
+  uint256[] public infinity = [5, 3, 2, 1, 1];
 
   uint256[] public gananciasRango = [20*10**18, 50*10**18, 200*10**18, 500*10**18, 1200*10**18, 6000*10**18, 15000*10**18, 50000*10**18 ];
   uint256[] public puntosRango = [1500*10**18, 5000*10**18, 20000*10**18, 50000*10**18, 120000*10**18, 600000*10**18, 1500000*10**18, 5000000*10**18];
@@ -157,13 +156,11 @@ contract UnilevelSystem is Context, Admin{
   bool public onOffWitdrawl = true;
 
   uint256 public duracionMembership = 365;
+  uint256 public dias = 900;
 
-  uint256 public dias = 200;
   uint256 public unidades = 86400;
 
   uint256 public porcent = 240;
-
-  uint256 public porcentPuntosBinario = 5;
 
   uint256 public descuento = 95;
   uint256 public personas = 2;
@@ -235,13 +232,6 @@ contract UnilevelSystem is Context, Admin{
     return true;
   }
 
-  function setPuntosPorcentajeBinario(uint256 _porcentaje) public onlyOwner returns(uint256){
-
-    porcentPuntosBinario = _porcentaje;
-
-    return _porcentaje;
-  }
-
   function setMIN_RETIRO(uint256 _min) public onlyOwner returns(uint256){
 
     MIN_RETIRO = _min;
@@ -278,9 +268,9 @@ contract UnilevelSystem is Context, Admin{
 
   function setPorcientosSalida(uint256 _nivel, uint256 _value) public onlyOwner returns(uint256[] memory){
 
-    porcientosSalida[_nivel] = _value;
+    infinity[_nivel] = _value;
 
-    return porcientosSalida;
+    return infinity;
 
   }
 
@@ -292,14 +282,8 @@ contract UnilevelSystem is Context, Admin{
 
   }
 
-  function plansLength() public view returns(uint8){
-    
-    return uint8(plans.length);
-  }
-
-  function setPlansAll(uint256[] memory _values, bool[] memory _true) public onlyOwner returns(bool){
-    plans = _values ;
-    active = _true ;
+  function setPriceBlock(uint256 _value) public onlyOwner returns(bool){
+    PRECIO_BLOCK = _value;
     return true;
   }
 
@@ -386,7 +370,7 @@ contract UnilevelSystem is Context, Admin{
 
   }
 
-  function rewardReferers(address yo, uint256 amount, uint256[] memory array, bool _sal) internal {
+  function rewardReferers(address yo, uint256 amount, uint256[] memory array) internal {
 
     address[] memory referi;
     referi = column(yo, array.length);
@@ -404,23 +388,21 @@ contract UnilevelSystem is Context, Admin{
             if (usuario.amount > a+withdrawable(_msgSender())) {
 
               usuario.amount -= a;
-              if(_sal){
-                usuario.balanceSal += a;
-              }else{
-                usuario.balanceRef += a;
-                usuario.totalRef += a;
-              }
-              
+
+              usuario.balanceRef += a;
+              usuario.totalRef += a;
+              usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true, true));
+
               totalRefRewards += a;
               
             }else{
 
-              if(_sal){
-                usuario.balanceSal += usuario.amount;
-              }else{
-                usuario.balanceRef += usuario.amount;
-                usuario.totalRef += usuario.amount;
-              }
+    
+              usuario.balanceRef += usuario.amount;
+              usuario.totalRef += usuario.amount;
+
+              usuario.depositos.push(Deposito(block.timestamp,(usuario.amount.mul(porcent)).div(1000),(usuario.amount.mul(porcent)).div(1000), true, true));
+
               
               totalRefRewards += usuario.amount;
               delete usuario.amount;
@@ -459,17 +441,16 @@ contract UnilevelSystem is Context, Admin{
     }
   }
 
-  function asignarBloke(address _user ,uint256 _plan) public onlyAdmin returns (bool){
-    if(_plan >= plans.length )revert();
-    if(!active[_plan])revert();
+  function asignarBloke(address _user ,uint256 _bloks, bool _infinity) public onlyAdmin returns (bool){
+    if(_bloks <= 0)revert("cantidad minima de blokes es 1");
 
     Investor storage usuario = investors[_user];
 
     if(!usuario.registered)revert();
 
-    uint256 _value = plans[_plan];
+    uint256 _value = PRECIO_BLOCK*_bloks;
 
-    usuario.depositos.push(Deposito(block.timestamp, (_value.mul(porcent)).div(100), false));
+    usuario.depositos.push(Deposito(block.timestamp, (_value.mul(porcent)).div(100), (_value.mul(porcent)).div(100), false, _infinity));
     usuario.amount += (_value.mul(porcent)).div(100);
 
 
@@ -479,8 +460,6 @@ contract UnilevelSystem is Context, Admin{
   function registro(address _sponsor, string memory _datos) public{
     
     Investor storage usuario = investors[_msgSender()];
-
-    if(usuario.registered)revert("ya estas registrado");
 
     if(precioRegistro > 0){
 
@@ -494,9 +473,9 @@ contract UnilevelSystem is Context, Admin{
         USDT_Contract.transfer(walletFee[i], precioRegistro.mul(valorFee[i]).div(100));
       }
     }
+      if(!usuario.registered){
         usuario.registered = true;
         usuario.membership = block.timestamp + duracionMembership*unidades;
-        usuario.data = _datos;
         padre[_msgSender()] = _sponsor;
 
         if (_sponsor != address(0) ){
@@ -512,7 +491,19 @@ contract UnilevelSystem is Context, Admin{
         addressToId[_msgSender()] = lastUserId;
         
         lastUserId++;
+      }else{
+        usuario.membership = usuario.membership + duracionMembership*unidades;
+      }
+        
+        usuario.data = _datos;
 
+  }
+
+  function updateData(string memory _datos) public{
+    
+    Investor storage usuario = investors[_msgSender()];
+
+    usuario.data = _datos;
 
   }
 
@@ -522,7 +513,9 @@ contract UnilevelSystem is Context, Admin{
 
     Investor storage usuario = investors[_msgSender()];
 
-    if ( usuario.registered) {
+    if (!usuario.registered)revert("no esta registrado");
+
+    if (block.timestamp >= usuario.membership )revert("no tiene membership");
 
       uint256 _value = PRECIO_BLOCK*_bloks;
 
@@ -532,15 +525,15 @@ contract UnilevelSystem is Context, Admin{
       if (padre[_msgSender()] != address(0) ){
         if (usuario.depositos.length < inversiones ){
           
-          rewardReferers(_msgSender(), _value, primervez, false);
+          rewardReferers(_msgSender(), _value, primervez);
           
         }else{
-          rewardReferers(_msgSender(), _value, porcientos, false);
+          rewardReferers(_msgSender(), _value, porcientos);
 
         }
       }
 
-      usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100), true));
+      usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100), true, false));
       usuario.invested += _value;
       usuario.amount += (_value.mul(porcent)).div(100);
 
@@ -550,10 +543,6 @@ contract UnilevelSystem is Context, Admin{
         USDT_Contract.transfer(wallet[i], _value.mul(valor[i]).div(100));
       }
 
-      
-    } else {
-      revert("no esta registrado");
-    }
     
   }
 

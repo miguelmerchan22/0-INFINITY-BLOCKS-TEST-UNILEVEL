@@ -441,14 +441,13 @@ export default class Oficina extends Component {
                             <i className="material-icons background-round mt-5">
                               add_shopping_cart
                             </i>
-                            <p>Account</p>
                           </div>
                           <div className="col s5 m7 right-align">
                             <h5 className="mb-0 white-text">
                               {invested / 50} BLKS
                             </h5>
-                            <p className="no-margin">Total invested</p>
-                            <p>${invested}</p>
+                            <p>Total earn</p>
+                            <p className="no-margin">${this.state.withdrawn.toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
@@ -466,7 +465,7 @@ export default class Oficina extends Component {
                           </div>
                           <div className="col s7 m7 left-align p-0 mb-6 pr-3">
                             <h5 className="mb-0 white-text">$ {balanceSal}</h5>
-                            <p className="no-margin">Network Bonus</p>
+                            <p className="no-margin">ROI</p>
                           </div>
                           <div className="col s12 m12">
                             <button className="mb-2 btn waves-effect waves-light amber darken-4 ancho100">
@@ -489,7 +488,7 @@ export default class Oficina extends Component {
                           </div>
                           <div className="col s7 m7 right-align mb-7">
                             <h5 className="mb-0 white-text">$ {available}</h5>
-                            <p className="no-margin">Passive Gain</p>
+                            <p className="no-margin">Infynit Bonus</p>
                           </div>
                           <div className="col s12 m12">
                             <button
@@ -512,17 +511,20 @@ export default class Oficina extends Component {
                             <i className="material-icons background-round mt-5">
                               attach_money
                             </i>
-                            <p>Account</p>
                           </div>
-                          <div className="col s7 m7 left-align p-0 pr-2">
-                            <h5 className="mb-0 white-text">
-                              {this.state.withdrawn.toFixed(2) / 50} BLKS
-                            </h5>
-                            <p className="no-margin">Infinity earned</p>
-                            <p className="right-align pr-8">
-                              ${this.state.withdrawn.toFixed(2)}
-                            </p>
+                          <div className="col s7 m7 right-align mb-7">
+                            <h5 className="mb-0 white-text">{this.state.withdrawn.toFixed(2) / 50} BLKS</h5>
+                            <p className="no-margin">Team Bonus</p>
                           </div>
+                          <div className="col s12 m12">
+                            <button
+                              className="waves-effect waves-light btn mb-1 mr-1 green ancho100"
+                              onClick={() => this.withdraw()}
+                            >
+                              Withdraw ${this.state.withdrawn.toFixed(2)}
+                            </button>
+                          </div>
+
                         </div>
                       </div>
                     </div>
