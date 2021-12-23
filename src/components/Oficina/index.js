@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export default class Oficina extends Component {
   constructor(props) {
@@ -33,6 +32,8 @@ export default class Oficina extends Component {
       puntosLostIzquierda: 0,
       puntosLostDerecha: 0,
       directos: 0,
+      withdrawableInfinity: 0,
+      data: {nombre: "###### ######", bio: ""}
     };
 
     this.Investors = this.Investors.bind(this);
@@ -147,8 +148,13 @@ export default class Oficina extends Component {
     let usuario = await this.props.wallet.contractBinary.methods
       .investors(this.state.currentAccount)
       .call({ from: this.state.currentAccount });
+
     usuario.withdrawable = await this.props.wallet.contractBinary.methods
-      .withdrawable(this.state.currentAccount)
+      .withdrawable(this.state.currentAccount, false)
+      .call({ from: this.state.currentAccount });
+
+    var withdrawableInfinity = await this.props.wallet.contractBinary.methods
+      .withdrawable(this.state.currentAccount, true)
       .call({ from: this.state.currentAccount });
 
     var decimales = await this.props.wallet.contractToken.methods
@@ -156,7 +162,7 @@ export default class Oficina extends Component {
       .call({ from: this.state.currentAccount });
 
     var despositos = await this.props.wallet.contractBinary.methods
-      .depositos(this.state.currentAccount)
+      .depositos(this.state.currentAccount, false)
       .call({ from: this.state.currentAccount });
 
     var valores = despositos[0];
@@ -183,22 +189,29 @@ export default class Oficina extends Component {
 
     progresoRetiro = progresoRetiro.toFixed(2);
 
-    //console.log(usuario)
+    if(usuario.data){
+      usuario.data = JSON.parse(usuario.data); 
+    }else{
+      usuario.data = {nombre: "Migel Merchan", bio: "soy un mexicano carismatico"};
+    }
+
+    console.log(usuario.data)
 
     this.setState({
       registered: usuario.registered,
       balanceRef: usuario.balanceRef / 10 ** decimales,
-      balanceSal: usuario.balanceSal / 10 ** decimales,
       totalRef: usuario.totalRef / 10 ** decimales,
       invested: usuario.invested / 10 ** decimales,
       paidAt: usuario.paidAt / 10 ** decimales,
       my: usuario.withdrawable,
+      withdrawableInfinity: withdrawableInfinity / 10**decimales,
       withdrawn: usuario.withdrawn,
       almacen: usuario.almacen / 10 ** decimales,
       progresoUsdt: progresoUsdt,
       progresoRetiro: progresoRetiro,
       valorPlan: valorPlan,
       directos: usuario.directos,
+      data: usuario.data,
     });
   }
 
@@ -210,10 +223,9 @@ export default class Oficina extends Component {
   }
 
   async Investors3() {
-    var { directos, valorPlan } = this.state;
 
     var available = await this.props.wallet.contractBinary.methods
-      .withdrawable(this.state.currentAccount)
+      .withdrawable(this.state.currentAccount, false)
       .call({ from: this.state.currentAccount });
 
     available = available / 10 ** 18;
@@ -464,7 +476,7 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 left-align p-0 mb-6 pr-3">
-                            <h5 className="mb-0 white-text">$ {balanceSal}</h5>
+                            <h5 className="mb-0 white-text">$ {available}</h5>
                             <p className="no-margin">ROI</p>
                           </div>
                           <div className="col s12 m12">
@@ -487,7 +499,7 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">$ {available}</h5>
+                            <h5 className="mb-0 white-text">$ {this.state.withdrawableInfinity}</h5>
                             <p className="no-margin">Infynit Bonus</p>
                           </div>
                           <div className="col s12 m12">
@@ -513,7 +525,7 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">{this.state.withdrawn.toFixed(2) / 50} BLKS</h5>
+                            <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(2)} </h5>
                             <p className="no-margin">Team Bonus</p>
                           </div>
                           <div className="col s12 m12">
@@ -521,7 +533,7 @@ export default class Oficina extends Component {
                               className="waves-effect waves-light btn mb-1 mr-1 green ancho100"
                               onClick={() => this.withdraw()}
                             >
-                              Withdraw ${this.state.withdrawn.toFixed(2)}
+                              Withdraw 
                             </button>
                           </div>
 
@@ -543,7 +555,8 @@ export default class Oficina extends Component {
                         alt="images"
                       />
                       <p className="m-0 break">{this.state.currentAccount}</p>
-                      <h4 className="white-text">Migel Merchan</h4>
+                      <h4 className="white-text">{this.state.data.nombre}</h4>
+                      <p className="white-text">{this.state.data.bio}</p> 
                     </div>
                   </div>
                 </div>

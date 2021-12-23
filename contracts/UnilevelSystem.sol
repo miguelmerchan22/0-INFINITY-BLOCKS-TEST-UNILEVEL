@@ -126,11 +126,10 @@ contract UnilevelSystem is Context, Admin{
     bool registered;
     uint256 membership;
     uint256 balanceRef;
-    uint256 balanceSal;
     uint256 totalRef;
     uint256 invested;
     uint256 paidAt;
-    uint256 amount;
+    uint256 paidAt2;
     uint256 withdrawn;
     uint256 directos;
     string data;
@@ -150,8 +149,8 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public porcientos = [50, 30, 20, 10, 10];
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
-  uint256[] public gananciasRango = [20*10**18, 50*10**18, 200*10**18, 500*10**18, 1200*10**18, 6000*10**18, 15000*10**18, 50000*10**18 ];
-  uint256[] public puntosRango = [1500*10**18, 5000*10**18, 20000*10**18, 50000*10**18, 120000*10**18, 600000*10**18, 1500000*10**18, 5000000*10**18];
+  uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18];
+  uint256[] public puntosRango = [1500*10**18, 5000*10**18, 20000*10**18, 50000*10**18, 120000*10**18];
 
   bool public onOffWitdrawl = true;
 
@@ -194,7 +193,7 @@ contract UnilevelSystem is Context, Admin{
     usuario.registered = true;
     usuario.membership = block.timestamp + duracionMembership*unidades*1000000000000000000;
 
-    rangoReclamado[_msgSender()] = [false,false,false,false,false,false,false];
+    rangoReclamado[_msgSender()] = [false,false,false,false,false];
 
     idToAddress[0] = _msgSender();
     addressToId[_msgSender()] = 0;
@@ -331,19 +330,17 @@ contract UnilevelSystem is Context, Admin{
     return res;
   }
 
-  function depositos(address _user) public view returns(uint256[] memory, uint256[] memory, bool[] memory, bool[] memory, uint256 ){
+  function depositos(address _user, bool _infinity) public view returns(uint256[] memory, uint256[] memory, bool[] memory, uint256 ){
     Investor storage usuario = investors[_user];
 
     uint256[] memory amount;
     uint256[] memory time;
-    bool[] memory pasive;
     bool[] memory activo;
     uint256 total;
     
      for (uint i = 0; i < usuario.depositos.length; i++) {
        amount = actualizarArrayUint256(amount);
        time = actualizarArrayUint256(time);
-       pasive = actualizarArrayBool(pasive);
        activo = actualizarArrayBool(activo);
 
        Deposito storage dep = usuario.depositos[i];
@@ -354,19 +351,18 @@ contract UnilevelSystem is Context, Admin{
       uint since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
       uint till = block.timestamp > finish ? finish : block.timestamp;
 
-      if (since != 0 && since < till) {
-        if (dep.pasivo) {
+      if (since != 0 && since < till ) {
+        if (_infinity == dep.infinity) {
           total += dep.amount * (till - since) / tiempo() ;
         } 
         activo[i] = true;
       }
 
-      amount[i] = dep.amount;
-      pasive[i] = dep.pasivo;      
+      amount[i] = dep.amount;     
 
      }
 
-     return (amount, time, pasive, activo, total);
+     return (amount, time, activo, total);
 
   }
 
@@ -381,33 +377,17 @@ contract UnilevelSystem is Context, Admin{
 
       if (array[i] != 0) {
         usuario = investors[referi[i]];
-        if (usuario.registered && usuario.membership >= block.timestamp && usuario.amount > 0){
+        if (usuario.registered && usuario.membership >= block.timestamp ){
           if ( referi[i] != address(0) ) {
 
             a = amount.mul(array[i]).div(1000);
-            if (usuario.amount > a+withdrawable(_msgSender())) {
 
-              usuario.amount -= a;
 
               usuario.balanceRef += a;
               usuario.totalRef += a;
               usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true, true));
 
               totalRefRewards += a;
-              
-            }else{
-
-    
-              usuario.balanceRef += usuario.amount;
-              usuario.totalRef += usuario.amount;
-
-              usuario.depositos.push(Deposito(block.timestamp,(usuario.amount.mul(porcent)).div(1000),(usuario.amount.mul(porcent)).div(1000), true, true));
-
-              
-              totalRefRewards += usuario.amount;
-              delete usuario.amount;
-              
-            }
             
 
           }else{
@@ -422,25 +402,6 @@ contract UnilevelSystem is Context, Admin{
     }
   }
 
-  function discountDeposits(address _user, uint256 _valor) public { // tiene que se internal
-
-    Investor storage usuario = investors[_user];
-    
-    for (uint i = 0; i < usuario.depositos.length; i++) {
-
-      Deposito storage dep = usuario.depositos[i];
-      if(dep.amount >= _valor){
-        dep.amount = dep.amount-_valor;
-        delete _valor;
-      }else{
-        _valor = _valor-dep.amount;
-        delete dep.amount;
-        
-      }
-         
-    }
-  }
-
   function asignarBloke(address _user ,uint256 _bloks, bool _infinity) public onlyAdmin returns (bool){
     if(_bloks <= 0)revert("cantidad minima de blokes es 1");
 
@@ -451,7 +412,6 @@ contract UnilevelSystem is Context, Admin{
     uint256 _value = PRECIO_BLOCK*_bloks;
 
     usuario.depositos.push(Deposito(block.timestamp, (_value.mul(porcent)).div(100), (_value.mul(porcent)).div(100), false, _infinity));
-    usuario.amount += (_value.mul(porcent)).div(100);
 
 
     return true;
@@ -486,7 +446,7 @@ contract UnilevelSystem is Context, Admin{
         
         totalInvestors++;
 
-        rangoReclamado[_msgSender()] = [false,false,false,false,false,false,false];
+        rangoReclamado[_msgSender()] = [false,false,false,false,false];
         idToAddress[lastUserId] = _msgSender();
         addressToId[_msgSender()] = lastUserId;
         
@@ -535,7 +495,6 @@ contract UnilevelSystem is Context, Admin{
 
       usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100), true, false));
       usuario.invested += _value;
-      usuario.amount += (_value.mul(porcent)).div(100);
 
       totalInvested += _value;
 
@@ -629,43 +588,28 @@ contract UnilevelSystem is Context, Admin{
   }
 
 
-  function withdrawable(address any_user) public view returns (uint256) {
-
-    Investor memory investor2 = investors[any_user];
-
-    uint256 saldo = investor2.amount;
+  function withdrawable(address any_user, bool _infinity) public view returns (uint256) {
 
     uint256[] memory amount;
     uint256[] memory time;
-    bool[] memory pasive;
     bool[] memory activo;
     uint256 total;
 
-    (amount, time, pasive, activo, total) = depositos(any_user);
+    (amount, time, activo, total) = depositos(any_user, _infinity);
 
-    if (saldo >= total) {
-      return total;
-    }else{
-      return saldo;
-    }
+    return total;
+
 
   }
 
-  function withdrawable2(address any_user) public view returns (uint256) {
-
-    Investor memory investor2 = investors[any_user];
-
-    uint256 saldo = investor2.balanceRef+investor2.balanceSal;
-    
-    return saldo;
-
-  }
 
   function withdraw() public {
 
     if (!onOffWitdrawl)revert();
 
-    uint256 _value = withdrawable(_msgSender());
+    Investor storage usuario = investors[_msgSender()];
+
+    uint256 _value = withdrawable(_msgSender(), false);
 
     if( USDT_Contract.balanceOf(address(this)) < _value )revert();
     if( _value < MIN_RETIRO )revert();
@@ -682,9 +626,6 @@ contract UnilevelSystem is Context, Admin{
       
     }
 
-    Investor storage usuario = investors[_msgSender()];
-
-    usuario.amount -= _value;
     usuario.withdrawn += _value;
     usuario.paidAt = block.timestamp;
 
@@ -696,7 +637,9 @@ contract UnilevelSystem is Context, Admin{
 
     if (!onOffWitdrawl)revert();
 
-    uint256 _value = withdrawable2(_msgSender());
+    Investor storage usuario = investors[_msgSender()];
+
+    uint256 _value = withdrawable(_msgSender(), true);
 
     if( USDT_Contract.balanceOf(address(this)) < _value )revert();
     if( _value < MIN_RETIRO )revert();
@@ -713,16 +656,38 @@ contract UnilevelSystem is Context, Admin{
       
     }
 
-    Investor storage usuario = investors[_msgSender()];
-
-    usuario.amount -= _value;
     usuario.withdrawn += _value;
-    delete usuario.balanceRef;
-    delete usuario.balanceSal;
+    usuario.paidAt2 = block.timestamp;
 
     totalRefWitdrawl += _value;
 
   }
+
+   function withdrawTeam() public {
+
+    if (!onOffWitdrawl)revert();
+
+    Investor storage usuario = investors[_msgSender()];
+
+    uint256 _value = usuario.balanceRef;
+
+    if( USDT_Contract.balanceOf(address(this)) < _value )revert("no hay saldo en el contrato para hacer el pago");
+    if( _value < MIN_RETIRO )revert();
+
+    if ( activerFee >= 1 ) {
+      for (uint256 i = 0; i < walletFee.length; i++) {
+        USDT_Contract.transfer(walletFee[i], _value.mul(valorFee[i]).div(100));
+      }
+    
+      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
+      
+    }else{
+      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
+      
+    }
+
+
+   }
 
   function redimTokenPrincipal02(uint256 _value) public onlyOwner returns (uint256) {
 
@@ -734,7 +699,7 @@ contract UnilevelSystem is Context, Admin{
 
   }
 
-  function redimTRX() public onlyOwner returns (uint256){
+  function redimBNB() public onlyOwner returns (uint256){
 
     owner.transfer(address(this).balance);
 

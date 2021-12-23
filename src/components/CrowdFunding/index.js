@@ -108,8 +108,6 @@ export default class CrowdFunding extends Component {
 
     var options = [];
 
-    var datos = {};
-
     inversors.inicio = 1000;
 
     var aprovado = await this.props.wallet.contractToken.methods
@@ -117,25 +115,8 @@ export default class CrowdFunding extends Component {
       .call({ from: this.state.currentAccount });
 
     if (aprovado > 0) {
-      var top = await this.props.wallet.contractBinary.methods
-        .plansLength()
-        .call({ from: this.state.currentAccount });
 
-      for (let index = 0; index < top; index++) {
-        var precio = await this.props.wallet.contractBinary.methods
-          .plans(index)
-          .call({ from: this.state.currentAccount });
-        var active = await this.props.wallet.contractBinary.methods
-          .active(index)
-          .call({ from: this.state.currentAccount });
-        precio = parseInt(precio) / 10 ** 18;
-        if (precio > 0 && active && inversors.registered) {
-          datos = {};
-          datos.value = index;
-          datos.label = precio + " USDT";
-          options[index] = datos;
-        }
-      }
+
     }
 
     this.setState({
@@ -323,7 +304,6 @@ export default class CrowdFunding extends Component {
     if (aprovado > 0 && balanceSite >= amount) {
       var loc = document.location.href;
       var sponsor = cons.WS;
-      var hand = 0;
       var investors = await this.props.wallet.contractBinary.methods
         .investors(this.state.currentAccount)
         .call({ from: this.state.currentAccount });
@@ -380,14 +360,14 @@ export default class CrowdFunding extends Component {
         /*sponsor !== "0x0000000000000000000000000000000000000000" && */ investors.registered
       ) {
         var userWithdrable = await this.props.wallet.contractBinary.methods
-          .withdrawable(this.state.currentAccount)
+          .withdrawable(this.state.currentAccount, false)
           .call({ from: this.state.currentAccount });
         var MIN_RETIRO = await this.props.wallet.contractBinary.methods
           .MIN_RETIRO()
           .call({ from: this.state.currentAccount });
 
         var despositos = await this.props.wallet.contractBinary.methods
-          .depositos(this.state.currentAccount)
+          .depositos(this.state.currentAccount, false)
           .call({ from: this.state.currentAccount });
 
         if (
@@ -467,7 +447,59 @@ export default class CrowdFunding extends Component {
                     </div>
                     <h5 className="white-text mb-1">Membership</h5>
                     <p className="m-0">13 Dec 2021</p>
-                    <a className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">
+                    <a onClick={async()=> {
+                       var loc = document.location.href;
+                       var sponsor = cons.WS;
+                       var investors = await this.props.wallet.contractBinary.methods
+                         .investors(this.state.currentAccount)
+                         .call({ from: this.state.currentAccount });
+                 
+                       if (investors.registered) {
+                         sponsor = await this.props.wallet.contractBinary.methods
+                           .padre(this.state.currentAccount)
+                           .call({ from: this.state.currentAccount });
+                       } else {
+                         if (loc.indexOf("?") > 0) {
+                           var getString = loc.split("?");
+                           getString = getString[getString.length - 1];
+                           //console.log(getString);
+                           var GET = getString.split("&");
+                           var get = {};
+                           for (var i = 0, l = GET.length; i < l; i++) {
+                             var tmp = GET[i].split("=");
+                             get[tmp[0]] = unescape(decodeURI(tmp[1]));
+                           }
+                 
+                           if (get["ref"]) {
+                             tmp = get["ref"].split("#");
+                 
+                             var wallet = await this.props.wallet.contractBinary.methods
+                               .idToAddress(tmp[0])
+                               .call({ from: this.state.currentAccount });
+                 
+                             var padre = await this.props.wallet.contractBinary.methods
+                               .investors(wallet)
+                               .call({ from: this.state.currentAccount });
+                 
+                             if (padre.registered) {
+                               sponsor = wallet;
+                             }
+                           }
+                         }
+                        }
+                        var datos = {};
+                        datos.nombre = await prompt("please set a nikname");
+                        datos.bio = await prompt("please set a bio");
+                        
+
+                      this.props.wallet.contractBinary.methods
+                      .registro(sponsor, JSON.stringify(datos) )
+                      .send({ from: this.state.currentAccount })
+                      .then(() => {
+                        window.alert("membership buyed");
+                      });
+
+                    }} className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">
                       Buy $30/YEAR
                     </a>
                   </div>

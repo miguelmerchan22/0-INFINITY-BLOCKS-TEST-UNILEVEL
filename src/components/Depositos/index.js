@@ -138,11 +138,11 @@ export default class Depositos extends Component {
 
     let usuario = await this.props.wallet.contractBinary.methods.investors(this.state.currentAccount).call({from:this.state.currentAccount});
 
-    usuario.withdrawable = await this.props.wallet.contractBinary.methods.withdrawable(this.state.currentAccount).call({from:this.state.currentAccount});
+    usuario.withdrawable = await this.props.wallet.contractBinary.methods.withdrawable(this.state.currentAccount, false).call({from:this.state.currentAccount});
     
     var decimales = await this.props.wallet.contractToken.methods.decimals().call({from:this.state.currentAccount});
 
-    var verdepositos = await this.props.wallet.contractBinary.methods.depositos(this.state.currentAccount).call({from:this.state.currentAccount});
+    var verdepositos = await this.props.wallet.contractBinary.methods.depositos(this.state.currentAccount, false).call({from:this.state.currentAccount});
 
     usuario.inicio = 1000;
 
@@ -154,7 +154,7 @@ export default class Depositos extends Component {
     );
 
     if (verdepositos[0].length > 0) {
-      var depositos = await this.props.wallet.contractBinary.methods.depositos(this.state.currentAccount).call({from:this.state.currentAccount});
+      var depositos = await this.props.wallet.contractBinary.methods.depositos(this.state.currentAccount, false).call({from:this.state.currentAccount});
       depositos.amount =  depositos[0];
       delete depositos[0];
       depositos.tiempo =  depositos[1];
