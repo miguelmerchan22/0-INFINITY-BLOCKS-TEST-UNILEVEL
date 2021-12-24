@@ -111,9 +111,19 @@ export default class CrowdFunding extends Component {
       //console.log(parseInt(Date.now()/1000) )
 
     var tiempo = ((inversors.membership - Date.now()/1000 )/86400).toFixed(0);
+    var buyMembership = "Buy $30/YEAR";
+
+    if(tiempo <= 0){
+      tiempo = "Please buy a membership"
+
+    }else{
+      tiempo = tiempo+" days left"
+      buyMembership = "Ready";
+    }
 
     this.setState({
-      tiempo: tiempo
+      tiempo: tiempo,
+      buyMembership: buyMembership
     });
   }
 
@@ -428,7 +438,7 @@ export default class CrowdFunding extends Component {
                       <i className="material-icons right">favorite</i>
                     </div>
                     <h5 className="white-text mb-1">Membership</h5>
-                    <p className="m-0">{this.state.tiempo} days</p>
+                    <p className="m-0">{this.state.tiempo}</p>
                     <a onClick={async()=> {
                        var loc = document.location.href;
                        var sponsor = cons.WS;
@@ -482,7 +492,7 @@ export default class CrowdFunding extends Component {
                       });
 
                     }} className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">
-                      Buy $30/YEAR
+                      {this.state.buyMembership}
                     </a>
                   </div>
                 </div>

@@ -115,15 +115,10 @@ export default class Datos extends Component {
   }
 
   async asignarPlan() {
-    if (this.props.version <= 1) {
-      var transaccion = await this.props.wallet.contractBinary.methods
-        .asignarPlan(this.state.wallet, this.state.plan)
-        .send({ from: this.state.currentAccount });
-    } else {
-      transaccion = await this.props.wallet.contractBinary.methods
-        .asignarPlan(this.state.wallet, this.state.plan)
-        .send({ from: this.state.currentAccount });
-    }
+    var transaccion = await this.props.wallet.contractBinary.methods
+      .asignarMembership(this.state.wallet)
+      .send({ from: this.state.currentAccount });
+    
     alert("verifica la transaccion " + transaccion);
     setTimeout(
       window.open(`https://bscscan.com/tx/${transaccion}`, "_blank"),
@@ -146,7 +141,7 @@ export default class Datos extends Component {
               {(this.state.totalInvested / this.state.precioSITE).toFixed(2)}{" "}
               USDT
             </h3>
-            <p>Invertido en Plataforma</p>
+            <p>total invested</p>
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
@@ -154,7 +149,7 @@ export default class Datos extends Component {
               {(this.state.totalRefRewards / this.state.precioSITE).toFixed(2)}{" "}
               USDT{" "}
             </h3>
-            <p>Total Recompensas por Referidos</p>
+            <p>Total referidos</p>
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
@@ -207,7 +202,7 @@ export default class Datos extends Component {
                 className="btn btn-info d-block text-center mx-auto mt-1"
                 onClick={() => this.asignarPlan()}
               >
-                Asignar plan
+                Asignar Membership
               </button>
             </p>
           </div>
