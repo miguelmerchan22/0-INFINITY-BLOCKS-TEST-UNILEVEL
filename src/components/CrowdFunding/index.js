@@ -106,10 +106,10 @@ export default class CrowdFunding extends Component {
       .investors(this.state.currentAccount)
       .call({ from: this.state.currentAccount });
 
-      console.log(parseInt(inversors.membership))
-      console.log(parseInt(Date.now()/1000) )
+      //console.log(parseInt(inversors.membership))
+      //console.log(parseInt(Date.now()/1000) )
 
-    var tiempo = ((inversors.membership - Date.now()/1000 )/86400).toFixed(2);
+    var tiempo = ((inversors.membership - Date.now()/1000 )/86400).toFixed(0);
 
     this.setState({
       tiempo: tiempo

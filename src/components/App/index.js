@@ -123,7 +123,7 @@ class App extends Component {
 
     if (!this.state.conectado) return (
       <>
-        <div class="row">
+        <div className="row">
           <TronLinkGuide installed />
         </div>
       </>
@@ -135,13 +135,13 @@ class App extends Component {
       case "v0":
       case "V0": 
         return(
-          <div class="row">
+          <div className="row">
           <Home admin={this.state.admin} contractAddress={cons.SCtest} version="999" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
           </div>);
       
         default:
         return(
-          <div class="row">
+          <div className="row">
             <Home admin={this.state.admin} contractAddress={cons.SC2} version="5" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
           </div>);
     }

@@ -337,6 +337,9 @@ contract UnilevelSystem is Context, Admin{
     uint256[] memory time;
     bool[] memory activo;
     uint256 total;
+    uint finish;
+    uint since;
+    uint till;
     
      for (uint i = 0; i < usuario.depositos.length; i++) {
        amount = actualizarArrayUint256(amount);
@@ -347,9 +350,13 @@ contract UnilevelSystem is Context, Admin{
 
        time[i] = dep.inicio;
       
-      uint finish = dep.inicio + tiempo();
-      uint since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
-      uint till = block.timestamp > finish ? finish : block.timestamp;
+      finish = dep.inicio + tiempo();
+      if (_infinity == dep.infinity) {
+        since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
+      }else{
+        since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
+      }
+      till = block.timestamp > finish ? finish : block.timestamp;
 
       if (since != 0 && since < till ) {
         if (_infinity == dep.infinity) {
@@ -685,6 +692,8 @@ contract UnilevelSystem is Context, Admin{
       USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
       
     }
+
+    delete usuario.balanceRef;
 
 
    }

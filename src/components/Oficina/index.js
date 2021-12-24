@@ -41,7 +41,7 @@ export default class Oficina extends Component {
     this.Investors3 = this.Investors3.bind(this);
     this.Link = this.Link.bind(this);
     this.withdraw = this.withdraw.bind(this);
-    this.withdraw1 = this.withdraw1.bind(this);
+    this.withdraw2 = this.withdraw2.bind(this);
     this.withdrawTeam = this.withdrawTeam.bind(this);
 
     this.rateSITE = this.rateSITE.bind(this);
@@ -300,6 +300,8 @@ export default class Oficina extends Component {
 
   async withdrawTeam() {
     var available  = this.state.balanceRef;
+
+    console.log(available)
 
     available = (available * 1).toFixed(6);
     available = parseFloat(available);
