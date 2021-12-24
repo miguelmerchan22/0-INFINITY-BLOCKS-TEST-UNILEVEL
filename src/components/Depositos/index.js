@@ -178,6 +178,10 @@ export default class Depositos extends Component {
 
       for (let i = 0; i < depositos.amount.length; i++) {
 
+        if(depositos.tiempo){
+
+        }
+
         var porcentiempo = (((Date.now()-(depositos.tiempo[i]*1000)))*100)/tiempo;
 
         var fecha = new Date((depositos.tiempo[i]*1000)+tiempo);

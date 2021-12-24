@@ -33,7 +33,8 @@ export default class Oficina extends Component {
       puntosLostDerecha: 0,
       directos: 0,
       withdrawableInfinity: 0,
-      data: {nombre: "###### ######", bio: "Loading..."}
+      data: {nombre: "###### ######", bio: "Loading..."},
+      rango: "N/A",
     };
 
     this.Investors = this.Investors.bind(this);
@@ -350,11 +351,12 @@ export default class Oficina extends Component {
         .call({ from: this.state.currentAccount });
     }
 
-    if (rango === 0) {
+    if (rango >= 0 && rango < 50000) {
       rango = "N/A";
     }
-    if (rango >= 1500 && rango < 5000) {
-      rango = "Master";
+
+    if (rango >= 50000 && rango < 100000) {
+      rango = "INFINITY SENIOR";
       if (!rangoArray[0]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
@@ -367,8 +369,8 @@ export default class Oficina extends Component {
         };
       }
     }
-    if (rango >= 5000 && rango < 20000) {
-      rango = "Sapphire";
+    if (rango >= 100000 && rango < 250000) {
+      rango = "INFINITY BARON";
       if (!rangoArray[1]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
@@ -381,8 +383,8 @@ export default class Oficina extends Component {
         };
       }
     }
-    if (rango >= 20000 && rango < 50000) {
-      rango = "Ruby";
+    if (rango >= 250000 && rango < 500000) {
+      rango = "INFINITY DUKE";
       if (!rangoArray[2]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
@@ -395,8 +397,8 @@ export default class Oficina extends Component {
         };
       }
     }
-    if (rango >= 50000 && rango < 120000) {
-      rango = "Emerauld";
+    if (rango >= 500000 && rango < 1000000) {
+      rango = "INFINITY KING";
       if (!rangoArray[3]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
@@ -409,8 +411,8 @@ export default class Oficina extends Component {
         };
       }
     }
-    if (rango >= 120000 && rango < 600000) {
-      rango = "Diamond";
+    if (rango >= 1000000 ) {
+      rango = "INFINITY EMPEROR";
       if (!rangoArray[4]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
@@ -423,48 +425,7 @@ export default class Oficina extends Component {
         };
       }
     }
-    if (rango >= 600000 && rango < 1500000) {
-      rango = "Blue Diamond";
-      if (!rangoArray[5]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(5)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    if (rango >= 1500000 && rango < 5000000) {
-      rango = "Black Diamond";
-      if (!rangoArray[6]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(6)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    if (rango >= 5000000) {
-      rango = "Crown Diamond";
-      if (!rangoArray[7]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(7)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
+    
 
     this.setState({
       rango: rango,
@@ -627,9 +588,12 @@ export default class Oficina extends Component {
                         alt="images"
                         className="width-20"
                       />
-                      <h5 className="m-0 white-text lighten-4 mt-6">Rank</h5>
+                      <h5 className="m-0 white-text lighten-4 mt-6">{this.state.rango}</h5>
                       <p className="white-text lighten-4">
-                        <button className="mb-2 btn waves-effect waves-light amber darken-4 ancho100">
+                        <button 
+                          className="mb-2 btn waves-effect waves-light amber darken-4 ancho100"
+                          onClick={this.state.funcionRango}
+                        >
                           Next Rank
                         </button>
                       </p>
