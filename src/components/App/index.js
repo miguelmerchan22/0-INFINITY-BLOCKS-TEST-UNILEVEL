@@ -115,7 +115,7 @@ class App extends Component {
 
     if (!this.state.metamask) return (
       <>
-        <div class="row">
+        <div className="row">
           <TronLinkGuide />
         </div>
       </>

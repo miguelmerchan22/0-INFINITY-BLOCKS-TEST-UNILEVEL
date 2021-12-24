@@ -137,7 +137,7 @@ contract UnilevelSystem is Context, Admin{
     uint256 blokesDirectos;
   }
 
-  uint256 public MIN_RETIRO = 30 * 10**18;
+  uint256 public MIN_RETIRO = 15 * 10**18;
   uint256 public MIN_RETIRO_interno;
 
   uint256 public PRECIO_BLOCK = 50 * 10**18;

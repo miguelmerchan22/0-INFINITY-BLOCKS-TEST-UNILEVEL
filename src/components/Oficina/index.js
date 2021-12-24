@@ -499,7 +499,7 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">$ {this.state.withdrawableInfinity}</h5>
+                            <h5 className="mb-0 white-text">$ {(this.state.withdrawableInfinity).toFixed(6)}</h5>
                             <p className="no-margin">Infynit Bonus</p>
                           </div>
                           <div className="col s12 m12">

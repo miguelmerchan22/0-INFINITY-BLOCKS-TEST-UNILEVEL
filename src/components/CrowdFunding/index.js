@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Select from "react-select";
 
 import cons from "../../cons.js";
 
@@ -22,6 +21,7 @@ export default class CrowdFunding extends Component {
       hand: 0,
       cantidadBlokes: 1,
       valorBlokes: 50,
+      tiempo: 0,
     };
 
     this.deposit = this.deposit.bind(this);
@@ -106,21 +106,13 @@ export default class CrowdFunding extends Component {
       .investors(this.state.currentAccount)
       .call({ from: this.state.currentAccount });
 
-    var options = [];
+      console.log(parseInt(inversors.membership))
+      console.log(parseInt(Date.now()/1000) )
 
-    inversors.inicio = 1000;
-
-    var aprovado = await this.props.wallet.contractToken.methods
-      .allowance(this.state.currentAccount, this.props.contractAddress)
-      .call({ from: this.state.currentAccount });
-
-    if (aprovado > 0) {
-
-
-    }
+    var tiempo = ((inversors.membership - Date.now()/1000 )/86400).toFixed(2);
 
     this.setState({
-      options: options,
+      tiempo: tiempo
     });
   }
 
@@ -446,7 +438,7 @@ export default class CrowdFunding extends Component {
                       <i className="material-icons right">favorite</i>
                     </div>
                     <h5 className="white-text mb-1">Membership</h5>
-                    <p className="m-0">13 Dec 2021</p>
+                    <p className="m-0">{this.state.tiempo} days</p>
                     <a onClick={async()=> {
                        var loc = document.location.href;
                        var sponsor = cons.WS;
@@ -524,6 +516,7 @@ export default class CrowdFunding extends Component {
                       className="form-control center-align white-text"
                       value={this.state.cantidadBlokes}
                       onChange={this.handleChangeA}
+                      
                     />
                     <p className="mb-0">Quantity</p>
                   </div>
@@ -537,6 +530,7 @@ export default class CrowdFunding extends Component {
                       className="form-control center-align white-text"
                       value={this.state.valorBlokes}
                       onChange={this.handleChangeB}
+                      step="50"
                     />
                     <p className="mb-0">Total</p>
                   </div>
