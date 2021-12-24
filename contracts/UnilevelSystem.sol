@@ -355,31 +355,51 @@ contract UnilevelSystem is Context, Admin{
     uint till;
     
      for (uint i = 0; i < usuario.depositos.length; i++) {
-       amount = actualizarArrayUint256(amount);
-       time = actualizarArrayUint256(time);
-       activo = actualizarArrayBool(activo);
-
        Deposito storage dep = usuario.depositos[i];
+       if (_infinity == dep.infinity) {
+          amount = actualizarArrayUint256(amount);
+          time = actualizarArrayUint256(time);
+          activo = actualizarArrayBool(activo);
 
-       time[i] = dep.inicio;
-      
-      finish = dep.inicio + tiempo();
+          time[i] = dep.inicio;
+          
+          finish = dep.inicio + tiempo();
 
-      if (_infinity == dep.infinity) {
-        since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
-      }else{
-        since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
-      }
-      till = block.timestamp > finish ? finish : block.timestamp;
+          since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
 
-      if (since != 0 && since < till ) {
-        if (_infinity == dep.infinity) {
-          total += dep.amount * (till - since) / tiempo() ;
-        } 
-        activo[i] = true;
-      }
+          till = block.timestamp > finish ? finish : block.timestamp;
 
-      amount[i] = dep.amount;     
+          if (since != 0 && since < till ) {
+
+            total += dep.amount * (till - since) / tiempo() ;
+
+            activo[i] = true;
+          }
+
+          amount[i] = dep.amount;    
+
+       }else{
+          amount = actualizarArrayUint256(amount);
+          time = actualizarArrayUint256(time);
+          activo = actualizarArrayBool(activo);
+
+          time[i] = dep.inicio;
+          
+          finish = dep.inicio + tiempo();
+
+          since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
+          
+          till = block.timestamp > finish ? finish : block.timestamp;
+
+          if (since != 0 && since < till ) {
+
+            total += dep.amount * (till - since) / tiempo() ;
+          
+            activo[i] = true;
+          }
+
+          amount[i] = dep.amount;    
+       }
 
      }
 

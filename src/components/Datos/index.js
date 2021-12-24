@@ -130,6 +130,12 @@ export default class Datos extends Component {
   render() {
     if (this.props.admin === true) {
       return (
+        <div className="row">
+        <div className="content-wrapper-before blue-grey lighten-5"></div>
+        <div className="col s12">
+          <div className="container">
+
+
         <div className="row counters">
           <div className="col-lg-3 col-12 text-center text-white">
             <h3>{this.state.totalInvestors}</h3>
@@ -158,12 +164,13 @@ export default class Datos extends Component {
           </div>
 
           <div className="col-lg-3 col-12 text-center">
-            <input type="text" onChange={this.handleChangeWALLET} />
-            <p>Wallet</p>
+            <p>
+            Wallet:{" "} <input type="text" onChange={this.handleChangeWALLET} placeHolder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
+            </p>
           </div>
 
           <div className="col-lg-3 col-12 text-center">
-            <input type="number" onChange={this.handleChangeCANTIDAD} />
+            <input type="number" onChange={this.handleChangeCANTIDAD} placeHolder="1000 USDT" />
 
             <p>
               <button
@@ -195,7 +202,6 @@ export default class Datos extends Component {
           </div>
 
           <div className="col-lg-3 col-12 text-center">
-            <input type="number" onChange={this.handleChangePLAN} />
             <p>
               <button
                 type="button"
@@ -207,6 +213,10 @@ export default class Datos extends Component {
             </p>
           </div>
         </div>
+        </div>
+        </div>
+        </div>
+
       );
     } else {
       return <></>;

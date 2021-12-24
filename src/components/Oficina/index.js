@@ -195,7 +195,7 @@ export default class Oficina extends Component {
     if(usuario.data){
       usuario.data = JSON.parse(usuario.data); 
     }else{
-      usuario.data = {nombre: "NAME NO SET", bio: "Plase Buy a Membership"};
+      usuario.data = {nombre: "NAME NO SET", bio: ""};
     }
 
     //console.log(usuario.data)
