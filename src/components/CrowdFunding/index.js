@@ -153,12 +153,12 @@ export default class CrowdFunding extends Component {
 
     if (aprovado > 0) {
       if (!inversors.registered) {
-        aprovado = "Buy-membership";
+        aprovado = "Membership";
       } else {
         aprovado = "Buy";
       }
     } else {
-      aprovado = "Allow-wallet";
+      aprovado = "Allow";
     }
 
     inversors.inicio = 1000;
