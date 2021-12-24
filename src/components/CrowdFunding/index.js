@@ -516,7 +516,7 @@ export default class CrowdFunding extends Component {
                       className="form-control center-align white-text"
                       value={this.state.cantidadBlokes}
                       onChange={this.handleChangeA}
-                      
+                      step={1}
                     />
                     <p className="mb-0">Quantity</p>
                   </div>

@@ -41,6 +41,8 @@ export default class Oficina extends Component {
     this.Investors3 = this.Investors3.bind(this);
     this.Link = this.Link.bind(this);
     this.withdraw = this.withdraw.bind(this);
+    this.withdraw1 = this.withdraw1.bind(this);
+    this.withdrawTeam = this.withdrawTeam.bind(this);
 
     this.rateSITE = this.rateSITE.bind(this);
     this.handleChangeSITE = this.handleChangeSITE.bind(this);
@@ -270,6 +272,58 @@ export default class Oficina extends Component {
     }
   }
 
+  async withdraw2() {
+    var available = this.state.withdrawableInfinity;
+
+    available = (available * 1).toFixed(6);
+    available = parseFloat(available);
+
+    var decimales = await this.props.wallet.contractToken.methods
+      .decimals()
+      .call({ from: this.state.currentAccount });
+
+    var MIN_RETIRO = await this.props.wallet.contractBinary.methods
+      .MIN_RETIRO()
+      .call({ from: this.state.currentAccount });
+    MIN_RETIRO = MIN_RETIRO / 10 ** decimales;
+
+    if (available > MIN_RETIRO) {
+      await this.props.wallet.contractBinary.methods
+        .withdraw2()
+        .send({ from: this.state.currentAccount });
+    } else {
+      if (available < MIN_RETIRO) {
+        window.alert("The minimum to withdraw are: " + MIN_RETIRO + " USDT");
+      }
+    }
+  }
+
+  async withdrawTeam() {
+    var available  = this.state.balanceRef;
+
+    available = (available * 1).toFixed(6);
+    available = parseFloat(available);
+
+    var decimales = await this.props.wallet.contractToken.methods
+      .decimals()
+      .call({ from: this.state.currentAccount });
+
+    var MIN_RETIRO = await this.props.wallet.contractBinary.methods
+      .MIN_RETIRO()
+      .call({ from: this.state.currentAccount });
+    MIN_RETIRO = MIN_RETIRO / 10 ** decimales;
+
+    if (available > MIN_RETIRO) {
+      await this.props.wallet.contractBinary.methods
+        .withdrawTeam()
+        .send({ from: this.state.currentAccount });
+    } else {
+      if (available < MIN_RETIRO) {
+        window.alert("The minimum to withdraw are: " + MIN_RETIRO + " USDT");
+      }
+    }
+  }
+
   async claim() {
     await this.props.wallet.contractBinary.methods
       .newRecompensa()
@@ -421,13 +475,13 @@ export default class Oficina extends Component {
   render() {
     var { available, invested, direccion, rango, balanceSal } = this.state;
 
-    available = available.toFixed(2);
+    available = available.toFixed(3);
     available = parseFloat(available);
 
-    balanceSal = balanceSal.toFixed(2);
+    balanceSal = balanceSal.toFixed(3);
     balanceSal = parseFloat(balanceSal);
 
-    invested = invested.toFixed(2);
+    invested = invested.toFixed(3);
     invested = parseFloat(invested);
 
     if (available >= this.state.MIN_RETIRO) {
@@ -459,7 +513,7 @@ export default class Oficina extends Component {
                               {invested / 50} BLKS
                             </h5>
                             <p>Total earn</p>
-                            <p className="no-margin">${this.state.withdrawn.toFixed(2)}</p>
+                            <p className="no-margin">${this.state.withdrawn.toFixed(3)}</p>
                           </div>
                         </div>
                       </div>
@@ -499,13 +553,13 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">$ {(this.state.withdrawableInfinity).toFixed(6)}</h5>
-                            <p className="no-margin">Infynit Bonus</p>
+                            <h5 className="mb-0 white-text">$ {(this.state.withdrawableInfinity).toFixed(3)}</h5>
+                            <p className="no-margin">Infinity Bonus</p>
                           </div>
                           <div className="col s12 m12">
                             <button
                               className="waves-effect waves-light btn mb-1 mr-1 ancho100"
-                              onClick={() => this.withdraw()}
+                              onClick={() => this.withdraw2()}
                             >
                               Withdraw
                             </button>
@@ -525,13 +579,13 @@ export default class Oficina extends Component {
                             </i>
                           </div>
                           <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(2)} </h5>
+                            <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(3)} </h5>
                             <p className="no-margin">Team Bonus</p>
                           </div>
                           <div className="col s12 m12">
                             <button
                               className="waves-effect waves-light btn mb-1 mr-1 green ancho100"
-                              onClick={() => this.withdraw()}
+                              onClick={() => this.withdrawTeam()}
                             >
                               Withdraw 
                             </button>
