@@ -364,7 +364,7 @@ contract UnilevelSystem is Context, Admin{
        time[i] = dep.inicio;
       
       finish = dep.inicio + tiempo();
-      
+
       if (_infinity == dep.infinity) {
         since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
       }else{
@@ -436,6 +436,35 @@ contract UnilevelSystem is Context, Admin{
 
 
     return true;
+  }
+
+  function asignarMembership(address _user) public onlyAdmin returns (bool){
+
+    Investor storage usuario = investors[_user];
+
+    if(!usuario.registered){
+        usuario.registered = true;
+        usuario.membership = block.timestamp + duracionMembership*unidades;
+        padre[_msgSender()] = _msgSender();
+
+        if (_msgSender() != address(0) ){
+          Investor storage sponsor = investors[_msgSender()];
+          sponsor.directos++;
+          
+        }
+        
+        totalInvestors++;
+
+        rangoReclamado[_msgSender()] = [false,false,false,false,false];
+        idToAddress[lastUserId] = _msgSender();
+        addressToId[_msgSender()] = lastUserId;
+        
+        lastUserId++;
+      }else{
+        usuario.membership = usuario.membership + duracionMembership*unidades;
+      }
+        
+      return true;
   }
 
   function registro(address _sponsor, string memory _datos) public{

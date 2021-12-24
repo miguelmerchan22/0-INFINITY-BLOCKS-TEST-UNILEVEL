@@ -22,6 +22,7 @@ export default class CrowdFunding extends Component {
       cantidadBlokes: 1,
       valorBlokes: 50,
       tiempo: 0,
+      estadoBuy: "Loading...",
     };
 
     this.deposit = this.deposit.bind(this);
@@ -142,12 +143,12 @@ export default class CrowdFunding extends Component {
 
     if (aprovado > 0) {
       if (!inversors.registered) {
-        aprovado = "Register";
+        aprovado = "Buy-membership";
       } else {
-        aprovado = "Buy Plan";
+        aprovado = "Buy";
       }
     } else {
-      aprovado = "Allow wallet";
+      aprovado = "Allow-wallet";
     }
 
     inversors.inicio = 1000;
@@ -179,8 +180,6 @@ export default class CrowdFunding extends Component {
     }
 
     var partner = cons.WS;
-
-    var hand = "Left ";
 
     if (inversors.registered) {
       partner = await this.props.wallet.contractBinary.methods
@@ -530,7 +529,7 @@ export default class CrowdFunding extends Component {
                       className="mb-6 btn waves-effect waves-light cyan"
                       onClick={() => this.deposit()}
                     >
-                      Buy
+                      {this.state.deposito}
                     </button>
                   </div>
                 </div>
