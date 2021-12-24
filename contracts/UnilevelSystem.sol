@@ -171,6 +171,7 @@ contract UnilevelSystem is Context, Admin{
 
   mapping (address => Investor) public investors;
   mapping (address => address) public padre;
+  mapping (address => address[]) public hijos;
   mapping (uint256 => address) public idToAddress;
   mapping (address => uint256) public addressToId;
   mapping (address => bool[]) public rangoReclamado;
@@ -318,13 +319,25 @@ contract UnilevelSystem is Context, Admin{
 
   }
 
-  function column(address yo, uint256 _largo) public view returns(address[] memory) {
+  function column(address yo, uint256 _largo) public view returns(address[ ] memory) {
 
     address[] memory res;
     for (uint256 i = 0; i < _largo; i++) {
       res = actualizarNetwork(res);
       res[i] = padre[yo];
       yo = padre[yo];
+    }
+    
+    return res;
+  }
+
+  function columnHijos(address yo, uint256 _largo) public view returns(address[ ] memory) {
+
+    address[] memory res;
+    for (uint256 i = 0; i < _largo; i++) {
+      res = actualizarNetwork(res);
+      res = actualizarNetwork(hijos[yo]);
+      res[i] = address(0);
     }
     
     return res;
@@ -351,6 +364,7 @@ contract UnilevelSystem is Context, Admin{
        time[i] = dep.inicio;
       
       finish = dep.inicio + tiempo();
+      
       if (_infinity == dep.infinity) {
         since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
       }else{

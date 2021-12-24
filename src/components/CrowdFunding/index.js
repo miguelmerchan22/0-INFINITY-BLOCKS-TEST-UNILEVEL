@@ -200,15 +200,6 @@ export default class CrowdFunding extends Component {
           get[tmp[0]] = unescape(decodeURI(tmp[1]));
         }
 
-        if (get["hand"]) {
-          tmp = get["hand"].split("#");
-
-          //console.log(tmp);
-
-          if (tmp[0] === "right") {
-            hand = "Rigth ";
-          }
-        }
 
         if (get["ref"]) {
           tmp = get["ref"].split("#");
@@ -224,7 +215,7 @@ export default class CrowdFunding extends Component {
             .call({ from: this.state.currentAccount });
           //console.log(wallet);
           if (inversors.registered) {
-            partner = "team " + hand + " of " + wallet;
+            partner =  wallet;
           }
         }
       }

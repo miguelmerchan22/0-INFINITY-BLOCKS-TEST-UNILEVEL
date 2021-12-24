@@ -536,7 +536,9 @@ export default class Oficina extends Component {
                             <p className="no-margin">ROI</p>
                           </div>
                           <div className="col s12 m12">
-                            <button className="mb-2 btn waves-effect waves-light amber darken-4 ancho100">
+                            <button 
+                              className="mb-2 btn waves-effect waves-light amber darken-4 ancho100"
+                              onClick={() => this.withdraw()}>
                               Withdraw
                             </button>
                           </div>
