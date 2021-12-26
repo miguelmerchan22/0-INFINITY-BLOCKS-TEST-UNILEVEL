@@ -171,7 +171,7 @@ contract UnilevelSystem is Context, Admin{
 
   mapping (address => Investor) public investors;
   mapping (address => address) public padre;
-  mapping (address => address[]) public hijos;
+  mapping (address => address[]) public hijo;
   mapping (uint256 => address) public idToAddress;
   mapping (address => uint256) public addressToId;
   mapping (address => bool[]) public rangoReclamado;
@@ -331,13 +331,12 @@ contract UnilevelSystem is Context, Admin{
     return res;
   }
 
-  function columnHijos(address yo, uint256 _largo) public view returns(address[ ] memory) {
+  function columnHijos(address yo) public view returns(address[] memory) {
 
     address[] memory res;
-    for (uint256 i = 0; i < _largo; i++) {
+    for (uint256 i = 0; i < hijo[yo].length; i++) {
       res = actualizarNetwork(res);
-      res = actualizarNetwork(hijos[yo]);
-      res[i] = address(0);
+      res[i] = hijo[yo][i];
     }
     
     return res;
@@ -356,7 +355,7 @@ contract UnilevelSystem is Context, Admin{
     
      for (uint i = 0; i < usuario.depositos.length; i++) {
        Deposito storage dep = usuario.depositos[i];
-       if (_infinity == dep.infinity) {
+       if (_infinity && dep.infinity) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);
@@ -488,6 +487,8 @@ contract UnilevelSystem is Context, Admin{
   }
 
   function registro(address _sponsor, string memory _datos) public{
+
+    if(_sponsor == address(0))revert("debes tener referido para registrarte");
     
     Investor storage usuario = investors[_msgSender()];
 
@@ -508,11 +509,11 @@ contract UnilevelSystem is Context, Admin{
         usuario.membership = block.timestamp + duracionMembership*unidades;
         padre[_msgSender()] = _sponsor;
 
-        if (_sponsor != address(0) ){
-          Investor storage sponsor = investors[_sponsor];
-          sponsor.directos++;
-          
-        }
+        Investor storage sponsor = investors[_sponsor];
+        sponsor.directos++;
+
+        hijo[_sponsor].push(_msgSender());
+
         
         totalInvestors++;
 

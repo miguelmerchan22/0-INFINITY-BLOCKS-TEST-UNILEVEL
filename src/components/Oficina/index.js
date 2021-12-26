@@ -466,17 +466,19 @@ export default class Oficina extends Component {
                     <div className="card gradient-45deg-light-blue-cyan gradient-shadow min-height-100 white-text animate fadeLeft">
                       <div className="padding-4">
                         <div className="row">
-                          <div className="col s7 m5">
+                          <div className="col s4 m4">
                             <i className="material-icons background-round mt-5">
                               add_shopping_cart
                             </i>
                           </div>
-                          <div className="col s5 m7 right-align">
+                          <div className="col s8 m8 right-align ">
                             <h5 className="mb-0 white-text">
                               {invested / 50} BLKS
                             </h5>
-                            <p>Total earn</p>
-                            <p className="no-margin">${this.state.withdrawn.toFixed(3)}</p>
+                            <p className="no-margin">$ {invested}</p>
+                          </div>
+                          <div className="col s12 m12 right-align">
+                            <p>Earned: $ {this.state.withdrawn.toFixed(3)}</p>
                           </div>
                         </div>
                       </div>
@@ -487,12 +489,12 @@ export default class Oficina extends Component {
                     <div className="card gradient-45deg-amber-amber gradient-shadow min-height-100 white-text animate fadeRight">
                       <div className="padding-4">
                         <div className="row">
-                          <div className="col s5 m5">
+                          <div className="col s4 m4">
                             <i className="material-icons background-round mt-5">
                               timeline
                             </i>
                           </div>
-                          <div className="col s7 m7 left-align p-0 mb-6 pr-3">
+                          <div className="col s8 m8 right-align mb-7">
                             <h5 className="mb-0 white-text">$ {available}</h5>
                             <p className="no-margin">ROI</p>
                           </div>
@@ -512,14 +514,14 @@ export default class Oficina extends Component {
                     <div className="card gradient-45deg-red-pink gradient-shadow min-height-100 white-text animate fadeLeft">
                       <div className="padding-4">
                         <div className="row">
-                          <div className="col s5 m5">
+                          <div className="col s4 m4">
                             <i className="material-icons background-round mt-5">
                               perm_identity
                             </i>
                           </div>
-                          <div className="col s7 m7 right-align mb-7">
+                          <div className="col s8 m8 right-align mb-7">
                             <h5 className="mb-0 white-text">$ {(this.state.withdrawableInfinity).toFixed(3)}</h5>
-                            <p className="no-margin">Infinity Bonus</p>
+                            <p className="no-margin">Infinity ∞</p>
                           </div>
                           <div className="col s12 m12">
                             <button
@@ -538,13 +540,13 @@ export default class Oficina extends Component {
                     <div className="card gradient-45deg-green-teal gradient-shadow min-height-100 white-text animate fadeRight">
                       <div className="padding-4">
                         <div className="row">
-                          <div className="col s5 m5">
+                          <div className="col s4 m4">
                             <i className="material-icons background-round mt-5">
                               attach_money
                             </i>
                           </div>
-                          <div className="col s7 m7 right-align mb-7">
-                            <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(3)} </h5>
+                          <div className="col s8 m8 right-align mb-7">
+                            <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(1)} </h5>
                             <p className="no-margin">Team Bonus</p>
                           </div>
                           <div className="col s12 m12">
