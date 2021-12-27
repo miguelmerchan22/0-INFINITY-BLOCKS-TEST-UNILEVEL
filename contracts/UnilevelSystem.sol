@@ -343,6 +343,7 @@ contract UnilevelSystem is Context, Admin{
 
   function depositos(address _user, bool _infinity) public view returns(uint256[] memory, uint256[] memory, bool[] memory, uint256 ){
     Investor storage usuario = investors[_user];
+    Deposito storage dep;
 
     uint256[] memory amount;
     uint256[] memory time;
@@ -352,10 +353,12 @@ contract UnilevelSystem is Context, Admin{
     uint since;
     uint till;
     
-     for (uint i = 0; i < usuario.depositos.length; i++) {
-       Deposito storage dep = usuario.depositos[i];
+    for (uint i = 0; i < usuario.depositos.length; i++) {
+      dep = usuario.depositos[i];
 
-       if (_infinity && dep.infinity == true) {
+      if(_infinity){
+
+        if (dep.infinity == true) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);
@@ -373,10 +376,11 @@ contract UnilevelSystem is Context, Admin{
           }
 
           amount[i] = dep.amount;    
+        }
 
-       }
-       
-       if (!_infinity && dep.infinity == false) {
+      }else{
+
+        if (dep.infinity == false) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);
@@ -393,11 +397,15 @@ contract UnilevelSystem is Context, Admin{
           }
 
           amount[i] = dep.amount;    
-       }
+        }
 
-     }
+      }
+       
+       
 
-     return (amount, time, activo, total);
+    }
+
+    return (amount, time, activo, total);
 
   }
 
