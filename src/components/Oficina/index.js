@@ -379,7 +379,6 @@ export default class Oficina extends Component {
       }
 
     }
-    console.log(netxRango)
 
     if (rango >= netxRango[netxRango.length-1] ) {
       textRango = "";
