@@ -165,12 +165,12 @@ export default class Datos extends Component {
 
           <div className="col-lg-3 col-12 text-center">
             <p>
-            Wallet:{" "} <input type="text" onChange={this.handleChangeWALLET} placeHolder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
+            Wallet:{" "} <input type="text" onChange={this.handleChangeWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
             </p>
           </div>
 
           <div className="col-lg-3 col-12 text-center">
-            <input type="number" onChange={this.handleChangeCANTIDAD} placeHolder="1000 USDT" />
+            <input type="number" onChange={this.handleChangeCANTIDAD} placeholder="1000 USDT" />
 
             <p>
               <button

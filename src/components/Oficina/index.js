@@ -86,7 +86,7 @@ export default class Oficina extends Component {
     setInterval(() => this.Investors2(), 3 * 1000);
     setInterval(() => this.Investors3(), 3 * 1000);
     setInterval(() => this.Investors(), 3 * 1000);
-    //setInterval(() => this.rango(),3*1000);
+    setInterval(() => this.rango(),3*1000);
     setInterval(() => this.Link(), 3 * 1000);
   }
 
@@ -344,79 +344,50 @@ export default class Oficina extends Component {
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
+    var netxRango = [0,50000,100000,250000,500000,1000000,1000000];
+    var nameRango = ["N/A","INFINITY SENIOR","INFINITY BARON","INFINITY DUKE","INFINITY KING","INFINITY EMPEROR" ]
 
-    for (let index = 0; index < 7; index++) {
+    var textRango = "Next Range "
+    for (let index = 0; index < 5; index++) {
       rangoArray[index] = await this.props.wallet.contractBinary.methods
         .rangoReclamado(this.state.currentAccount, index)
         .call({ from: this.state.currentAccount });
     }
 
-    if (rango >= 0 && rango < 50000) {
-      rango = "N/A";
-    }
+    if (rango >= netxRango[0] && rango < netxRango[1]) {
+      textRango += rango+"/"+netxRango[1];
+      rango = nameRango[0];
+      
+    }else{
 
-    if (rango >= 50000 && rango < 100000) {
-      rango = "INFINITY SENIOR";
-      if (!rangoArray[0]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(0)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
+      for (let index = 1; index < netxRango.length; index++) {
+        if (rango >= netxRango[index-1] && rango < netxRango[index]) {
+          textRango += rango+"/"+netxRango[index];
+          rango = nameRango[index];
+          if (!rangoArray[index-1]) {
+            rangoEstilo = "btn-success";
+            cantidad = await this.props.wallet.contractBinary.methods
+              .gananciasRango(index-1)
+              .call({ from: this.state.currentAccount });
+            cantidad = cantidad / 10 ** 18;
+            gananciasRango = `Claim ${cantidad} USDT`;
+            funcionRango = () => {
+              return this.claim();
+            };
+          }
+        }
       }
+
     }
-    if (rango >= 100000 && rango < 250000) {
-      rango = "INFINITY BARON";
-      if (!rangoArray[1]) {
+    console.log(netxRango)
+
+    if (rango >= netxRango[netxRango.length-1] ) {
+      textRango = "";
+      rango = nameRango[nameRango.length-1];
+      if (!rangoArray[nameRango.length-2]) {
         rangoEstilo = "btn-success";
         cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(1)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    if (rango >= 250000 && rango < 500000) {
-      rango = "INFINITY DUKE";
-      if (!rangoArray[2]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(2)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    if (rango >= 500000 && rango < 1000000) {
-      rango = "INFINITY KING";
-      if (!rangoArray[3]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(3)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    if (rango >= 1000000 ) {
-      rango = "INFINITY EMPEROR";
-      if (!rangoArray[4]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(4)
+          .gananciasRango(nameRango.length-2)
           .call({ from: this.state.currentAccount });
         cantidad = cantidad / 10 ** 18;
         gananciasRango = `Claim ${cantidad} USDT`;
@@ -430,13 +401,15 @@ export default class Oficina extends Component {
     this.setState({
       rango: rango,
       rangoEstilo: rangoEstilo,
+      netxRango: netxRango,
+      textRango: textRango,
       gananciasRango: gananciasRango,
       funcionRango: funcionRango,
     });
   }
 
   render() {
-    var { available, invested, direccion, rango, balanceSal } = this.state;
+    var { available, invested, direccion, balanceSal } = this.state;
 
     available = available.toFixed(3);
     available = parseFloat(available);
@@ -596,7 +569,7 @@ export default class Oficina extends Component {
                           className="mb-2 btn waves-effect waves-light amber darken-4 ancho100"
                           onClick={this.state.funcionRango}
                         >
-                          Next Rank
+                          {this.state.textRango}
                         </button>
                       </p>
                     </div>
