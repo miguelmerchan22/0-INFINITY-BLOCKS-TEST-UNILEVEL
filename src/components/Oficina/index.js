@@ -198,7 +198,7 @@ export default class Oficina extends Component {
       usuario.data = {nombre: "NAME NO SET", bio: ""};
     }
 
-    //console.log(usuario.data)
+    //console.log(usuario)
 
     this.setState({
       registered: usuario.registered,

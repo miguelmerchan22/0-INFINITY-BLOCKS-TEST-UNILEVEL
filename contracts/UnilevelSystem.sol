@@ -355,7 +355,8 @@ contract UnilevelSystem is Context, Admin{
     
      for (uint i = 0; i < usuario.depositos.length; i++) {
        Deposito storage dep = usuario.depositos[i];
-       if (_infinity && dep.infinity) {
+
+       if (_infinity && dep.infinity == _infinity) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);
@@ -379,7 +380,7 @@ contract UnilevelSystem is Context, Admin{
 
        }
        
-       if (!_infinity && !dep.infinity) {
+       if (!_infinity && dep.infinity == _infinity) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);
@@ -424,12 +425,11 @@ contract UnilevelSystem is Context, Admin{
 
             a = amount.mul(array[i]).div(1000);
 
+            usuario.balanceRef += a;
+            usuario.totalRef += a;
+            usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true, true));
 
-              usuario.balanceRef += a;
-              usuario.totalRef += a;
-              usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true, true));
-
-              totalRefRewards += a;
+            totalRefRewards += a;
             
 
           }else{
