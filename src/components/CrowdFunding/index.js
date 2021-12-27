@@ -336,7 +336,7 @@ export default class CrowdFunding extends Component {
         var datos = {};
         datos.nombre = await prompt("please set a nikname");
         datos.bio = await prompt("please set a bio");
-        
+
         var reg = this.props.wallet.contractBinary.methods
           .registro(sponsor, JSON.stringify(datos))
           .send({ from: this.state.currentAccount });
@@ -439,6 +439,7 @@ export default class CrowdFunding extends Component {
                             }
                           }
                         }
+                      if(sponsor !== "0x0000000000000000000000000000000000000000" ){
                         var datos = {};
                         datos.nombre = await prompt("please set a nikname");
                         datos.bio = await prompt("please set a bio");
@@ -449,6 +450,9 @@ export default class CrowdFunding extends Component {
                           .then(() => {
                             window.alert("membership buyed");
                           });
+                      }else{
+                        window.alert("You need a referal link");
+                      }
                       }}
                       className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4"
                     >
