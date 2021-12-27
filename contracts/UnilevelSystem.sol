@@ -377,7 +377,9 @@ contract UnilevelSystem is Context, Admin{
 
           amount[i] = dep.amount;    
 
-       }else{
+       }
+       
+       if (!_infinity && !dep.infinity) {
           amount = actualizarArrayUint256(amount);
           time = actualizarArrayUint256(time);
           activo = actualizarArrayBool(activo);

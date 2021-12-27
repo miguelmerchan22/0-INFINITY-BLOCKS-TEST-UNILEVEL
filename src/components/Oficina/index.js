@@ -478,7 +478,7 @@ export default class Oficina extends Component {
                             <p className="no-margin">$ {invested}</p>
                           </div>
                           <div className="col s12 m12 right-align">
-                            <p>Earned: $ {this.state.withdrawn.toFixed(3)}</p>
+                            <p>Earned: $ {this.state.withdrawn.toFixed(2)}</p>
                           </div>
                         </div>
                       </div>
