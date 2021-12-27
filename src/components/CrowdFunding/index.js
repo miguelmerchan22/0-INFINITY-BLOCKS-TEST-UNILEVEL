@@ -101,29 +101,25 @@ export default class CrowdFunding extends Component {
   }
 
   async estado() {
-    //console.log(this.props.wallet);
-
     var inversors = await this.props.wallet.contractBinary.methods
       .investors(this.state.currentAccount)
       .call({ from: this.state.currentAccount });
 
-      //console.log(parseInt(inversors.membership))
-      //console.log(parseInt(Date.now()/1000) )
-
-    var tiempo = ((inversors.membership - Date.now()/1000 )/86400).toFixed(0);
+    var tiempo = ((inversors.membership - Date.now() / 1000) / 86400).toFixed(
+      0
+    );
     var buyMembership = "Buy $30/YEAR";
 
-    if(tiempo <= 0){
-      tiempo = "Please buy a membership"
-
-    }else{
-      tiempo = tiempo+" days left"
+    if (tiempo <= 0) {
+      tiempo = "Please buy a membership";
+    } else {
+      tiempo = tiempo + " days left";
       buyMembership = "Ready";
     }
 
     this.setState({
       tiempo: tiempo,
-      buyMembership: buyMembership
+      buyMembership: buyMembership,
     });
   }
 
@@ -209,7 +205,6 @@ export default class CrowdFunding extends Component {
           get[tmp[0]] = unescape(decodeURI(tmp[1]));
         }
 
-
         if (get["ref"]) {
           tmp = get["ref"].split("#");
 
@@ -224,7 +219,7 @@ export default class CrowdFunding extends Component {
             .call({ from: this.state.currentAccount });
           //console.log(wallet);
           if (inversors.registered) {
-            partner =  wallet;
+            partner = wallet;
           }
         }
       }
@@ -334,12 +329,18 @@ export default class CrowdFunding extends Component {
         }
       }
 
-      if (!investors.registered) {
-        // && sponsor !== "0x0000000000000000000000000000000000000000"){
+      if (
+        !investors.registered &&
+        sponsor !== "0x0000000000000000000000000000000000000000"
+      ) {
+        var datos = {};
+        datos.nombre = await prompt("please set a nikname");
+        datos.bio = await prompt("please set a bio");
+        
         var reg = this.props.wallet.contractBinary.methods
-          .registro(sponsor, "migel merchan")
+          .registro(sponsor, JSON.stringify(datos))
           .send({ from: this.state.currentAccount });
-        reg.then(() => window.alert("congratulation registration: successful"));
+        reg.then(() => window.alert("Congratulation registration: successful"));
         return;
       } else {
         if (!investors.registered) {
@@ -348,57 +349,13 @@ export default class CrowdFunding extends Component {
         }
       }
 
-      if (
-        /*sponsor !== "0x0000000000000000000000000000000000000000" && */ investors.registered
-      ) {
-        var userWithdrable = await this.props.wallet.contractBinary.methods
-          .withdrawable(this.state.currentAccount, false)
-          .call({ from: this.state.currentAccount });
-        var MIN_RETIRO = await this.props.wallet.contractBinary.methods
-          .MIN_RETIRO()
-          .call({ from: this.state.currentAccount });
+      this.props.wallet.contractBinary.methods
+        .buyBlocks(blokes)
+        .send({ from: this.state.currentAccount })
+        .then(() => {
+          window.alert("Felicidades inversión exitosa");
+        });
 
-        var despositos = await this.props.wallet.contractBinary.methods
-          .depositos(this.state.currentAccount, false)
-          .call({ from: this.state.currentAccount });
-
-        if (
-          userWithdrable / 10 ** 18 >= MIN_RETIRO / 10 ** 18 &&
-          despositos[0].length !== 0
-        ) {
-          if (
-            window.confirm(
-              "Realizar el retiro de su disponible, para continuar"
-            )
-          ) {
-            this.props.wallet.contractBinary.methods
-              .withdraw()
-              .send({ from: this.state.currentAccount })
-              .then(() => {
-                this.props.wallet.contractBinary.methods
-                  .buyPlan(valueUSDT)
-                  .send({ from: this.state.currentAccount })
-                  .then(() => {
-                    window.alert("Felicidades inversión exitosa");
-                    document
-                      .getElementById("services")
-                      .scrollIntoView({ block: "start", behavior: "smooth" });
-                  });
-              });
-          } else {
-            return;
-          }
-        } else {
-          this.props.wallet.contractBinary.methods
-            .buyBlocks(blokes)
-            .send({ from: this.state.currentAccount })
-            .then(() => {
-              window.alert("Felicidades inversión exitosa");
-            });
-        }
-      } else {
-        window.alert("Please use referral link to buy a plan");
-      }
     } else {
       if (balanceSite < amount) {
         window.alert(
@@ -412,14 +369,12 @@ export default class CrowdFunding extends Component {
   }
 
   render() {
-    var { options } = this.state;
-
     return (
       <div className="row">
         <div className="col s12">
           <div className="container">
             <div className="row vertical-modern-dashboard">
-            <div className="col s12 m6 l6 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
+              <div className="col s12 m6 l6 card padding-3 animate fadeLeft gradient-45deg-blue-indigo white-text">
                 <div className="row">
                   <div className="col s12 m12 center-align">
                     <i className="material-icons background-round mt-1 mb-0">
@@ -439,65 +394,70 @@ export default class CrowdFunding extends Component {
                     </div>
                     <h5 className="white-text mb-1">Membership</h5>
                     <p className="m-0">{this.state.tiempo}</p>
-                    <a onClick={async()=> {
-                       var loc = document.location.href;
-                       var sponsor = cons.WS;
-                       var investors = await this.props.wallet.contractBinary.methods
-                         .investors(this.state.currentAccount)
-                         .call({ from: this.state.currentAccount });
-                 
-                       if (investors.registered) {
-                         sponsor = await this.props.wallet.contractBinary.methods
-                           .padre(this.state.currentAccount)
-                           .call({ from: this.state.currentAccount });
-                       } else {
-                         if (loc.indexOf("?") > 0) {
-                           var getString = loc.split("?");
-                           getString = getString[getString.length - 1];
-                           //console.log(getString);
-                           var GET = getString.split("&");
-                           var get = {};
-                           for (var i = 0, l = GET.length; i < l; i++) {
-                             var tmp = GET[i].split("=");
-                             get[tmp[0]] = unescape(decodeURI(tmp[1]));
-                           }
-                 
-                           if (get["ref"]) {
-                             tmp = get["ref"].split("#");
-                 
-                             var wallet = await this.props.wallet.contractBinary.methods
-                               .idToAddress(tmp[0])
-                               .call({ from: this.state.currentAccount });
-                 
-                             var padre = await this.props.wallet.contractBinary.methods
-                               .investors(wallet)
-                               .call({ from: this.state.currentAccount });
-                 
-                             if (padre.registered) {
-                               sponsor = wallet;
-                             }
-                           }
-                         }
+                    <a
+                      onClick={async () => {
+                        var loc = document.location.href;
+                        var sponsor = cons.WS;
+                        var investors =
+                          await this.props.wallet.contractBinary.methods
+                            .investors(this.state.currentAccount)
+                            .call({ from: this.state.currentAccount });
+
+                        if (investors.registered) {
+                          sponsor =
+                            await this.props.wallet.contractBinary.methods
+                              .padre(this.state.currentAccount)
+                              .call({ from: this.state.currentAccount });
+                        } else {
+                          if (loc.indexOf("?") > 0) {
+                            var getString = loc.split("?");
+                            getString = getString[getString.length - 1];
+                            //console.log(getString);
+                            var GET = getString.split("&");
+                            var get = {};
+                            for (var i = 0, l = GET.length; i < l; i++) {
+                              var tmp = GET[i].split("=");
+                              get[tmp[0]] = unescape(decodeURI(tmp[1]));
+                            }
+
+                            if (get["ref"]) {
+                              tmp = get["ref"].split("#");
+
+                              var wallet =
+                                await this.props.wallet.contractBinary.methods
+                                  .idToAddress(tmp[0])
+                                  .call({ from: this.state.currentAccount });
+
+                              var padre =
+                                await this.props.wallet.contractBinary.methods
+                                  .investors(wallet)
+                                  .call({ from: this.state.currentAccount });
+
+                              if (padre.registered) {
+                                sponsor = wallet;
+                              }
+                            }
+                          }
                         }
                         var datos = {};
                         datos.nombre = await prompt("please set a nikname");
                         datos.bio = await prompt("please set a bio");
-                        
 
-                      this.props.wallet.contractBinary.methods
-                      .registro(sponsor, JSON.stringify(datos) )
-                      .send({ from: this.state.currentAccount })
-                      .then(() => {
-                        window.alert("membership buyed");
-                      });
-
-                    }} className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4">
+                        this.props.wallet.contractBinary.methods
+                          .registro(sponsor, JSON.stringify(datos))
+                          .send({ from: this.state.currentAccount })
+                          .then(() => {
+                            window.alert("membership buyed");
+                          });
+                      }}
+                      className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4"
+                    >
                       {this.state.buyMembership}
                     </a>
                   </div>
                 </div>
               </div>
-              
+
               <div className="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
                 <div className="row">
                   <div className="col s2 m2 center-align">
@@ -544,8 +504,6 @@ export default class CrowdFunding extends Component {
                   </div>
                 </div>
               </div>
-
-              
             </div>
           </div>
           <div className="content-overlay"></div>
