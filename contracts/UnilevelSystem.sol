@@ -355,53 +355,35 @@ contract UnilevelSystem is Context, Admin{
     
     for (uint i = 0; i < usuario.depositos.length; i++) {
       dep = usuario.depositos[i];
+      if(dep.infinity == _infinity){
 
-      if(_infinity){
+        amount = actualizarArrayUint256(amount);
+        time = actualizarArrayUint256(time);
+        activo = actualizarArrayBool(activo);
 
-        if (dep.infinity == true) {
-          amount = actualizarArrayUint256(amount);
-          time = actualizarArrayUint256(time);
-          activo = actualizarArrayBool(activo);
+        time[time.length-1] = dep.inicio;
+        finish = dep.inicio + tiempo();
 
-          time[i] = dep.inicio;
-          finish = dep.inicio + tiempo();
+        till = block.timestamp > finish ? finish : block.timestamp;
+        
+        if (dep.infinity) {
+          
           since = usuario.paidAt2 > dep.inicio ? usuario.paidAt2 : dep.inicio;
-          till = block.timestamp > finish ? finish : block.timestamp;
 
-          if (since != 0 && since < till ) {
-
-            total += dep.amount * (till - since) / tiempo() ;
-
-            activo[i] = true;
-          }
-
-          amount[i] = dep.amount;    
-        }
-
-      }else{
-
-        if (dep.infinity == false) {
-          amount = actualizarArrayUint256(amount);
-          time = actualizarArrayUint256(time);
-          activo = actualizarArrayBool(activo);
-
-          time[i] = dep.inicio;
-          finish = dep.inicio + tiempo();
+        }else{
+          
           since = usuario.paidAt > dep.inicio ? usuario.paidAt : dep.inicio;
-          till = block.timestamp > finish ? finish : block.timestamp;
+          
+        }    
 
-          if (since != 0 && since < till ) {
+        if (since != 0 && since < till ) {
 
-            total += dep.amount * (till - since) / tiempo() ;
-            activo[i] = true;
-          }
+          total += dep.amount * (till - since) / tiempo() ;
+          activo[activo.length-1] = true;
+        } 
 
-          amount[i] = dep.amount;    
-        }
-
-      }
-       
-       
+        amount[amount.length-1] = dep.amount;    
+      } 
 
     }
 

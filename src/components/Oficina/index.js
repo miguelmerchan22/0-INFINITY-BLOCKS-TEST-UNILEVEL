@@ -347,7 +347,7 @@ export default class Oficina extends Component {
     var netxRango = [0,50000,100000,250000,500000,1000000,1000000];
     var nameRango = ["N/A","INFINITY SENIOR","INFINITY BARON","INFINITY DUKE","INFINITY KING","INFINITY EMPEROR" ]
 
-    var textRango = "Next Range "
+    var textRango = "Next Rank "
     for (let index = 0; index < 5; index++) {
       rangoArray[index] = await this.props.wallet.contractBinary.methods
         .rangoReclamado(this.state.currentAccount, index)
@@ -519,7 +519,7 @@ export default class Oficina extends Component {
                           </div>
                           <div className="col s8 m8 right-align mb-7">
                             <h5 className="mb-0 white-text">${this.state.balanceRef.toFixed(1)} </h5>
-                            <p className="no-margin">Team Bonus</p>
+                            <p className="no-margin">Referrals</p>
                           </div>
                           <div className="col s12 m12">
                             <button
