@@ -184,6 +184,8 @@ export default class Depositos extends Component {
 
         var porcentiempo = (((Date.now()-(depositos.tiempo[i]*1000)))*100)/tiempo;
 
+        console.log(porcentiempo)
+
         var fecha = new Date((depositos.tiempo[i]*1000)+tiempo);
         fecha = ""+fecha;
 
@@ -210,14 +212,15 @@ export default class Depositos extends Component {
                     <div className="card-title">
                         <div className="row">
                             <div className="col s12 m6 l10">
-                                <h4 className="card-title"><b>{((depositos.amount[i]/10**18)/porcent)/50}</b> BLKS |  Time <b>{fecha} | {proceso}</b></h4>
+                                <h4 className="card-title"><b>{((depositos.amount[i]/10**18)/porcent)/50}</b> BLKS |  <progress id="file"  value={porcentiempo}> {porcentiempo}% </progress> {porcentiempo.toFixed(6)}% </h4>
                             </div>
                         </div>
                     </div>
                     <div id="view-basic-demo">
                         <div className="row">
                             <div className="col s12">
-                                <input type="range" id="range_01" />
+                              
+                              <p><b>Time to end: </b>{fecha} | {proceso}</p>
                             </div>
                         </div>
                     </div>
