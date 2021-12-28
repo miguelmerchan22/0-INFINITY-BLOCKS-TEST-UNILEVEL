@@ -35,6 +35,7 @@ export default class Oficina extends Component {
       withdrawableInfinity: 0,
       data: {nombre: "###### ######", bio: "Loading..."},
       rango: "N/A",
+      textRango: "loading...",
     };
 
     this.Investors = this.Investors.bind(this);
@@ -524,7 +525,7 @@ export default class Oficina extends Component {
                           </div>
                           <div className="col s12 m12">
                             <button
-                              className="waves-effect waves-light btn mb-1 mr-1 green ancho100"
+                              className="waves-effect waves-light btn mb-1 mr-1 ancho100"
                               onClick={() => this.withdrawTeam()}
                             >
                               Withdraw 
