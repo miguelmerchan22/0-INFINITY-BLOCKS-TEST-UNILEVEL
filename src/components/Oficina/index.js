@@ -234,7 +234,12 @@ export default class Oficina extends Component {
 
     available = available / 10 ** 18;
 
-    //console.log(brazoDerecho);
+    var balance = await this.props.wallet.contractToken.methods
+      .balanceOf(this.state.currentAccount)
+      .call({ from: this.state.currentAccount });
+
+    balance = "USDT: "+(balance / 10 ** 18).toFixed(2);
+
 
     var MIN_RETIRO = await this.props.wallet.contractBinary.methods
       .MIN_RETIRO()
@@ -245,6 +250,7 @@ export default class Oficina extends Component {
     this.setState({
       available: available,
       MIN_RETIRO: MIN_RETIRO,
+      balance: balance,
     });
   }
 
@@ -339,14 +345,14 @@ export default class Oficina extends Component {
       .withdrawableRange(this.state.currentAccount)
       .call({ from: this.state.currentAccount });
     rango = rango / 10 ** 18;
-    rango = rango / 2;
+    rango = rango / 50;
     var rangoArray = [];
     var rangoEstilo = "btn-secondary";
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
-    var netxRango = [0,50000,100000,250000,500000,1000000,1000000];
-    var nameRango = ["N/A","INFINITY SENIOR","INFINITY BARON","INFINITY DUKE","INFINITY KING","INFINITY EMPEROR" ]
+    var netxRango = [0,50000/50,100000/50,250000/50,500000/50,1000000/50,1000000/50];
+    var nameRango = ["","INFINITY SENIOR","INFINITY BARON","INFINITY DUKE","INFINITY KING","INFINITY EMPEROR" ]
 
     var textRango = "Next Rank "
     for (let index = 0; index < 5; index++) {
@@ -356,14 +362,14 @@ export default class Oficina extends Component {
     }
 
     if (rango >= netxRango[0] && rango < netxRango[1]) {
-      textRango += rango+"/"+netxRango[1];
+      textRango += rango+"/"+netxRango[1] + " BLKS";
       rango = nameRango[0];
       
     }else{
 
       for (let index = 1; index < netxRango.length; index++) {
         if (rango >= netxRango[index-1] && rango < netxRango[index]) {
-          textRango += rango+"/"+netxRango[index];
+          textRango += rango+"/"+netxRango[index] + " BLKS";
           rango = nameRango[index];
           if (!rangoArray[index-1]) {
             rangoEstilo = "btn-success";
@@ -550,7 +556,10 @@ export default class Oficina extends Component {
                         src="app-assets/images/user/2.png"
                         alt="images"
                       />
-                      <p className="m-0 break">{this.state.currentAccount}</p>
+                      <p className="m-0 break">{this.state.currentAccount} <br></br>
+                      <b>{this.state.balance}</b>
+                      </p>
+                      
                       <h4 className="white-text">{this.state.data.nombre}</h4>
                       <p className="white-text">{this.state.data.bio}</p> 
                     </div>

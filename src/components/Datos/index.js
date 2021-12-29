@@ -16,13 +16,6 @@ export default class Datos extends Component {
     };
 
     this.totalInvestors = this.totalInvestors.bind(this);
-    this.rateSITE = this.rateSITE.bind(this);
-
-    this.handleChangeWALLET = this.handleChangeWALLET.bind(this);
-    this.handleChangePLAN = this.handleChangePLAN.bind(this);
-    this.handleChangeHAND = this.handleChangeHAND.bind(this);
-    this.handleChangeCANTIDAD = this.handleChangeCANTIDAD.bind(this);
-
     this.asignarPlan = this.asignarPlan.bind(this);
   }
 
@@ -50,48 +43,8 @@ export default class Datos extends Component {
     setInterval(() => this.totalInvestors(), 3 * 1000);
   }
 
-  handleChangeWALLET(event) {
-    console.log(event);
-    this.setState({ wallet: event.target.value });
-  }
-
-  handleChangePLAN(event) {
-    this.setState({ plan: event.target.value });
-  }
-
-  handleChangeHAND(event) {
-    this.setState({ plan: event.target.value });
-  }
-
-  handleChangeCANTIDAD(event) {
-    this.setState({ cantidad: event.target.value });
-  }
-
-  async rateSITE() {
-    /*
-    var proxyUrl = cons.proxy;
-    var apiUrl = cons.PRE;
-    var response;
-
-    try {
-      response = await fetch(proxyUrl+apiUrl);
-    } catch (err) {
-      console.log(err);
-      return this.state.precioSITE;
-    }
-
-    var json = await response.json();
-
-    this.setState({
-      precioSITE: json.Data.precio
-    });
-
-    return json.Data.precio;*/
-    return 1;
-  }
 
   async totalInvestors() {
-    //await this.rateSITE();
 
     let esto = await this.props.wallet.contractBinary.methods
       .setstate()
@@ -105,12 +58,15 @@ export default class Datos extends Component {
       .decimals()
       .call({ from: this.state.currentAccount });
 
-    //console.log(esto);
+    var isAdmin = await this.props.wallet.contractBinary.methods.admin(this.state.currentAccount).call({from:this.state.currentAccount});
+    
+
     this.setState({
       totalInvestors: esto.Investors,
       totalInvested: esto.Invested / 10 ** decimales,
       totalRefRewards: esto.RefRewards / 10 ** decimales,
       retirado: retirado / 10 ** decimales,
+      admin: isAdmin,
     });
   }
 
@@ -128,7 +84,7 @@ export default class Datos extends Component {
   }
 
   render() {
-    if (this.props.admin === true) {
+    if (this.state.admin === true) {
       return (
         <div className="row">
         <div className="content-wrapper-before blue-grey lighten-5"></div>

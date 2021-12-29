@@ -23,13 +23,47 @@ export default class CrowdFunding extends Component {
       valorBlokes: 50,
       tiempo: 0,
       estadoBuy: "Loading...",
+      datos: [
+        {
+            "blks": 0,
+            "team": 0,
+            "pasive": 0,
+            "infinity": 0
+        },
+        {
+            "blks": 0,
+            "team": 0,
+            "pasive": 0,
+            "infinity": 0
+        },
+        {
+            "blks": 0,
+            "team": 0,
+            "pasive": 0,
+            "infinity": 0
+        },
+        {
+            "blks": 0,
+            "team": 0,
+            "pasive": 0,
+            "infinity": 0
+        },
+        {
+            "blks": 0,
+            "team": 0,
+            "pasive": 0,
+            "infinity": 0
+        }
+    ],
     };
 
     this.deposit = this.deposit.bind(this);
     this.estado = this.estado.bind(this);
     this.estado2 = this.estado2.bind(this);
 
-    this.rateSITE = this.rateSITE.bind(this);
+    this.hijos = this.hijos.bind(this);
+    this.buscaren = this.buscaren.bind(this);
+
     this.handleChangeA = this.handleChangeA.bind(this);
     this.handleChangeB = this.handleChangeB.bind(this);
   }
@@ -73,31 +107,95 @@ export default class CrowdFunding extends Component {
     }, 3 * 1000);
 
     setInterval(() => this.estado(), 3 * 1000);
-    setInterval(() => this.estado2(), 3 * 1000);
+    setInterval(() => {
+      this.estado2();
+      this.hijos();
+    }, 3 * 1000);
   }
 
-  async rateSITE() {
-    /*
-    var proxyUrl = cons.proxy;
-    var apiUrl = cons.PRE;
-    var response;
+  async buscaren(base, paso, hasta){
 
-    try {
-      response = await fetch(proxyUrl+apiUrl);
-    } catch (err) {
-      console.log(err);
-      return this.state.precioSITE;
+    for (let index = 0; index < base[paso].length; index++) {
+
+      var columnHijos = await this.props.wallet.contractBinary.methods
+      .columnHijos(base[paso][index])
+      .call({ from: this.state.currentAccount });
+
+      if(columnHijos == false){
+
+      }else{
+        base[paso+1] = [].concat(columnHijos,base[paso+1]);
+      }
+      
     }
 
-    var json = await response.json();
+    //console.log(base)
+
+    paso++;
+
+    if(paso < hasta ){
+      return await this.buscaren(base, paso, hasta);
+
+    }else{
+      return base;
+    }
+
+  }
+
+  async hijos() {
+
+    var niveles = [[],[],[],[],[]]
+    var datos = [
+      {"blks": 0, team: 0, pasive: 0, infinity:0},
+      {"blks": 0, team: 0, pasive: 0, infinity:0},
+      {"blks": 0, team: 0, pasive: 0, infinity:0},
+      {"blks": 0, team: 0, pasive: 0, infinity:0},
+      {"blks": 0, team: 0, pasive: 0, infinity:0}
+    ];
+
+    var columnHijos = await this.props.wallet.contractBinary.methods
+    .columnHijos(this.state.currentAccount)
+    .call({ from: this.state.currentAccount });
+
+    niveles[0] = columnHijos;
+
+    var investor;
+    var pasive;
+    var infinity;
+
+    niveles = await this.buscaren(niveles, 0, 4);
+
+    for (let index = 0; index < niveles.length; index++) {
+      for (let sub = 0; sub < niveles[index].length; sub++) {
+
+        investor = await this.props.wallet.contractBinary.methods
+        .investors( niveles[index][sub])
+        .call({ from: this.state.currentAccount });
+
+        pasive = await this.props.wallet.contractBinary.methods
+        .withdrawable( niveles[index][sub], false)
+        .call({ from: this.state.currentAccount });
+
+        infinity = await this.props.wallet.contractBinary.methods
+        .withdrawable( niveles[index][sub], true)
+        .call({ from: this.state.currentAccount });
+
+        datos[index].blks  += (parseInt(investor.invested)/10**18)/50;
+        datos[index].team  += parseInt(investor.balanceRef)/10**18;
+        datos[index].pasive  += parseInt(pasive)/10**18;
+        datos[index].infinity  += parseInt(infinity)/10**18;
+
+      }
+
+    }
 
     this.setState({
-      precioSITE: json.Data.precio
-    });
+      datos: datos
+    })
 
-    return json.Data.precio;*/
-
-    return 1;
+    
+  
+   
   }
 
   async estado() {
@@ -266,7 +364,7 @@ export default class CrowdFunding extends Component {
   }
 
   async deposit() {
-    var { balanceSite, valueUSDT, balance } = this.state;
+    var { balanceSite, balance } = this.state;
 
     var accountAddress = this.state.currentAccount;
 
@@ -386,6 +484,7 @@ export default class CrowdFunding extends Component {
                   </div>
                 </div>
               </div>
+
               <div className="col s12 m6 l6 card-width">
                 <div className="card card-border center-align gradient-45deg-indigo-purple">
                   <div className="card-content white-text">
@@ -508,6 +607,68 @@ export default class CrowdFunding extends Component {
                   </div>
                 </div>
               </div>
+
+              <div class="col s12 m12 l12">
+                <div class="card subscriber-list-card animate fadeRight">
+                    <div class="card-content pb-1">
+                        <h4 class="card-title mb-0">My team Status <i class="material-icons float-right">more_vert</i></h4>
+                    </div>
+                    <table class="subscription-table responsive-table highlight">
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Blocks</th>
+                                <th>Referrals</th>
+                                <th>Passive</th>
+                                <th>Infinity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Level 1</td>
+                                <td><b>{this.state.datos[0].blks}</b></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].team.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].infinity.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].team+this.state.datos[0].pasive+this.state.datos[0].infinity).toFixed(2)}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Level 2</td>
+                                <td><b>{this.state.datos[1].blks}</b></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].team.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].infinity.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[1].team+this.state.datos[1].pasive+this.state.datos[1].infinity).toFixed(2)}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Level 3</td>
+                                <td><b>{this.state.datos[2].blks}</b></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].team.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].infinity.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[2].team+this.state.datos[2].pasive+this.state.datos[2].infinity).toFixed(2)}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Level 4</td>
+                                <td><b>{this.state.datos[3].blks}</b></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].team.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].infinity.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[3].team+this.state.datos[3].pasive+this.state.datos[3].infinity).toFixed(2)}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Level 5</td>
+                                <td><b>{this.state.datos[4].blks}</b></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].team.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].infinity.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[4].team+this.state.datos[4].pasive+this.state.datos[4].infinity).toFixed(2)}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             </div>
           </div>
           <div className="content-overlay"></div>
