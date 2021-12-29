@@ -547,7 +547,7 @@ export default class Oficina extends Component {
                       <img
                         className="responsive-img circle z-depth-4"
                         width="100"
-                        src="app-assets/images/user/2.jpg"
+                        src="app-assets/images/user/2.png"
                         alt="images"
                       />
                       <p className="m-0 break">{this.state.currentAccount}</p>
