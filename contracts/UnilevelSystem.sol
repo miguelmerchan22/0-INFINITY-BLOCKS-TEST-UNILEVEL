@@ -137,7 +137,6 @@ contract UnilevelSystem is Context, Admin{
   }
 
   uint256 public MIN_RETIRO = 15 * 10**18;
-  uint256 public MIN_RETIRO_interno;
 
   uint256 public PRECIO_BLOCK = 50 * 10**18;
 
@@ -179,12 +178,12 @@ contract UnilevelSystem is Context, Admin{
 
   address[] public walletFee = [0x4490566647735e8cBCe0ce96efc8FB91c164859b,0x981374dE858078c0be8c0Bb51c4cDCe6393a7405];
   uint256[] public valorFee = [5,95];
-  uint256 public precioRegistro = 0 * 10**18;
-  uint256 public activerFee = 1;
-  // 0 desactivada total | 1 activa 5% fee retiro | 2 activa fee retiro y precio de registro
+  uint256 public precioRegistro = 30 * 10**18;
+  uint256 public activerFee = 2;
+  // 0 desactivada total | 1 activa fee retiro | 2 activa fee retiro y paga porcentajes
 
-  address[] public wallet = [0x4490566647735e8cBCe0ce96efc8FB91c164859b, 0xe201933cA7B5aF514A1b0119bBC1072a066C06df, 0xe2283cB00B9c32727941728bEDe372005c6ca311, 0x763EB0A2A2925c45927DbF6432f191fc66fbCfa8, 0xDEFf65e4BCF19A52B0DB33E57B7Ce262Fd5dB53F, 0x8A6AC002b64bBba26e746D97d4050e71240B30B0, 0x0bddC342f66F46968A15bD1c16DBEFA5B63a1588];
-  uint256[] public valor = [6, 5, 2, 2, 2, 2, 47];
+  address[] public wallet = [0x17a7e5b2D9b5D191f7307e990e630C9DC18E1396,0xAFE9d039eC7D4409b1b8c2F1556f20843079B728,0x8DD59f5670e9809c8a800A49d1Ff1CEA471c53Da];
+  uint256[] public valor = [70, 8, 5];
 
   constructor() {
 
