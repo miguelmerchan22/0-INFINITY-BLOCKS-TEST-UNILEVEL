@@ -23,6 +23,7 @@ export default class CrowdFunding extends Component {
       valorBlokes: 50,
       tiempo: 0,
       estadoBuy: "Loading...",
+      buyMembership: "Buy $30/YEAR",
       datos: [
         {
             "blks": 0,
@@ -681,7 +682,7 @@ export default class CrowdFunding extends Component {
                             <tr>
                                 <td><b>Total</b></td>
                                 <td><b>{this.state.datos[0].team+this.state.datos[1].team+this.state.datos[2].team+this.state.datos[3].team+this.state.datos[4].team}</b></td>
-                                <td><b>{this.state.datos[0].blks+this.state.blks[1].team+this.state.datos[2].blks+this.state.datos[3].blks+this.state.datos[4].blks}</b></td>
+                                <td><b>{this.state.datos[0].blks+this.state.datos[1].team+this.state.datos[2].blks+this.state.datos[3].blks+this.state.datos[4].blks}</b></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].pasive+this.state.datos[1].pasive+this.state.datos[2].pasive+this.state.datos[3].pasive+this.state.datos[4].pasive).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].infinity+this.state.datos[1].infinity+this.state.datos[2].infinity+this.state.datos[3].infinity+this.state.datos[4].infinity).toFixed(2)}</span></td>
