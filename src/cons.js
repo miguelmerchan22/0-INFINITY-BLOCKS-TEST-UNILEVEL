@@ -4,14 +4,14 @@ const PRE = "https://precio-site.herokuapp.com/api/v1/servicio/precio/v2/SITE";
 
 const WS = "0x0000000000000000000000000000000000000000";//0x0000000000000000000000000000000000000000 recibe los huerfanos por defecto
 
-var SCtest = "0x6490E63FC5e28027B1A7Eb6cBe3155767EE74Cef";// direccion del contrato de pruebas test only no real
-var SC = "0xaD356cA07BE4A9a3237b7d4326ad07D08846fb60";// direccion del contrato V1
-var SC2 = "0xaD356cA07BE4A9a3237b7d4326ad07D08846fb60";// direccion del contrato V2
+var SCtest = "0x18D756a22758e5ef2D2b98756e37B2062884CaF7";// direccion del contrato de pruebas test only no real
+var SC = "0x18D756a22758e5ef2D2b98756e37B2062884CaF7";// direccion del contrato V1
+var SC2 = "0x18D756a22758e5ef2D2b98756e37B2062884CaF7";// direccion del contrato V2
 
 var TOKEN = "0x55d398326f99059fF775485246999027B3197955";
 
 
-if(true){// testnet comand
+if(false){// testnet comand
 
     SCtest = "0x6490E63FC5e28027B1A7Eb6cBe3155767EE74Cef";// direccion del contrato de pruebas test only no real
     SC = "0x6490E63FC5e28027B1A7Eb6cBe3155767EE74Cef";// direccion del contrato V1
