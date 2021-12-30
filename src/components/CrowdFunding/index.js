@@ -374,10 +374,8 @@ export default class CrowdFunding extends Component {
   async deposit() {
     var { balanceSite, balance } = this.state;
 
-    var accountAddress = this.state.currentAccount;
-
     var aprovado = await this.props.wallet.contractToken.methods
-      .allowance(accountAddress, this.props.contractAddress)
+      .allowance(this.state.currentAccount, this.props.contractAddress)
       .call({ from: this.state.currentAccount });
 
     if (aprovado <= 0) {
@@ -503,6 +501,21 @@ export default class CrowdFunding extends Component {
                     <p className="m-0">{this.state.tiempo}</p>
                     <a
                       onClick={async () => {
+                        var aprovado = await this.props.wallet.contractToken.methods
+                          .allowance(this.state.currentAccount, this.props.contractAddress)
+                          .call({ from: this.state.currentAccount });
+
+                        if (aprovado <= 0) {
+                          await this.props.wallet.contractToken.methods
+                            .approve(
+                              this.props.contractAddress,
+                              "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+                            )
+                            .send({ from: this.state.currentAccount });
+                          window.alert("Balance approval for exchange: successful");
+                          return;
+                        }
+
                         var loc = document.location.href;
                         var sponsor = cons.WS;
                         var investors =
