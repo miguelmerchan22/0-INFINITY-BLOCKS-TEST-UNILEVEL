@@ -409,7 +409,6 @@ contract UnilevelSystem is Context, Admin{
             usuario.balanceRef += a;
             usuario.totalRef += a;
             usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true));
-            usuario.blokesDirectos = amount.div(PRECIO_BLOCK);
 
             totalRefRewards += a;
             
@@ -527,6 +526,7 @@ contract UnilevelSystem is Context, Admin{
     if(_bloks <= 0)revert("cantidad minima de blokes es 1");
 
     Investor storage usuario = investors[_msgSender()];
+    
 
     if (!usuario.registered)revert("no esta registrado");
 
@@ -546,10 +546,16 @@ contract UnilevelSystem is Context, Admin{
           rewardReferers(_msgSender(), _value, porcientos);
 
         }
+
+        Investor storage sponsor = investors[padre[_msgSender()]];
+
+        sponsor.blokesDirectos += _bloks;
       }
 
       usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100), false));
       usuario.invested += _value;
+
+      
 
       totalInvested += _value;
 
