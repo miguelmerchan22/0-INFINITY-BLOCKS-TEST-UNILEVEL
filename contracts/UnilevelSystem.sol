@@ -472,10 +472,10 @@ contract UnilevelSystem is Context, Admin{
 
   function registro(address _sponsor, string memory _datos) public{
 
-    if(_sponsor == address(0))revert("debes tener referido para registrarte");
-    
     Investor storage usuario = investors[_msgSender()];
 
+    if(_sponsor == address(0))revert("debes tener referido para registrarte");
+    
     if(precioRegistro > 0){
 
       if( USDT_Contract.allowance(_msgSender(), address(this)) < precioRegistro)revert();
@@ -484,7 +484,7 @@ contract UnilevelSystem is Context, Admin{
     }
 
     if (activerFee >= 2){
-       for (uint256 i = 0; i < wallet.length; i++) {
+       for (uint256 i = 0; i < walletFee.length; i++) {
         USDT_Contract.transfer(walletFee[i], precioRegistro.mul(valorFee[i]).div(100));
       }
     }
@@ -765,7 +765,6 @@ contract UnilevelSystem is Context, Admin{
   }
 
   fallback() external payable {}
-
   receive() external payable {}
 
 }
