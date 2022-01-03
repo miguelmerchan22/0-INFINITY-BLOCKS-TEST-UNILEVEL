@@ -149,7 +149,7 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
   uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18, 50000*10**18, 150000*10**18, 250000*10**18];
-  uint256[] public puntosRango = [1000*10**18, 2000*10**18, 5000*10**18, 10000*10**18, 20000*10**18, 100000*10**18, 300000*10**18, 500000*10**18];
+  uint256[] public puntosRango = [1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
 
   bool public onOffWitdrawl = true;
 
@@ -228,6 +228,12 @@ contract UnilevelSystem is Context, Admin{
     walletFee = _wallet;
     valorFee = _fee;
     activerFee = _activerFee;
+    return true;
+  }
+
+  function setRangos(uint256[] memory _gananciasRango , uint256[] memory _puntosRango ) public onlyOwner returns(bool){
+    gananciasRango = _gananciasRango;
+    puntosRango = _puntosRango;
     return true;
   }
 
@@ -571,11 +577,9 @@ contract UnilevelSystem is Context, Admin{
    function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
 
-    uint256 blokes = user.blokesDirectos*PRECIO_BLOCK;
-
     for (uint256 index = 0; index < gananciasRango.length; index++) {
 
-      if(blokes >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
+      if(user.blokesDirectos >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
 
        amount = gananciasRango[index];
         
@@ -598,7 +602,7 @@ contract UnilevelSystem is Context, Admin{
 
     for (uint256 index = 0; index < gananciasRango.length; index++) {
 
-      if(user.blokesDirectos*PRECIO_BLOCK >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
+      if(user.blokesDirectos >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
 
         USDT_Contract.transfer(_msgSender(), gananciasRango[index]);
         rangoReclamado[_msgSender()][index] = true;
