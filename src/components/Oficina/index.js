@@ -341,11 +341,11 @@ export default class Oficina extends Component {
   }
 
   async rango() {
-    var rango = await this.props.wallet.contractBinary.methods
-      .withdrawableRange(this.state.currentAccount)
-      .call({ from: this.state.currentAccount });
-    rango = rango / 10 ** 18;
-    rango = rango / 50;
+    var investor = await this.props.wallet.contractBinary.methods
+        .investors( this.state.currentAccount )
+        .call({ from: this.state.currentAccount });
+
+    var rango = investor.blokesDirectos ;
     var rangoArray = [];
     var rangoEstilo = "btn-secondary";
     var gananciasRango = "Claimed";
