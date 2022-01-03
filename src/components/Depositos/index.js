@@ -186,6 +186,10 @@ export default class Depositos extends Component {
 
         //console.log(porcentiempo)
 
+        if(porcentiempo >= 100){
+          porcentiempo = 100;
+        }
+
         var fecha = new Date((depositos.tiempo[i]*1000)+tiempo);
         fecha = ""+fecha;
 

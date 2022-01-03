@@ -164,7 +164,7 @@ export default class Datos extends Component {
                 className="btn btn-info d-block text-center mx-auto mt-1"
                 onClick={() => this.asignarPlan()}
               >
-                Asignar Membership
+                assign free membership
               </button>
             </p>
           </div>
