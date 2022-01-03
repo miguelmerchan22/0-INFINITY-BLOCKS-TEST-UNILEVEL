@@ -126,6 +126,7 @@ contract UnilevelSystem is Context, Admin{
     uint256 membership;
     uint256 balanceRef;
     uint256 totalRef;
+    uint256 totalInfinit;
     uint256 invested;
     uint256 paidAt;
     uint256 paidAt2;
@@ -147,8 +148,8 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public porcientos = [50, 30, 20, 10, 10];
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
-  uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18];
-  uint256[] public puntosRango = [1500*10**18, 5000*10**18, 20000*10**18, 50000*10**18, 120000*10**18];
+  uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18, 50000*10**18, 150000*10**18, 250000*10**18];
+  uint256[] public puntosRango = [1000*10**18, 2000*10**18, 5000*10**18, 10000*10**18, 20000*10**18, 100000*10**18, 300000*10**18, 500000*10**18];
 
   bool public onOffWitdrawl = true;
 
@@ -180,7 +181,7 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public valorFee = [5,95];
   uint256 public precioRegistro = 30 * 10**18;
   uint256 public activerFee = 2;
-  // 0 desactivada total | 1 activa fee retiro | 2 activa fee retiro y paga porcentajes
+  // 0 desactivada total |  | 2 activa fee registro y paga porcentajes
 
   address[] public wallet = [0x17a7e5b2D9b5D191f7307e990e630C9DC18E1396,0xAFE9d039eC7D4409b1b8c2F1556f20843079B728,0x8DD59f5670e9809c8a800A49d1Ff1CEA471c53Da];
   uint256[] public valor = [70, 8, 5];
@@ -409,6 +410,7 @@ contract UnilevelSystem is Context, Admin{
             usuario.balanceRef += a;
             usuario.totalRef += a;
             usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true));
+            usuario.totalInfinit += (a.mul(porcent)).div(1000);
 
             totalRefRewards += a;
             
@@ -569,7 +571,17 @@ contract UnilevelSystem is Context, Admin{
    function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
 
-    amount = user.blokesDirectos*PRECIO_BLOCK;//canditad de blokesDirectos
+    uint256 blokes = user.blokesDirectos*PRECIO_BLOCK;
+
+    for (uint256 index = 0; index < gananciasRango.length; index++) {
+
+      if(blokes >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
+
+       amount = gananciasRango[index];
+        
+      }
+      
+    }
   
   
   }
@@ -580,12 +592,17 @@ contract UnilevelSystem is Context, Admin{
 
     uint256 amount = withdrawableRange(_msgSender());
 
+    if ( amount <= 0 )revert();
+
+    Investor memory user = investors[_msgSender()];
+
     for (uint256 index = 0; index < gananciasRango.length; index++) {
 
-      if(amount >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
+      if(user.blokesDirectos*PRECIO_BLOCK >= puntosRango[index] && !rangoReclamado[_msgSender()][index]){
 
         USDT_Contract.transfer(_msgSender(), gananciasRango[index]);
         rangoReclamado[_msgSender()][index] = true;
+
       }
       
     }
@@ -675,18 +692,8 @@ contract UnilevelSystem is Context, Admin{
     if( USDT_Contract.balanceOf(address(this)) < _value )revert();
     if( _value < MIN_RETIRO )revert();
 
-    if ( activerFee >= 1 ) {
-      for (uint256 i = 0; i < walletFee.length; i++) {
-        USDT_Contract.transfer(walletFee[i], _value.mul(valorFee[i]).div(100));
-      }
-    
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }else{
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }
-
+    USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
+  
     usuario.withdrawn += _value;
     usuario.paidAt = block.timestamp;
 
@@ -705,17 +712,7 @@ contract UnilevelSystem is Context, Admin{
     if( USDT_Contract.balanceOf(address(this)) < _value )revert();
     if( _value < MIN_RETIRO )revert();
 
-    if ( activerFee >= 1 ) {
-      for (uint256 i = 0; i < walletFee.length; i++) {
-        USDT_Contract.transfer(walletFee[i], _value.mul(valorFee[i]).div(100));
-      }
-    
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }else{
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }
+    USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
 
     usuario.withdrawn += _value;
     usuario.paidAt2 = block.timestamp;
@@ -735,17 +732,7 @@ contract UnilevelSystem is Context, Admin{
     if( USDT_Contract.balanceOf(address(this)) < _value )revert("no hay saldo en el contrato para hacer el pago");
     if( _value < MIN_RETIRO )revert();
 
-    if ( activerFee >= 1 ) {
-      for (uint256 i = 0; i < walletFee.length; i++) {
-        USDT_Contract.transfer(walletFee[i], _value.mul(valorFee[i]).div(100));
-      }
-    
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }else{
-      USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
-      
-    }
+    USDT_Contract.transfer(_msgSender(), _value.mul(descuento).div(100));
 
     delete usuario.balanceRef;
 

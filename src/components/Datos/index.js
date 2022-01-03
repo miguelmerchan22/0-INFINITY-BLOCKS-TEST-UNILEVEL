@@ -17,6 +17,14 @@ export default class Datos extends Component {
 
     this.totalInvestors = this.totalInvestors.bind(this);
     this.asignarPlan = this.asignarPlan.bind(this);
+    this.handleChangeWALLET = this.handleChangeWALLET.bind(this);
+  }
+
+  handleChangeWALLET(event) {
+    var evento = event.target.value;
+    this.setState({
+      wallet: evento
+    });
   }
 
   async componentDidMount() {
@@ -95,7 +103,7 @@ export default class Datos extends Component {
         <div className="row counters">
           <div className="col-lg-3 col-12 text-center text-white">
             <h3>{this.state.totalInvestors}</h3>
-            <p>Inversores Globales</p>
+            <p>Investor Global</p>
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
@@ -111,7 +119,7 @@ export default class Datos extends Component {
               {(this.state.totalRefRewards / this.state.precioSITE).toFixed(2)}{" "}
               USDT{" "}
             </h3>
-            <p>Total referidos</p>
+            <p>Total referer</p>
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
@@ -168,6 +176,69 @@ export default class Datos extends Component {
               </button>
             </p>
           </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .makeNewAdmin(this.state.wallet)
+                    .send({ from: this.state.currentAccount });
+                  
+                  alert("verifica la transaccion " + transaccion.transactionHash);
+                  setTimeout(
+                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                    3000
+                  );
+                }}
+              >
+                assign admin
+              </button>
+            </p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .makeRemoveAdmin(this.state.wallet)
+                    .send({ from: this.state.currentAccount });
+                  
+                  alert("verifica la transaccion " + transaccion.transactionHash);
+                  setTimeout(
+                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                    3000
+                  );
+                }}
+              >
+                remove admin
+              </button>
+            </p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .admin(this.state.wallet)
+                    .call({ from: this.state.currentAccount });
+                  
+                  alert("this wallet is admin? "+this.state.wallet + ": "+transaccion);
+                }}
+              >
+                is admin?
+              </button>
+            </p>
+          </div>
+
         </div>
         </div>
         </div>

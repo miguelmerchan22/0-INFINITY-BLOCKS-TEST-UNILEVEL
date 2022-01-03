@@ -186,10 +186,10 @@ export default class CrowdFunding extends Component {
         .withdrawable( niveles[index][sub], true)
         .call({ from: this.state.currentAccount });
 
-        datos[index].blks  += (parseInt(investor.invested)/10**18)/50;
-        datos[index].refer  += parseInt(investor.balanceRef)/10**18;
-        datos[index].pasive  += parseInt(pasive)/10**18;
-        datos[index].infinity  += parseInt(infinity)/10**18;
+        datos[index].blks  += parseInt(investor.blokesDirectos);
+        datos[index].pasive  += parseInt(investor.blokesDirectos)*50;
+        datos[index].refer  += parseInt(investor.totalRef)/10**18;
+        datos[index].infinity  += parseInt(investor.totalRef)/10**18;
 
       }
 
@@ -640,8 +640,8 @@ export default class CrowdFunding extends Component {
                                 <th>Level</th>
                                 <th>Team</th>
                                 <th>Blocks</th>
+                                <th>Capital</th>
                                 <th>Referrals</th>
-                                <th>Passive</th>
                                 <th>Infinity</th>
                                 <th>Total</th>
                             </tr>
@@ -650,45 +650,45 @@ export default class CrowdFunding extends Component {
                             <tr>
                                 <td>Level 1</td>
                                 <td><b>{this.state.datos[0].team}</b></td>
-                                <td><b>{this.state.datos[0].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].refer.toFixed(2)}</span></td>
+                                <td><b>{(this.state.datos[0].blks).toFixed(0)}</b></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[0].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].refer.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[0].infinity.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].team+this.state.datos[0].pasive+this.state.datos[0].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 2</td>
                                 <td><b>{this.state.datos[1].team}</b></td>
-                                <td><b>{this.state.datos[1].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].refer.toFixed(2)}</span></td>
+                                <td><b>{(this.state.datos[1].blks).toFixed(0)}</b></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[1].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].refer.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[1].infinity.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[1].team+this.state.datos[1].pasive+this.state.datos[1].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 3</td>
                                 <td><b>{this.state.datos[2].team}</b></td>
-                                <td><b>{this.state.datos[2].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].refer.toFixed(2)}</span></td>
+                                <td><b>{(this.state.datos[2].blks).toFixed(0)}</b></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[2].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].refer.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[2].infinity.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[2].team+this.state.datos[2].pasive+this.state.datos[2].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 4</td>
                                 <td><b>{this.state.datos[3].team}</b></td>
-                                <td><b>{this.state.datos[3].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].refer.toFixed(2)}</span></td>
+                                <td><b>{(this.state.datos[3].blks).toFixed(0)}</b></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[3].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].refer.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[3].infinity.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[3].team+this.state.datos[3].pasive+this.state.datos[3].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 5</td>
                                 <td><b>{this.state.datos[4].team}</b></td>
-                                <td><b>{this.state.datos[4].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].refer.toFixed(2)}</span></td>
+                                <td><b>{(this.state.datos[4].blks).toFixed(0)}</b></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[4].pasive.toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].refer.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${this.state.datos[4].infinity.toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[4].team+this.state.datos[4].pasive+this.state.datos[4].infinity).toFixed(2)}</span></td>
                             </tr>
@@ -696,8 +696,8 @@ export default class CrowdFunding extends Component {
                                 <td><b>Total</b></td>
                                 <td><b>{this.state.datos[0].team+this.state.datos[1].team+this.state.datos[2].team+this.state.datos[3].team+this.state.datos[4].team}</b></td>
                                 <td><b>{this.state.datos[0].blks+this.state.datos[1].team+this.state.datos[2].blks+this.state.datos[3].blks+this.state.datos[4].blks}</b></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].pasive+this.state.datos[1].pasive+this.state.datos[2].pasive+this.state.datos[3].pasive+this.state.datos[4].pasive).toFixed(2)}</span></td>
+                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].infinity+this.state.datos[1].infinity+this.state.datos[2].infinity+this.state.datos[3].infinity+this.state.datos[4].infinity).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4"><b>${
                                   (this.state.datos[0].team+this.state.datos[0].pasive+this.state.datos[0].infinity+
