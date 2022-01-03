@@ -159,7 +159,7 @@ contract UnilevelSystem is Context, Admin{
 
   uint256 public porcent = 240;
 
-  uint256 public descuento = 95;
+  uint256 public descuento = 100;
   uint256 public personas = 2;
 
   uint256 public totalInvestors = 1;
