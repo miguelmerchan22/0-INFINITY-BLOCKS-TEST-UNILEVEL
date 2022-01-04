@@ -13,9 +13,9 @@ var TOKEN = "0x55d398326f99059fF775485246999027B3197955";
 
 if(true){// testnet comand
 
-    SCtest = "0xC8bF55AB38baA80cA8201d96e58A8A33EEEa6b66";// direccion del contrato de pruebas test only no real
-    SC = "0xC8bF55AB38baA80cA8201d96e58A8A33EEEa6b66";// direccion del contrato V1
-    SC2 = "0xC8bF55AB38baA80cA8201d96e58A8A33EEEa6b66";// direccion del contrato V2
+    SCtest = "0x84de23Ef4D54a4A5620b6D7B1458516CBc7451ad";// direccion del contrato de pruebas test only no real
+    SC = "0x84de23Ef4D54a4A5620b6D7B1458516CBc7451ad";// direccion del contrato V1
+    SC2 = "0x84de23Ef4D54a4A5620b6D7B1458516CBc7451ad";// direccion del contrato V2
 
     TOKEN = "0xd5881b890b443be0c609BDFAdE3D8cE886cF9BAc";
 

@@ -702,10 +702,10 @@ export default class CrowdFunding extends Component {
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4">${(this.state.datos[0].infinity+this.state.datos[1].infinity+this.state.datos[2].infinity+this.state.datos[3].infinity+this.state.datos[4].infinity).toFixed(2)}</span></td>
                                 <td><span class="badge green-text text-accent-4"><b>${
-                                  (this.state.datos[0].pasive+this.state.datos[0].refer+this.state.datos[0].infinity+
-                                  this.state.datos[1].pasive+this.state.datos[1].refer+this.state.datos[1].infinity+
-                                  this.state.datos[2].pasive+this.state.datos[2].refer+this.state.datos[2].infinity+
-                                  this.state.datos[3].pasive+this.state.datos[3].refer+this.state.datos[3].infinity).toFixed(2)
+                                  (this.state.datos[0].refer+this.state.datos[0].infinity+
+                                  this.state.datos[1].refer+this.state.datos[1].infinity+
+                                  this.state.datos[2].refer+this.state.datos[2].infinity+
+                                  this.state.datos[3].refer+this.state.datos[3].infinity).toFixed(2)
                                 }</b></span></td>
                             </tr>
                         </tbody>

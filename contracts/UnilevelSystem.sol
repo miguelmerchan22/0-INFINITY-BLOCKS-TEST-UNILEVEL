@@ -455,7 +455,7 @@ contract UnilevelSystem is Context, Admin{
     if(!usuario.registered){
         usuario.registered = true;
         usuario.membership = block.timestamp + duracionMembership*unidades;
-        padre[_msgSender()] = _msgSender();
+        padre[_user] = _msgSender();
 
         if (_msgSender() != address(0) ){
           Investor storage sponsor = investors[_msgSender()];
@@ -465,9 +465,9 @@ contract UnilevelSystem is Context, Admin{
         
         totalInvestors++;
 
-        rangoReclamado[_msgSender()] = [false,false,false,false,false];
-        idToAddress[lastUserId] = _msgSender();
-        addressToId[_msgSender()] = lastUserId;
+        rangoReclamado[_user] = [false,false,false,false,false];
+        idToAddress[lastUserId] = _user;
+        addressToId[_user] = lastUserId;
         
         lastUserId++;
       }else{
