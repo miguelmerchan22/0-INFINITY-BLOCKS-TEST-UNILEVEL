@@ -368,45 +368,48 @@ export default class Oficina extends Component {
     if (rango >= netxRango[0] && rango < netxRango[1]) {
       textRango += rango+"/"+netxRango[1] + " BLKS";
       rango = nameRango[0];
+      console.log("entro1")
       
     }else{
 
-      for (let index = 1; index < netxRango.length; index++) {
-        if (rango >= netxRango[index-1] && rango < netxRango[index]) {
-          textRango += rango+"/"+netxRango[index] + " BLKS";
-          rango = nameRango[index];
-          if (!rangoArray[index-1]) {
-            rangoEstilo = "btn-success";
-            cantidad = await this.props.wallet.contractBinary.methods
-              .gananciasRango(index-1)
-              .call({ from: this.state.currentAccount });
-            cantidad = cantidad / 10 ** 18;
-            gananciasRango = `Claim ${cantidad} USDT`;
-            funcionRango = () => {
-              return this.claim();
-            };
+      if (rango >= netxRango[netxRango.length-1] ) {
+        textRango = "Welcome to the PARADISE!!!";
+        rango = nameRango[nameRango.length-1];
+        if (!rangoArray[nameRango.length-2]) {
+          rangoEstilo = "btn-success";
+          cantidad = await this.props.wallet.contractBinary.methods
+            .gananciasRango(nameRango.length-2)
+            .call({ from: this.state.currentAccount });
+          cantidad = cantidad / 10 ** 18;
+          gananciasRango = `Claim ${cantidad} USDT`;
+          funcionRango = () => {
+            return this.claim();
+          };
+        }
+      }else{
+        for (let index = 1; index < netxRango.length; index++) {
+        
+          if (rango >= netxRango[index] && rango < netxRango[index+1]) {
+            textRango += rango+"/"+netxRango[index] + " BLKS";
+            rango = nameRango[index];
+            console.log("entro2")
+            if (!rangoArray[index-1]) {
+              rangoEstilo = "btn-success";
+              cantidad = await this.props.wallet.contractBinary.methods
+                .gananciasRango(index-1)
+                .call({ from: this.state.currentAccount });
+              cantidad = cantidad / 10 ** 18;
+              gananciasRango = `Claim ${cantidad} USDT`;
+              funcionRango = () => {
+                return this.claim();
+              };
+            }
           }
         }
+
       }
 
     }
-
-    if (rango >= netxRango[netxRango.length-1] ) {
-      textRango = "Welcome to the PARADISE!!!";
-      rango = nameRango[nameRango.length-1];
-      if (!rangoArray[nameRango.length-2]) {
-        rangoEstilo = "btn-success";
-        cantidad = await this.props.wallet.contractBinary.methods
-          .gananciasRango(nameRango.length-2)
-          .call({ from: this.state.currentAccount });
-        cantidad = cantidad / 10 ** 18;
-        gananciasRango = `Claim ${cantidad} USDT`;
-        funcionRango = () => {
-          return this.claim();
-        };
-      }
-    }
-    
 
     this.setState({
       rango: rango,
