@@ -641,7 +641,7 @@ export default class CrowdFunding extends Component {
                                 <th>Blocks</th>
                                 <th>Capital</th>
                                 <th>Referrals</th>
-                                <th>Infinity</th>
+                                <th>Infinity ∞</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
