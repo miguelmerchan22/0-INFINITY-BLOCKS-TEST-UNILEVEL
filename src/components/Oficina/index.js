@@ -390,7 +390,7 @@ export default class Oficina extends Component {
         for (let index = 1; index < netxRango.length; index++) {
         
           if (rango >= netxRango[index] && rango < netxRango[index+1]) {
-            textRango += rango+"/"+netxRango[index] + " BLKS";
+            textRango += rango+"/"+netxRango[index+1] + " BLKS";
             rango = nameRango[index];
             console.log("entro2")
             if (!rangoArray[index-1]) {
