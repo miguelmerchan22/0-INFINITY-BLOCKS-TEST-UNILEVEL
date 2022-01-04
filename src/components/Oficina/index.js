@@ -353,10 +353,10 @@ export default class Oficina extends Component {
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
-    var netxRango = [0, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000, 1000000];
+    var netxRango = [0, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
     var nameRango = ["","Infinity Lord / Madame","Infinity Baron / Baroness",
     "Infinity Duke / Duchess","Infinity King / Queen 👑","Infinity Emperor/ Empress",
-    "Infinity Conqueror","Infinity World Lord / Madame","Infinity GOD","Infinity SON OF GOD" ]
+    "Infinity Conqueror","Infinity World Lord / Madame","Infinity GOD" ]
 
     var textRango = "Next Rank "
     for (let index = 0; index < netxRango.length-1; index++) {

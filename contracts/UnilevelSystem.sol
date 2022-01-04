@@ -147,9 +147,9 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public porcientos = [50, 30, 20, 10, 10];
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
-  bool[] public baserange = [false,false,false,false,false,false,false,false,false];
-  uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18, 50000*10**18, 150000*10**18, 250000*10**18, 400000*10**18];
-  uint256[] public puntosRango = [1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000, 1000000];
+  bool[] public baserange = [false,false,false,false,false,false,false,false];
+  uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18, 50000*10**18, 150000*10**18, 250000*10**18];
+  uint256[] public puntosRango = [1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
 
   bool public onOffWitdrawl = true;
 
@@ -238,6 +238,10 @@ contract UnilevelSystem is Context, Admin{
 
     rangoReclamado[_msgSender()] = baserange;
     return true;
+  }
+
+  function baserangelength() public view returns(uint256){
+    return baserange.length;
   }
 
   function setMIN_RETIRO(uint256 _min) public onlyOwner returns(uint256){
