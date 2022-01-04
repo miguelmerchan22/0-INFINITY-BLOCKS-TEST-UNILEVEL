@@ -245,11 +245,11 @@ export default class Datos extends Component {
                 type="button"
                 className="btn btn-info d-block text-center mx-auto mt-1"
                 onClick={async() => {
-                  var transaccion = await this.props.wallet.contractBinary.methods
+                  var admin = await this.props.wallet.contractBinary.methods
                     .admin(this.state.wallet)
                     .call({ from: this.state.currentAccount });
                   
-                  alert("this wallet is admin? "+this.state.wallet + ": "+transaccion.transactionHash);
+                  alert("this wallet is admin? "+this.state.wallet + ": "+admin);
                 }}
               >
                 is admin?
