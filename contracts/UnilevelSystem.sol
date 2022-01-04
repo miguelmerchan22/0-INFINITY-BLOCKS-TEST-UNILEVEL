@@ -126,7 +126,6 @@ contract UnilevelSystem is Context, Admin{
     uint256 membership;
     uint256 balanceRef;
     uint256 totalRef;
-    uint256 totalInfinit;
     uint256 invested;
     uint256 paidAt;
     uint256 paidAt2;
@@ -419,8 +418,7 @@ contract UnilevelSystem is Context, Admin{
 
             usuario.balanceRef += a;
             usuario.totalRef += a;
-            usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(1000),(a.mul(porcent)).div(1000), true));
-            usuario.totalInfinit += (a.mul(porcent)).div(1000);
+            usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(100),(a.mul(porcent)).div(100), true));
 
             totalRefRewards += a;
             

@@ -203,9 +203,6 @@ export default class CrowdFunding extends Component {
       datos: datos
     })
 
-    
-  
-   
   }
 
   async estado() {
