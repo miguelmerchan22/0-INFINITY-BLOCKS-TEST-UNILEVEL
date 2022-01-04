@@ -148,6 +148,7 @@ contract UnilevelSystem is Context, Admin{
   uint256[] public porcientos = [50, 30, 20, 10, 10];
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
+  bool[] public baserange = [false,false,false,false,false,false,false,false,false];
   uint256[] public gananciasRango = [750*10**18, 1500*10**18, 3750*10**18, 7500*10**18, 15000*10**18, 50000*10**18, 150000*10**18, 250000*10**18, 400000*10**18];
   uint256[] public puntosRango = [1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000, 1000000];
 
@@ -193,7 +194,7 @@ contract UnilevelSystem is Context, Admin{
     usuario.registered = true;
     usuario.membership = block.timestamp + duracionMembership*unidades*1000000000000000000;
 
-    rangoReclamado[_msgSender()] = [false,false,false,false,false];
+    rangoReclamado[_msgSender()] = baserange;
 
     idToAddress[0] = _msgSender();
     addressToId[_msgSender()] = 0;
@@ -231,9 +232,12 @@ contract UnilevelSystem is Context, Admin{
     return true;
   }
 
-  function setRangos(uint256[] memory _gananciasRango , uint256[] memory _puntosRango ) public onlyOwner returns(bool){
+  function setRangos(bool[] memory _baserange ,uint256[] memory _gananciasRango , uint256[] memory _puntosRango ) public onlyOwner returns(bool){
+    baserange = _baserange;
     gananciasRango = _gananciasRango;
     puntosRango = _puntosRango;
+
+    rangoReclamado[_msgSender()] = baserange;
     return true;
   }
 
@@ -466,7 +470,7 @@ contract UnilevelSystem is Context, Admin{
         
         totalInvestors++;
 
-        rangoReclamado[_user] = [false,false,false,false,false];
+        rangoReclamado[_user] = baserange;
         idToAddress[lastUserId] = _user;
         addressToId[_user] = lastUserId;
         
@@ -509,7 +513,7 @@ contract UnilevelSystem is Context, Admin{
         
         totalInvestors++;
 
-        rangoReclamado[_msgSender()] = [false,false,false,false,false];
+        rangoReclamado[_msgSender()] = baserange;
         idToAddress[lastUserId] = _msgSender();
         addressToId[_msgSender()] = lastUserId;
         
