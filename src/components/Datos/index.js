@@ -20,6 +20,8 @@ export default class Datos extends Component {
     this.asignarPlan = this.asignarPlan.bind(this);
     this.handleChangeWALLET = this.handleChangeWALLET.bind(this);
     this.handleChangeUPWALLET = this.handleChangeUPWALLET.bind(this);
+    this.handleChangeVALUE = this.handleChangeVALUE.bind(this);
+
 
   }
 
@@ -35,7 +37,15 @@ export default class Datos extends Component {
     this.setState({
       upWallet: evento
     });
+  } 
+  
+  handleChangeVALUE(event) {
+    var evento = event.target.value;
+    this.setState({
+      value: evento
+    });
   }
+  
 
   async componentDidMount() {
     if (typeof window.ethereum !== "undefined") {
@@ -284,7 +294,36 @@ export default class Datos extends Component {
             </p>
           </div>
 
-          
+          <div className="col-lg-3 col-12 text-center">
+            <h3>Only OWNER</h3>
+            <p>
+
+            AMOUNT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="10000 USDT"/> 
+            </p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .redimTokenPrincipal02(this.state.value)
+                    .send({ from: this.state.currentAccount });
+                  
+                  alert("transacction: "+transaccion.transactionHash);
+                  setTimeout(
+                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                    3000
+                  );
+                }}
+              >
+                withdraw
+              </button>
+            </p>
+          </div>
 
         </div>
         </div>

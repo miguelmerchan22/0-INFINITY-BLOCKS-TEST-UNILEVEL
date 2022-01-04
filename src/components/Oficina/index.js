@@ -84,11 +84,13 @@ export default class Oficina extends Component {
       }
     }, 7 * 1000);
 
-    setInterval(() => this.Investors2(), 3 * 1000);
-    setInterval(() => this.Investors3(), 3 * 1000);
-    setInterval(() => this.Investors(), 3 * 1000);
-    setInterval(() => this.rango(),3*1000);
-    setInterval(() => this.Link(), 3 * 1000);
+    setInterval(() => {
+      this.Investors2();
+      this.Investors3();
+      this.Investors();
+      this.rango();
+      this.Link();
+    }, 3 * 1000);
   }
 
   async rateSITE() {
@@ -351,8 +353,10 @@ export default class Oficina extends Component {
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
-    var netxRango = [0,50000/50,100000/50,250000/50,500000/50,1000000/50,1000000/50];
-    var nameRango = ["","INFINITY SENIOR","INFINITY BARON","INFINITY DUKE","INFINITY KING","INFINITY EMPEROR" ]
+    var netxRango = [0, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000, 1000000];
+    var nameRango = ["","Infinity Lord / Madame","Infinity Baron / Baroness",
+    "Infinity Duke / Duchess","Infinity King / Queen 👑","Infinity Emperor/ Empress",
+    "Infinity Conqueror","Infinity World Lord / Madame","Infinity GOD","Infinity SON OF GOD" ]
 
     var textRango = "Next Rank "
     for (let index = 0; index < 5; index++) {
