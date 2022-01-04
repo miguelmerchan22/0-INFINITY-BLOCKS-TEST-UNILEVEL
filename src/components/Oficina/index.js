@@ -392,7 +392,7 @@ export default class Oficina extends Component {
     }
 
     if (rango >= netxRango[netxRango.length-1] ) {
-      textRango = "";
+      textRango = "Welcome to the PARADISE!!!";
       rango = nameRango[nameRango.length-1];
       if (!rangoArray[nameRango.length-2]) {
         rangoEstilo = "btn-success";
