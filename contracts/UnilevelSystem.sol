@@ -144,7 +144,7 @@ contract UnilevelSystem is Context, Admin{
 
   uint256 public inversiones = 1;
   uint256[] public primervez = [50, 30, 20, 10, 10];
-  uint256[] public porcientos = [50, 30, 20, 10, 10];
+  uint256[] public porcientos = [15, 9, 6, 3, 3];
   uint256[] public infinity = [5, 3, 2, 1, 1];
 
   bool[] public baserange = [false,false,false,false,false,false,false,false];
@@ -409,6 +409,7 @@ contract UnilevelSystem is Context, Admin{
     address[] memory referi;
     referi = column(yo, array.length);
     uint256 a;
+    uint256 b;
     Investor storage usuario;
 
     for (uint256 i = 0; i < array.length; i++) {
@@ -419,10 +420,11 @@ contract UnilevelSystem is Context, Admin{
           if ( referi[i] != address(0) ) {
 
             a = amount.mul(array[i]).div(1000);
+            b = amount.mul(porcientos[i]).div(100);
 
             usuario.balanceRef += a;
             usuario.totalRef += a;
-            usuario.depositos.push(Deposito(block.timestamp,(a.mul(porcent)).div(100),(a.mul(porcent)).div(100), true));
+            usuario.depositos.push(Deposito(block.timestamp,b,b, true));
 
             totalRefRewards += a;
             
@@ -553,15 +555,9 @@ contract UnilevelSystem is Context, Admin{
       if( !USDT_Contract.transferFrom(_msgSender(), address(this), _value) )revert("tranferencia fallida");
       
       if (padre[_msgSender()] != address(0) ){
-        if (usuario.depositos.length < inversiones ){
-          
-          rewardReferers(_msgSender(), _value, primervez);
-          
-        }else{
-          rewardReferers(_msgSender(), _value, porcientos);
 
-        }
-
+        rewardReferers(_msgSender(), _value, primervez);
+          
         Investor storage sponsor = investors[padre[_msgSender()]];
 
         sponsor.blokesDirectos += _bloks;
