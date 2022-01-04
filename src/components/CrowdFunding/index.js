@@ -187,8 +187,8 @@ export default class CrowdFunding extends Component {
         .withdrawable( niveles[index][sub], true)
         .call({ from: this.state.currentAccount });
 
-        datos[index].blks  += parseInt((parseInt(investor.invested)/10**18)/50);
-        datos[index].pasive  += parseInt(investor.invested)/10**18;
+        datos[index].blks  += parseInt(investor.invested);
+        datos[index].pasive  += parseInt(investor.invested)*50;
         datos[index].refer  += parseInt(investor.totalRef)/10**18;
         datos[index].infinity  += (parseInt(investor.totalRef)/10**18)*porcentajes[index];
 
