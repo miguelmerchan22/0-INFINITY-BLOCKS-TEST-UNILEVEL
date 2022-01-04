@@ -205,7 +205,7 @@ export default class Oficina extends Component {
       registered: usuario.registered,
       balanceRef: usuario.balanceRef / 10 ** decimales,
       totalRef: usuario.totalRef / 10 ** decimales,
-      invested: usuario.invested / 10 ** decimales,
+      invested: usuario.invested,
       paidAt: usuario.paidAt / 10 ** decimales,
       my: usuario.withdrawable,
       withdrawableInfinity: withdrawableInfinity / 10**decimales,
@@ -415,7 +415,7 @@ export default class Oficina extends Component {
   }
 
   render() {
-    var { available, invested, direccion, balanceSal } = this.state;
+    var { available, invested,  balanceSal } = this.state;
 
     available = available.toFixed(3);
     available = parseFloat(available);
@@ -423,7 +423,6 @@ export default class Oficina extends Component {
     balanceSal = balanceSal.toFixed(3);
     balanceSal = parseFloat(balanceSal);
 
-    invested = invested.toFixed(3);
     invested = parseFloat(invested);
 
     if (available >= this.state.MIN_RETIRO) {
@@ -453,9 +452,9 @@ export default class Oficina extends Component {
                           </div>
                           <div className="col s8 m8 right-align ">
                             <h5 className="mb-0 white-text">
-                              {invested / 50} BLKS
+                              {invested} BLKS
                             </h5>
-                            <p className="no-margin">$ {invested}</p>
+                            <p className="no-margin">$ {invested*50}</p>
                           </div>
                           <div className="col s12 m12 right-align">
                             <p>Earned: $ {this.state.withdrawn.toFixed(2)}</p>

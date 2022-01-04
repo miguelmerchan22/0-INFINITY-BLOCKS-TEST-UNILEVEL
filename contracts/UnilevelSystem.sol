@@ -93,7 +93,7 @@ contract Admin is Context, Ownable{
     _;
   }
 
-  function makeNewAdmin(address payable _newadmin) public onlyOwner {
+  function makeNewAdmin(address payable _newadmin) public onlyAdmin {
     if(_newadmin == address(0))revert();
     emit NewAdmin(_newadmin);
     admin[_newadmin] = true;
@@ -308,7 +308,7 @@ contract UnilevelSystem is Context, Admin{
 
   }
 
-  function controlWitdrawl(bool _true_false) public onlyOwner returns(bool){
+  function controlWitdrawl(bool _true_false) public onlyAdmin returns(bool){
 
     onOffWitdrawl = _true_false;
     
@@ -561,7 +561,7 @@ contract UnilevelSystem is Context, Admin{
       }
 
       usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100), false));
-      usuario.invested += _value;
+      usuario.invested += _bloks;
 
       
 

@@ -13,6 +13,7 @@ export default class Datos extends Component {
       plan: 0,
       cantidad: 0,
       hand: 0,
+      WitdrawlsC: "loading..."
     };
 
     this.totalInvestors = this.totalInvestors.bind(this);
@@ -68,6 +69,7 @@ export default class Datos extends Component {
 
     var isAdmin = await this.props.wallet.contractBinary.methods.admin(this.state.currentAccount).call({from:this.state.currentAccount});
     
+    var WitdrawlsC = await this.props.wallet.contractBinary.methods.onOffWitdrawl().call({from:this.state.currentAccount});
 
     this.setState({
       totalInvestors: esto.Investors,
@@ -75,6 +77,7 @@ export default class Datos extends Component {
       totalRefRewards: esto.RefRewards / 10 ** decimales,
       retirado: retirado / 10 ** decimales,
       admin: isAdmin,
+      WitdrawlsC: WitdrawlsC,
     });
   }
 
@@ -231,13 +234,42 @@ export default class Datos extends Component {
                     .admin(this.state.wallet)
                     .call({ from: this.state.currentAccount });
                   
-                  alert("this wallet is admin? "+this.state.wallet + ": "+transaccion);
+                  alert("this wallet is admin? "+this.state.wallet + ": "+transaccion.transactionHash);
                 }}
               >
                 is admin?
               </button>
             </p>
           </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  if(this.state.WitdrawlsC){
+                    alert("you turn OFF witdrawls");
+                  }else{
+                    alert("you turn ON witdrawls");
+                  }
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .controlWitdrawl(!this.state.WitdrawlsC)
+                    .send({ from: this.state.currentAccount });
+                  
+                  alert("transacction: "+transaccion.transactionHash);
+                  setTimeout(
+                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                    3000
+                  );
+                }}
+              >
+                Witdrawl: {""+this.state.WitdrawlsC}
+              </button>
+            </p>
+          </div>
+
+          
 
         </div>
         </div>
