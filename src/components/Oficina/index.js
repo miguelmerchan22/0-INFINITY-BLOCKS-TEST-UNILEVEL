@@ -359,7 +359,7 @@ export default class Oficina extends Component {
     "Infinity Conqueror","Infinity World Lord / Madame","Infinity GOD","Infinity SON OF GOD" ]
 
     var textRango = "Next Rank "
-    for (let index = 0; index < 5; index++) {
+    for (let index = 0; index < netxRango.length-1; index++) {
       rangoArray[index] = await this.props.wallet.contractBinary.methods
         .rangoReclamado(this.state.currentAccount, index)
         .call({ from: this.state.currentAccount });
