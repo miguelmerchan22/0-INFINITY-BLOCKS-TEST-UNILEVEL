@@ -448,17 +448,17 @@ contract UnilevelSystem is Context, Admin{
     return true;
   }
 
-  function asignarMembership(address _user) public onlyAdmin returns (bool){
+  function asignarMembership(address _user, address _sponsor) public onlyAdmin returns (bool){
 
     Investor storage usuario = investors[_user];
 
     if(!usuario.registered){
         usuario.registered = true;
         usuario.membership = block.timestamp + duracionMembership*unidades;
-        padre[_user] = _msgSender();
+        padre[_user] = _sponsor;
 
-        if (_msgSender() != address(0) ){
-          Investor storage sponsor = investors[_msgSender()];
+        if (_sponsor != address(0) ){
+          Investor storage sponsor = investors[_sponsor];
           sponsor.directos++;
           
         }

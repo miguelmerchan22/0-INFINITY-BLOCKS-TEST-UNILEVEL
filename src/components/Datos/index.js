@@ -19,12 +19,21 @@ export default class Datos extends Component {
     this.totalInvestors = this.totalInvestors.bind(this);
     this.asignarPlan = this.asignarPlan.bind(this);
     this.handleChangeWALLET = this.handleChangeWALLET.bind(this);
+    this.handleChangeUPWALLET = this.handleChangeUPWALLET.bind(this);
+
   }
 
   handleChangeWALLET(event) {
     var evento = event.target.value;
     this.setState({
       wallet: evento
+    });
+  }
+
+  handleChangeUPWALLET(event) {
+    var evento = event.target.value;
+    this.setState({
+      upWallet: evento
     });
   }
 
@@ -83,7 +92,7 @@ export default class Datos extends Component {
 
   async asignarPlan() {
     var transaccion = await this.props.wallet.contractBinary.methods
-      .asignarMembership(this.state.wallet)
+      .asignarMembership(this.state.wallet, this.state.upWallet)
       .send({ from: this.state.currentAccount });
     
     alert("verifica la transaccion " + transaccion);
@@ -165,6 +174,12 @@ export default class Datos extends Component {
               >
                 Send Token
               </button>
+            </p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+            UPLINE:{" "} <input type="text" onChange={this.handleChangeUPWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
             </p>
           </div>
 
