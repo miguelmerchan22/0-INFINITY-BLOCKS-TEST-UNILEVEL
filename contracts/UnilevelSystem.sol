@@ -177,7 +177,7 @@ contract UnilevelSystem is Context, Admin{
   
   uint256 public lastUserId = 1;
 
-  address[] public walletFee = [0x4490566647735e8cBCe0ce96efc8FB91c164859b,0x981374dE858078c0be8c0Bb51c4cDCe6393a7405];
+  address[] public walletFee = [0x4490566647735e8cBCe0ce96efc8FB91c164859b,0xd0f2fCDf7d399205E9709C6D0fBeE434335e42DD];
   uint256[] public valorFee = [5,95];
   uint256 public precioRegistro = 30 * 10**18;
   uint256 public activerFee = 2;
