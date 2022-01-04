@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+const lc = require('lower-case');
 
 export default class Datos extends Component {
   constructor(props) {
@@ -90,6 +91,72 @@ export default class Datos extends Component {
     
     var WitdrawlsC = await this.props.wallet.contractBinary.methods.onOffWitdrawl().call({from:this.state.currentAccount});
 
+    var owner = await this.props.wallet.contractBinary.methods.owner().call({from:this.state.currentAccount});
+
+    var panelOwner = "";
+
+    if(lc.lowerCase(owner) === lc.lowerCase(this.state.currentAccount)){
+      panelOwner = (
+        <>
+        <div className="col-lg-3 col-12 text-center">
+        <h3>_______________</h3>
+      </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .makeRemoveAdmin(this.state.wallet)
+                .send({ from: this.state.currentAccount });
+              
+              alert("verifica la transaccion " + transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            remove admin
+          </button>
+        </p>
+      </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <p>
+
+        AMOUNT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="10000 USDT"/> 
+        </p>
+      </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .redimTokenPrincipal02(this.state.value)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            withdraw
+          </button>
+        </p>
+      </div>
+      </>
+      )
+    }
+
     this.setState({
       totalInvestors: esto.Investors,
       totalInvested: esto.Invested / 10 ** decimales,
@@ -97,6 +164,7 @@ export default class Datos extends Component {
       retirado: retirado / 10 ** decimales,
       admin: isAdmin,
       WitdrawlsC: WitdrawlsC,
+      panelOwner: panelOwner,
     });
   }
 
@@ -272,61 +340,7 @@ export default class Datos extends Component {
             </p>
           </div>
 
-          <div className="col-lg-3 col-12 text-center">
-            <h3>_______________</h3>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  var transaccion = await this.props.wallet.contractBinary.methods
-                    .makeRemoveAdmin(this.state.wallet)
-                    .send({ from: this.state.currentAccount });
-                  
-                  alert("verifica la transaccion " + transaccion.transactionHash);
-                  setTimeout(
-                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                    3000
-                  );
-                }}
-              >
-                remove admin
-              </button>
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-
-            AMOUNT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="10000 USDT"/> 
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  
-                  var transaccion = await this.props.wallet.contractBinary.methods
-                    .redimTokenPrincipal02(this.state.value)
-                    .send({ from: this.state.currentAccount });
-                  
-                  alert("transacction: "+transaccion.transactionHash);
-                  setTimeout(
-                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                    3000
-                  );
-                }}
-              >
-                withdraw
-              </button>
-            </p>
-          </div>
+          {this.state.panelOwner}
 
         </div>
         </div>
