@@ -11,7 +11,7 @@ var SC2 = "0x4E4eCBE00A5211a069a06B1A888651FBAbDc93Ca";// direccion del contrato
 var TOKEN = "0x55d398326f99059fF775485246999027B3197955";
 
 
-if(true){// testnet comand
+if(false){// testnet comand
 
     SCtest = "0x896840D275613b0f1ecC0D45F7aC2a32d8df9cf6";// direccion del contrato de pruebas test only no real
     SC = "0x896840D275613b0f1ecC0D45F7aC2a32d8df9cf6";// direccion del contrato V1
