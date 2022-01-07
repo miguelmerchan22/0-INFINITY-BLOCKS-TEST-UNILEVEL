@@ -233,7 +233,6 @@ export default class Datos extends Component {
       totalRoiWitdrawl: totalRoiWitdrawl / 10 ** decimales,
       totalRefWitdrawl: totalRefWitdrawl / 10 ** decimales,
       totalTeamWitdrawl: totalTeamWitdrawl / 10 ** decimales,
-      retirado: (totalRoiWitdrawl+totalRefWitdrawl+totalTeamWitdrawl) / 10 ** decimales,
       admin: isAdmin,
       WitdrawlsC: WitdrawlsC,
       panelOwner: panelOwner,
@@ -309,7 +308,7 @@ export default class Datos extends Component {
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
-            <h3>{this.state.retirado} USDT</h3>
+            <h3>{this.state.totalRoiWitdrawl+this.state.totalTeamWitdrawl+this.state.totalTeamWitdrawl} USDT</h3>
             <p>Global witdrawl</p>
           </div>
 
