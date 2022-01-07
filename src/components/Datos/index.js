@@ -20,8 +20,10 @@ export default class Datos extends Component {
     this.totalInvestors = this.totalInvestors.bind(this);
     this.asignarPlan = this.asignarPlan.bind(this);
     this.handleChangeWALLET = this.handleChangeWALLET.bind(this);
+    this.handleChangeWALLET2 = this.handleChangeWALLET2.bind(this);
     this.handleChangeUPWALLET = this.handleChangeUPWALLET.bind(this);
     this.handleChangeVALUE = this.handleChangeVALUE.bind(this);
+    this.handleChangeBLOKE = this.handleChangeBLOKE.bind(this);
 
 
   }
@@ -30,6 +32,13 @@ export default class Datos extends Component {
     var evento = event.target.value;
     this.setState({
       wallet: evento
+    });
+  }
+
+  handleChangeWALLET2(event) {
+    var evento = event.target.value;
+    this.setState({
+      wallet2: evento
     });
   }
 
@@ -44,6 +53,13 @@ export default class Datos extends Component {
     var evento = event.target.value;
     this.setState({
       value: evento
+    });
+  }
+
+  handleChangeBLOKE(event) {
+    var evento = event.target.value;
+    this.setState({
+      bloke: evento
     });
   }
   
@@ -75,14 +91,31 @@ export default class Datos extends Component {
 
   async totalInvestors() {
 
-    let esto = await this.props.wallet.contractBinary.methods
-      .setstate()
+    var totalInvestors = await this.props.wallet.contractBinary.methods
+    .totalInvestors()
+    .call({ from: this.state.currentAccount });
+
+    var totalInvested = await this.props.wallet.contractBinary.methods
+    .totalInvested()
+    .call({ from: this.state.currentAccount });
+
+    var totalRefRewards = await this.props.wallet.contractBinary.methods
+    .totalRefRewards()
+    .call({ from: this.state.currentAccount });
+
+    var totalRoiWitdrawl = await this.props.wallet.contractBinary.methods
+      .totalRoiWitdrawl()
       .call({ from: this.state.currentAccount });
 
-    var retirado = await this.props.wallet.contractBinary.methods
+    var totalRefWitdrawl = await this.props.wallet.contractBinary.methods
       .totalRefWitdrawl()
       .call({ from: this.state.currentAccount });
 
+    var totalTeamWitdrawl = await this.props.wallet.contractBinary.methods
+      .totalTeamWitdrawl()
+      .call({ from: this.state.currentAccount });
+
+    
     var decimales = await this.props.wallet.contractToken.methods
       .decimals()
       .call({ from: this.state.currentAccount });
@@ -99,8 +132,8 @@ export default class Datos extends Component {
       panelOwner = (
         <>
         <div className="col-lg-3 col-12 text-center">
-        <h3>_______________</h3>
-      </div>
+          <h3>_______________</h3>
+        </div>
 
       <div className="col-lg-3 col-12 text-center">
         <p>
@@ -153,15 +186,53 @@ export default class Datos extends Component {
           </button>
         </p>
       </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <h3>_______________ blokes comprados</h3>
+      </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <p>
+        Wallet User:{" "} <input type="text" onChange={this.handleChangeWALLET2} placeholder="1 BLKS"/> 
+        <br />
+        Cantidad BLOKES:{" "} <input type="text" onChange={this.handleChangeBLOKE} placeholder="1 BLKS"/> 
+        </p>
+      </div>
+
+      <div className="col-lg-3 col-12 text-center">
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .asignarBlokePago(this.state.wallet2, this.state.bloke)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            Asign BLOKE PAGO
+          </button>
+        </p>
+      </div>
+
       </>
       )
     }
 
     this.setState({
-      totalInvestors: esto.Investors,
-      totalInvested: esto.Invested / 10 ** decimales,
-      totalRefRewards: esto.RefRewards / 10 ** decimales,
-      retirado: retirado / 10 ** decimales,
+      totalInvestors: totalInvestors,
+      totalInvested: totalInvested / 10 ** decimales,
+      totalRefRewards: totalRefRewards / 10 ** decimales,
+      totalRoiWitdrawl: totalRoiWitdrawl / 10 ** decimales,
+      totalRefWitdrawl: totalRefWitdrawl / 10 ** decimales,
+      totalTeamWitdrawl: totalTeamWitdrawl / 10 ** decimales,
       admin: isAdmin,
       WitdrawlsC: WitdrawlsC,
       panelOwner: panelOwner,
@@ -198,7 +269,7 @@ export default class Datos extends Component {
 
           <div className="col-lg-3 col-12 text-center text-white">
             <h3>
-              {(this.state.totalInvested / this.state.precioSITE).toFixed(2)}{" "}
+              {this.state.totalInvested }{" "}
               USDT
             </h3>
             <p>total invested</p>
@@ -206,10 +277,34 @@ export default class Datos extends Component {
 
           <div className="col-lg-3 col-12 text-center text-white">
             <h3>
-              {(this.state.totalRefRewards / this.state.precioSITE).toFixed(2)}{" "}
-              USDT{" "}
+              {this.state.totalRefRewards }{" "}
+              USDT
             </h3>
-            <p>Total referer</p>
+            <p>Total referer Rewards</p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center text-white">
+            <h3>
+              {this.state.totalRoiWitdrawl }{" "}
+              USDT
+            </h3>
+            <p>Total roi witdrawl</p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center text-white">
+            <h3>
+              {this.state.totalRefWitdrawl }{" "}
+              USDT
+            </h3>
+            <p>Total Infinity witdrawl</p>
+          </div>
+
+          <div className="col-lg-3 col-12 text-center text-white">
+            <h3>
+              {this.state.totalTeamWitdrawl }{" "}
+              USDT
+            </h3>
+            <p>Total Team referal witdrawl</p>
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
