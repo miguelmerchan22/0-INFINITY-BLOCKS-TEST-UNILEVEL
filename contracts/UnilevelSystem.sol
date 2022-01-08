@@ -464,11 +464,11 @@ contract UnilevelSystem is Context, Admin{
 
     uint256 _value = PRECIO_BLOCK*_bloks;
 
-    if (padre[_msgSender()] != address(0) ){
+    if (padre[_user] != address(0) ){
 
-      rewardReferers(_msgSender(), _value, primervez);
+      rewardReferers(_user, _value, primervez);
         
-      Investor storage sponsor = investors[padre[_msgSender()]];
+      Investor storage sponsor = investors[padre[_user]];
 
       sponsor.blokesDirectos += _bloks;
     }
