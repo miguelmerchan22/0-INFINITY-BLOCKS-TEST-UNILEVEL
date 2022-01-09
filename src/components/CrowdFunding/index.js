@@ -222,7 +222,7 @@ export default class CrowdFunding extends Component {
       tiempo = "Please buy a membership";
     } else {
       tiempo = tiempo + " days left";
-      buyMembership = "Ready";
+      buyMembership = "Active!";
     }
 
     this.setState({
@@ -589,9 +589,11 @@ export default class CrowdFunding extends Component {
               <div className="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
                 <div className="row">
                   <div className="col s2 m2 center-align">
-                    <i className="material-icons background-round mt-1 mb-0">
-                      perm_identity
-                    </i>
+                  <img
+                        src="app-assets/images/bloque.png"
+                        alt="image block"
+                        className="width-40"
+                      />
                     <p className="mb-0">Blocks</p>
                   </div>
                   <div className="col s3 m2 center-align">
@@ -606,7 +608,7 @@ export default class CrowdFunding extends Component {
                       onChange={this.handleChangeA}
                       step={1}
                     />
-                    <p className="mb-0">Quantity</p>
+                    <p className="mb-0">Quantity USDT</p>
                   </div>
                   <div className="col s2 m2 center-align">
                     <h5 className="mb-0 white-text">=</h5>

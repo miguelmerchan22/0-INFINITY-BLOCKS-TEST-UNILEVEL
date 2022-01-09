@@ -36,6 +36,7 @@ export default class Oficina extends Component {
       data: {name: "###### ######", bio: "Loading...", image: "app-assets/images/user/2.png"},
       rango: "N/A",
       textRango: "loading...",
+      imageRango: "0",
     };
 
     this.Investors = this.Investors.bind(this);
@@ -197,7 +198,11 @@ export default class Oficina extends Component {
     if(usuario.data){
       var estado = this.state.data;
       estado = JSON.parse(usuario.data)
+      if(estado.image == ""){
+        estado.image = "app-assets/images/user/2.png";
+      }
       usuario.data = estado; 
+
     }else{
       usuario.data = {name: "NAME NO SET", bio: "", image: "app-assets/images/user/2.png"};
     }
@@ -354,6 +359,7 @@ export default class Oficina extends Component {
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
+    var imageRango = 0;
     var netxRango = [0, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
     var nameRango = ["","Infinity Lord / Madame","Infinity Baron / Baroness",
     "Infinity Duke / Duchess","Infinity King / Queen 👑","Infinity Emperor/ Empress",
@@ -369,7 +375,7 @@ export default class Oficina extends Component {
     if (rango >= netxRango[0] && rango < netxRango[1]) {
       textRango += rango+"/"+netxRango[1] + " BLKS";
       rango = nameRango[0];
-      console.log("entro1")
+      imageRango = 0;
       
     }else{
 
@@ -387,13 +393,13 @@ export default class Oficina extends Component {
             return this.claim();
           };
         }
+        imageRango = nameRango.length-1;
       }else{
         for (let index = 1; index < netxRango.length; index++) {
         
           if (rango >= netxRango[index] && rango < netxRango[index+1]) {
             textRango += rango+"/"+netxRango[index+1] + " BLKS";
             rango = nameRango[index];
-            console.log("entro2")
             if (!rangoArray[index-1]) {
               rangoEstilo = "btn-success";
               cantidad = await this.props.wallet.contractBinary.methods
@@ -405,6 +411,7 @@ export default class Oficina extends Component {
                 return this.claim();
               };
             }
+            imageRango = index;
           }
         }
 
@@ -419,6 +426,7 @@ export default class Oficina extends Component {
       textRango: textRango,
       gananciasRango: gananciasRango,
       funcionRango: funcionRango,
+      imageRango: imageRango,
     });
   }
 
@@ -580,9 +588,9 @@ export default class Oficina extends Component {
                   <div className="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
                     <div className="card-content center">
                       <img
-                        src="app-assets/images/rango-0.png"
-                        alt="images"
-                        className="width-20"
+                        src={"app-assets/images/rango-"+this.state.imageRango+".png"}
+                        alt="image rank"
+                        className="width-40"
                       />
                       <h5 className="m-0 white-text lighten-4 mt-6">{this.state.rango}</h5>
                       <p className="white-text lighten-4">
