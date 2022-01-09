@@ -600,7 +600,7 @@ export default class CrowdFunding extends Component {
                       onChange={this.handleChangeA}
                       step={1}
                     />
-                    <p className="mb-0">Quantity USDT</p>
+                    <p className="mb-0">Quantity</p>
                   </div>
                   <div className="col s2 m2 center-align">
                     <h5 className="mb-0 white-text">=</h5>
