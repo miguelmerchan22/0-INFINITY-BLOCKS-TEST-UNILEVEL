@@ -33,7 +33,7 @@ export default class Oficina extends Component {
       puntosLostDerecha: 0,
       directos: 0,
       withdrawableInfinity: 0,
-      data: {nombre: "###### ######", bio: "Loading..."},
+      data: {name: "###### ######", bio: "Loading...", image: "app-assets/images/user/2.png"},
       rango: "N/A",
       textRango: "loading...",
     };
@@ -52,6 +52,8 @@ export default class Oficina extends Component {
 
     this.claim = this.claim.bind(this);
     this.rango = this.rango.bind(this);
+
+    this.updateInfo = this.updateInfo.bind(this);
   }
 
   handleChangeSITE(event) {
@@ -93,27 +95,24 @@ export default class Oficina extends Component {
     }, 3 * 1000);
   }
 
+  
   async rateSITE() {
-    /*var proxyUrl = cons.proxy;
-    var apiUrl = cons.PRE;
-    var response;
-
-    try {
-      response = await fetch(proxyUrl+apiUrl);
-    } catch (err) {
-      console.log(err);
-      return this.state.precioSITE;
-    }
-
-    var json = await response.json();
-
-    this.setState({
-      precioSITE: json.Data.precio
-    });
-
-    return json.Data.precio;*/
-
+  
     return 1;
+  }
+
+  async updateInfo(){
+
+    var datos = {};
+    datos.name = await prompt("please set a nikname");
+    datos.bio = await prompt("please set a bio");
+    datos.image = await prompt("please set a image link");
+
+    var reg = this.props.wallet.contractBinary.methods
+      .updateData( JSON.stringify(datos))
+      .send({ from: this.state.currentAccount });
+    reg.then(() => window.alert("Congratulation update data: successful"));
+
   }
 
   async Link() {
@@ -196,9 +195,11 @@ export default class Oficina extends Component {
     progresoRetiro = progresoRetiro.toFixed(2);
 
     if(usuario.data){
-      usuario.data = JSON.parse(usuario.data); 
+      var estado = this.state.data;
+      estado = JSON.parse(usuario.data)
+      usuario.data = estado; 
     }else{
-      usuario.data = {nombre: "NAME NO SET", bio: ""};
+      usuario.data = {name: "NAME NO SET", bio: "", image: "app-assets/images/user/2.png"};
     }
 
     //console.log(usuario)
@@ -271,7 +272,7 @@ export default class Oficina extends Component {
       .call({ from: this.state.currentAccount });
     MIN_RETIRO = MIN_RETIRO / 10 ** decimales;
 
-    if (available > MIN_RETIRO) {
+    if (available >= MIN_RETIRO) {
       await this.props.wallet.contractBinary.methods
         .withdraw()
         .send({ from: this.state.currentAccount });
@@ -297,7 +298,7 @@ export default class Oficina extends Component {
       .call({ from: this.state.currentAccount });
     MIN_RETIRO = MIN_RETIRO / 10 ** decimales;
 
-    if (available > MIN_RETIRO) {
+    if (available >= MIN_RETIRO) {
       await this.props.wallet.contractBinary.methods
         .withdraw2()
         .send({ from: this.state.currentAccount });
@@ -325,7 +326,7 @@ export default class Oficina extends Component {
       .call({ from: this.state.currentAccount });
     MIN_RETIRO = MIN_RETIRO / 10 ** decimales;
 
-    if (available > MIN_RETIRO) {
+    if (available >= MIN_RETIRO) {
       await this.props.wallet.contractBinary.methods
         .withdrawTeam()
         .send({ from: this.state.currentAccount });
@@ -559,14 +560,17 @@ export default class Oficina extends Component {
                       <img
                         className="responsive-img circle z-depth-4"
                         width="100"
-                        src="app-assets/images/user/2.png"
+                        height="100"
+                        src={this.state.data.image}
                         alt="images"
+                        style={{cursor: "pointer"}}
+                        onClick={() => this.updateInfo()}
                       />
                       <p className="m-0 break">{this.state.currentAccount} <br></br>
                       <b>{this.state.balance}</b>
                       </p>
                       
-                      <h4 className="white-text">{this.state.data.nombre}</h4>
+                      <h4 className="white-text">{this.state.data.name}</h4>
                       <p className="white-text">{this.state.data.bio}</p> 
                     </div>
                   </div>
@@ -576,7 +580,7 @@ export default class Oficina extends Component {
                   <div className="card gradient-shadow gradient-45deg-light-blue-cyan border-radius-3">
                     <div className="card-content center">
                       <img
-                        src="app-assets/images/icon/apple-watch.png"
+                        src="app-assets/images/rango-0.png"
                         alt="images"
                         className="width-20"
                       />

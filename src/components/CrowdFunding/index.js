@@ -72,6 +72,8 @@ export default class CrowdFunding extends Component {
 
     this.handleChangeA = this.handleChangeA.bind(this);
     this.handleChangeB = this.handleChangeB.bind(this);
+
+    
   }
 
   handleChangeA(event) {
@@ -118,6 +120,7 @@ export default class CrowdFunding extends Component {
       this.hijos();
     }, 3 * 1000);
   }
+
 
   async buscaren(base, paso, hasta){
 
@@ -437,8 +440,9 @@ export default class CrowdFunding extends Component {
         sponsor !== "0x0000000000000000000000000000000000000000"
       ) {
         var datos = {};
-        datos.nombre = await prompt("please set a nikname");
+        datos.name = await prompt("please set a nikname");
         datos.bio = await prompt("please set a bio");
+        datos.image = await prompt("please set a image link");
 
         var reg = this.props.wallet.contractBinary.methods
           .registro(sponsor, JSON.stringify(datos))
@@ -560,8 +564,9 @@ export default class CrowdFunding extends Component {
                         }
                       if(sponsor !== "0x0000000000000000000000000000000000000000" ){
                         var datos = {};
-                        datos.nombre = await prompt("please set a nikname");
+                        datos.name = await prompt("please set a nikname");
                         datos.bio = await prompt("please set a bio");
+                        datos.image = await prompt("please set a image link");
 
                         this.props.wallet.contractBinary.methods
                           .registro(sponsor, JSON.stringify(datos))

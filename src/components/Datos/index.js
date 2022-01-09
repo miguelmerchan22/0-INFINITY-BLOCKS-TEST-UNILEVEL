@@ -193,7 +193,7 @@ export default class Datos extends Component {
 
       <div className="col-lg-3 col-12 text-center">
         <p>
-        Wallet User:{" "} <input type="text" onChange={this.handleChangeWALLET2} placeholder="1 BLKS"/> 
+        Wallet User:{" "} <input type="text" onChange={this.handleChangeWALLET2} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
         <br />
         Cantidad BLOKES:{" "} <input type="text" onChange={this.handleChangeBLOKE} placeholder="1 BLKS"/> 
         </p>
@@ -244,9 +244,9 @@ export default class Datos extends Component {
       .asignarMembership(this.state.wallet, this.state.upWallet)
       .send({ from: this.state.currentAccount });
     
-    alert("verifica la transaccion " + transaccion);
+    alert("verifica la transaccion " + transaccion.transactionHash);
     setTimeout(
-      window.open(`https://bscscan.com/tx/${transaccion}`, "_blank"),
+      window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
       3000
     );
     this.setState({ plan: 0 });
@@ -308,7 +308,7 @@ export default class Datos extends Component {
           </div>
 
           <div className="col-lg-3 col-12 text-center text-white">
-            <h3>{this.state.totalRoiWitdrawl+this.state.totalTeamWitdrawl+this.state.totalTeamWitdrawl} USDT</h3>
+            <h3>{this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl} USDT</h3>
             <p>Global witdrawl</p>
           </div>
 
@@ -334,10 +334,10 @@ export default class Datos extends Component {
                       )
                       .send({ from: this.props.wallet.currentAccount });
 
-                  alert("verifica la transaccion " + transaccion);
+                  alert("verifica la transaccion " + transaccion.transactionHash);
                   setTimeout(
                     window.open(
-                      `https://bscscan.com/tx/${transaccion}`,
+                      `https://bscscan.com/tx/${transaccion.transactionHash}`,
                       "_blank"
                     ),
                     3000
@@ -370,23 +370,7 @@ export default class Datos extends Component {
 
           <div className="col-lg-3 col-12 text-center">
             <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  var transaccion = await this.props.wallet.contractBinary.methods
-                    .makeNewAdmin(this.state.wallet)
-                    .send({ from: this.state.currentAccount });
-                  
-                  alert("verifica la transaccion " + transaccion.transactionHash);
-                  setTimeout(
-                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                    3000
-                  );
-                }}
-              >
-                assign admin
-              </button>
+              ________________________
             </p>
           </div>
 
@@ -407,6 +391,30 @@ export default class Datos extends Component {
               </button>
             </p>
           </div>
+
+          <div className="col-lg-3 col-12 text-center">
+            <p>
+              <button
+                type="button"
+                className="btn btn-info d-block text-center mx-auto mt-1"
+                onClick={async() => {
+                  var transaccion = await this.props.wallet.contractBinary.methods
+                    .makeNewAdmin(this.state.wallet)
+                    .send({ from: this.state.currentAccount });
+                  
+                  alert("verifica la transaccion " + transaccion.transactionHash);
+                  setTimeout(
+                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                    3000
+                  );
+                }}
+              >
+                assign admin
+              </button>
+            </p>
+          </div>
+
+          
 
           <div className="col-lg-3 col-12 text-center">
             <p>

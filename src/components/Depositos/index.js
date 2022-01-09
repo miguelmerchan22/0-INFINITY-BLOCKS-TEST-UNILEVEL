@@ -232,13 +232,7 @@ export default class Depositos extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
-
-          <div className="progress" style={{"height": "20px"}}>
-            <div className="progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{"width": porcentiempo+"%"}} aria-valuenow={this.state.porcentiempo} aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <br></br>
-          
+            </div>         
     
     
         </div>
@@ -318,22 +312,21 @@ export default class Depositos extends Component {
           porcentiempo = 100;
         }
 
+        if(porcentiempo < 0){
+          porcentiempo = 0;
+        }
+
         var fecha = new Date((depositos.tiempo[i]*1000)+tiempo);
         fecha = ""+fecha;
 
         var proceso;
-        if (depositos.activo[i]  && ((depositos.amount[i]/10**18)*(porcentiempo/100)) < (depositos.amount[i]/10**18)) {
-          if (depositos.pasivo[i]  ) {
+        if (depositos.activo[i]  && porcentiempo <= 100) {
+ 
             proceso = <b> (ACTIVE)</b> 
-          } else {
-            proceso = <b> (ACTIVE)</b> 
-          }
         }else{
-          if (depositos.pasivo[i]  ) {
+       
             proceso = <b> (FINALIZED)</b> 
-          }else{
-            proceso = <b> (FINALIZED)</b> 
-          }
+          
         }
         
 
@@ -361,13 +354,6 @@ export default class Depositos extends Component {
                     </div>
                 </div>
             </div>
-
-          <div className="progress" style={{"height": "20px"}}>
-            <div className="progress-bar-striped progress-bar-animated bg-success" role="progressbar" style={{"width": porcentiempo+"%"}} aria-valuenow={this.state.porcentiempo} aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <br></br>
-          
-    
     
         </div>
         );
