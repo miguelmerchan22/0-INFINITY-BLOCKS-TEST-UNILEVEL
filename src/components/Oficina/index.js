@@ -592,7 +592,8 @@ export default class Oficina extends Component {
                         alt="image rank"
                         className="width-40"
                       />
-                      <h5 className="m-0 white-text lighten-4 mt-6">{this.state.rango}</h5>
+                      <h5 className="m-0 white-text lighten-4 mt-1">{this.state.rango}</h5>
+                      <br></br>
                       <p className="white-text lighten-4">
                         <button 
                           className="mb-2 btn waves-effect waves-light amber darken-4 ancho100"
