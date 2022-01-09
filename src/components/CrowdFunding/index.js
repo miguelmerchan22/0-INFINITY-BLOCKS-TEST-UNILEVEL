@@ -130,7 +130,7 @@ export default class CrowdFunding extends Component {
       .columnHijos(base[paso][index])
       .call({ from: this.state.currentAccount });
 
-      if(columnHijos == false){
+      if(columnHijos === false){
 
       }else{
         base[paso+1] = [].concat(columnHijos,base[paso+1]);
@@ -171,8 +171,6 @@ export default class CrowdFunding extends Component {
     niveles[0] = columnHijos;
 
     var investor;
-    var pasive;
-    var infinity;
 
     niveles = await this.buscaren(niveles, 0, 4);
 
@@ -181,14 +179,6 @@ export default class CrowdFunding extends Component {
 
         investor = await this.props.wallet.contractBinary.methods
         .investors( niveles[index][sub])
-        .call({ from: this.state.currentAccount });
-
-        pasive = await this.props.wallet.contractBinary.methods
-        .withdrawable( niveles[index][sub], false)
-        .call({ from: this.state.currentAccount });
-
-        infinity = await this.props.wallet.contractBinary.methods
-        .withdrawable( niveles[index][sub], true)
         .call({ from: this.state.currentAccount });
 
         datos[index].blks  += parseInt(investor.invested);
@@ -246,6 +236,8 @@ export default class CrowdFunding extends Component {
       "login"
     ).href = `https://bscscan.com/address/${accountAddress}`;
     document.getElementById("login-my-wallet").innerHTML = texto;
+
+    document.getElementById("avatar").src = document.getElementById("avatarImage").src;
 
     var nameToken1 = await this.props.wallet.contractToken.methods
       .symbol()
@@ -502,7 +494,7 @@ export default class CrowdFunding extends Component {
                     </div>
                     <h5 className="white-text mb-1">Membership</h5>
                     <p className="m-0">{this.state.tiempo}</p>
-                    <a
+                    <button
                       onClick={async () => {
                         var aprovado = await this.props.wallet.contractToken.methods
                           .allowance(this.state.currentAccount, this.props.contractAddress)
@@ -581,7 +573,7 @@ export default class CrowdFunding extends Component {
                       className="waves-effect waves-light btn gradient-45deg-deep-orange-orange border-round mt-7 z-depth-4"
                     >
                       {this.state.buyMembership}
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -591,7 +583,7 @@ export default class CrowdFunding extends Component {
                   <div className="col s2 m2 center-align">
                   <img
                         src="app-assets/images/bloque.png"
-                        alt="image block"
+                        alt="block"
                         className="width-40"
                       />
                     <p className="mb-0">Blocks</p>

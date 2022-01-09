@@ -131,40 +131,12 @@ export default class Datos extends Component {
     if(lc.lowerCase(owner) === lc.lowerCase(this.state.currentAccount)){
       panelOwner = (
         <>
-        <div className="col-lg-3 col-12 text-center">
-          <h3>_______________</h3>
-        </div>
 
-      <div className="col-lg-3 col-12 text-center">
-        <p>
-          <button
-            type="button"
-            className="btn btn-info d-block text-center mx-auto mt-1"
-            onClick={async() => {
-              var transaccion = await this.props.wallet.contractBinary.methods
-                .makeRemoveAdmin(this.state.wallet)
-                .send({ from: this.state.currentAccount });
-              
-              alert("verifica la transaccion " + transaccion.transactionHash);
-              setTimeout(
-                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                3000
-              );
-            }}
-          >
-            remove admin
-          </button>
-        </p>
-      </div>
-
-      <div className="col-lg-3 col-12 text-center">
+      <div className="col l4 text-center">
         <p>
 
         AMOUNT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="10000 USDT"/> 
         </p>
-      </div>
-
-      <div className="col-lg-3 col-12 text-center">
         <p>
           <button
             type="button"
@@ -187,11 +159,7 @@ export default class Datos extends Component {
         </p>
       </div>
 
-      <div className="col-lg-3 col-12 text-center">
-        <h3>_______________ blokes comprados</h3>
-      </div>
-
-      <div className="col-lg-3 col-12 text-center">
+      <div className="col l4 text-center">
         <p>
         Wallet User:{" "} <input type="text" onChange={this.handleChangeWALLET2} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
         <br />
@@ -199,7 +167,7 @@ export default class Datos extends Component {
         </p>
       </div>
 
-      <div className="col-lg-3 col-12 text-center">
+      <div className="col l4 text-center">
         <p>
           <button
             type="button"
@@ -218,6 +186,26 @@ export default class Datos extends Component {
             }}
           >
             Asign BLOKE PAGO
+          </button>
+        </p>
+
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .makeRemoveAdmin(this.state.wallet2)
+                .send({ from: this.state.currentAccount });
+              
+              alert("verifica la transaccion " + transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            remove admin
           </button>
         </p>
       </div>
@@ -255,199 +243,209 @@ export default class Datos extends Component {
   render() {
     if (this.state.admin === true) {
       return (
-        <div className="row">
-        <div className="content-wrapper-before blue-grey lighten-5"></div>
-        <div className="col s12">
-          <div className="container">
+        <div className="container">
+          <div className="row">
+            <div className="col l4 text-center text-white">
+              <h3>{this.state.totalInvestors}</h3>
+              <p>Investor Global</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalInvested).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total invested</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalInvested*2.4).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total ROI</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalInvested* 0.005 * 30).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Infinity ♾</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {((this.state.totalInvested*2.4)+(this.state.totalInvested* 0.005 * 30)).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Roi y Infinity</p>
+            </div>
+
+            Total Roi y Infinity
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalRefRewards).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total referer Rewards</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalRoiWitdrawl).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total roi witdrawl</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalRefWitdrawl).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Infinity witdrawl</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalTeamWitdrawl).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Team referal witdrawl</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>{(this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl).toFixed(2)} USDT</h3>
+              <p>Global witdrawl</p>
+            </div>
 
 
-        <div className="row counters">
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>{this.state.totalInvestors}</h3>
-            <p>Investor Global</p>
           </div>
+          <hr></hr>
+          <div className="row">
 
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>
-              {this.state.totalInvested }{" "}
-              USDT
-            </h3>
-            <p>total invested</p>
+            <div className="col l4 text-center">
+              <p>
+              Wallet:{" "} <input type="text" onChange={this.handleChangeWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
+              </p>
+              <p>
+              UPLINE:{" "} <input type="text" onChange={this.handleChangeUPWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
+              </p>
+              <p>
+                <button
+                  type="button"
+                  className="btn btn-info d-block text-center mx-auto mt-1"
+                  onClick={() => this.asignarPlan()}
+                >
+                  assign free membership
+                </button>
+              </p>
+              <p>
+                <button
+                  type="button"
+                  className="btn btn-info d-block text-center mx-auto mt-1"
+                  onClick={async() => {
+                    var admin = await this.props.wallet.contractBinary.methods
+                      .admin(this.state.wallet)
+                      .call({ from: this.state.currentAccount });
+                    
+                    alert("this wallet is admin? "+this.state.wallet + ": "+admin);
+                  }}
+                >
+                  is admin?
+                </button>
+              </p>
+            </div>
+
+            <div className="col l4 text-center">
+              <input type="number" onChange={this.handleChangeCANTIDAD} placeholder="1000 USDT" />
+
+              <p>
+                <button
+                  type="button"
+                  className="btn btn-info d-block text-center mx-auto mt-1"
+                  onClick={async () => {
+                    var transaccion =
+                      await this.props.wallet.contractToken.methods
+                        .transfer(
+                          this.state.wallet,
+                          parseInt(this.state.cantidad * 10 ** 6)
+                        )
+                        .send({ from: this.props.wallet.currentAccount });
+
+                    alert("verifica la transaccion " + transaccion.transactionHash);
+                    setTimeout(
+                      window.open(
+                        `https://bscscan.com/tx/${transaccion.transactionHash}`,
+                        "_blank"
+                      ),
+                      3000
+                    );
+                    this.setState({ cantidad: 0 });
+                  }}
+                >
+                  Send Token
+                </button>
+              </p>
+            </div>
+
+            <div className="col l4 text-center">
+              <p>
+                <button
+                  type="button"
+                  className="btn btn-info d-block text-center mx-auto mt-1"
+                  onClick={async() => {
+                    var transaccion = await this.props.wallet.contractBinary.methods
+                      .makeNewAdmin(this.state.wallet)
+                      .send({ from: this.state.currentAccount });
+                    
+                    alert("verifica la transaccion " + transaccion.transactionHash);
+                    setTimeout(
+                      window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                      3000
+                    );
+                  }}
+                >
+                  assign admin
+                </button>
+              </p>
+              <p>
+                <button
+                  type="button"
+                  className="btn btn-info d-block text-center mx-auto mt-1"
+                  onClick={async() => {
+                    if(this.state.WitdrawlsC){
+                      alert("you turn OFF witdrawls");
+                    }else{
+                      alert("you turn ON witdrawls");
+                    }
+                    var transaccion = await this.props.wallet.contractBinary.methods
+                      .controlWitdrawl(!this.state.WitdrawlsC)
+                      .send({ from: this.state.currentAccount });
+                    
+                    alert("transacction: "+transaccion.transactionHash);
+                    setTimeout(
+                      window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                      3000
+                    );
+                  }}
+                >
+                  Witdrawl: {""+this.state.WitdrawlsC}
+                </button>
+              </p>
+            </div>
+
+            
+
           </div>
+          <hr></hr>
+          <div className="row">
 
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>
-              {this.state.totalRefRewards }{" "}
-              USDT
-            </h3>
-            <p>Total referer Rewards</p>
+            {this.state.panelOwner}
+
           </div>
-
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>
-              {this.state.totalRoiWitdrawl }{" "}
-              USDT
-            </h3>
-            <p>Total roi witdrawl</p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>
-              {this.state.totalRefWitdrawl }{" "}
-              USDT
-            </h3>
-            <p>Total Infinity witdrawl</p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>
-              {this.state.totalTeamWitdrawl }{" "}
-              USDT
-            </h3>
-            <p>Total Team referal witdrawl</p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center text-white">
-            <h3>{this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl} USDT</h3>
-            <p>Global witdrawl</p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-            Wallet:{" "} <input type="text" onChange={this.handleChangeWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <input type="number" onChange={this.handleChangeCANTIDAD} placeholder="1000 USDT" />
-
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async () => {
-                  var transaccion =
-                    await this.props.wallet.contractToken.methods
-                      .transfer(
-                        this.state.wallet,
-                        parseInt(this.state.cantidad * 10 ** 6)
-                      )
-                      .send({ from: this.props.wallet.currentAccount });
-
-                  alert("verifica la transaccion " + transaccion.transactionHash);
-                  setTimeout(
-                    window.open(
-                      `https://bscscan.com/tx/${transaccion.transactionHash}`,
-                      "_blank"
-                    ),
-                    3000
-                  );
-                  this.setState({ cantidad: 0 });
-                }}
-              >
-                Send Token
-              </button>
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-            UPLINE:{" "} <input type="text" onChange={this.handleChangeUPWALLET} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={() => this.asignarPlan()}
-              >
-                assign free membership
-              </button>
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              ________________________
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  var admin = await this.props.wallet.contractBinary.methods
-                    .admin(this.state.wallet)
-                    .call({ from: this.state.currentAccount });
-                  
-                  alert("this wallet is admin? "+this.state.wallet + ": "+admin);
-                }}
-              >
-                is admin?
-              </button>
-            </p>
-          </div>
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  var transaccion = await this.props.wallet.contractBinary.methods
-                    .makeNewAdmin(this.state.wallet)
-                    .send({ from: this.state.currentAccount });
-                  
-                  alert("verifica la transaccion " + transaccion.transactionHash);
-                  setTimeout(
-                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                    3000
-                  );
-                }}
-              >
-                assign admin
-              </button>
-            </p>
-          </div>
-
-          
-
-          <div className="col-lg-3 col-12 text-center">
-            <p>
-              <button
-                type="button"
-                className="btn btn-info d-block text-center mx-auto mt-1"
-                onClick={async() => {
-                  if(this.state.WitdrawlsC){
-                    alert("you turn OFF witdrawls");
-                  }else{
-                    alert("you turn ON witdrawls");
-                  }
-                  var transaccion = await this.props.wallet.contractBinary.methods
-                    .controlWitdrawl(!this.state.WitdrawlsC)
-                    .send({ from: this.state.currentAccount });
-                  
-                  alert("transacction: "+transaccion.transactionHash);
-                  setTimeout(
-                    window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                    3000
-                  );
-                }}
-              >
-                Witdrawl: {""+this.state.WitdrawlsC}
-              </button>
-            </p>
-          </div>
-
-          {this.state.panelOwner}
-
-        </div>
-        </div>
-        </div>
         </div>
 
       );

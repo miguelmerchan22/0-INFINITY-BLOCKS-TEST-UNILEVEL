@@ -269,10 +269,9 @@ export default class Depositos extends Component {
     usuario.inicio = 1000;
 
     var listaDepositos = (
-      <div className="box">
-        <h3 className="title"></h3>
+      <>
 
-      </div>
+      </>
     );
 
     if (verdepositos[0].length > 0) {
@@ -293,10 +292,6 @@ export default class Depositos extends Component {
       var tiempo = await this.props.wallet.contractBinary.methods.tiempo().call({from:this.state.currentAccount});
 
       tiempo = tiempo*1000;
-
-      let porcent = await this.props.wallet.contractBinary.methods.porcent().call({from:this.state.currentAccount});
-
-        porcent = porcent/100;
 
       for (let i = 0; i < depositos.amount.length; i++) {
 

@@ -10,7 +10,6 @@ export default class Oficina extends Component {
       registered: false,
       balanceRef: 0,
       available: 0,
-      balanceSal: 0,
       totalRef: 0,
       invested: 0,
       paidAt: 0,
@@ -131,10 +130,7 @@ export default class Oficina extends Component {
       mydireccion = await this.props.wallet.contractBinary.methods
         .addressToId(this.state.currentAccount)
         .call({ from: this.state.currentAccount });
-      var ver = "";
-      if (this.props.version > 1) {
-        ver = "?v" + this.props.version;
-      }
+
       mydireccion = loc + "?ref=" + mydireccion;
       var link = mydireccion;
       this.setState({
@@ -198,7 +194,7 @@ export default class Oficina extends Component {
     if(usuario.data){
       var estado = this.state.data;
       estado = JSON.parse(usuario.data)
-      if(estado.image == ""){
+      if(estado.image === ""){
         estado.image = "app-assets/images/user/2.png";
       }
       usuario.data = estado; 
@@ -431,21 +427,12 @@ export default class Oficina extends Component {
   }
 
   render() {
-    var { available, invested,  balanceSal } = this.state;
+    var { available, invested } = this.state;
 
     available = available.toFixed(3);
     available = parseFloat(available);
 
-    balanceSal = balanceSal.toFixed(3);
-    balanceSal = parseFloat(balanceSal);
-
     invested = parseFloat(invested);
-
-    if (available >= this.state.MIN_RETIRO) {
-      var ret = available.toFixed(2);
-    } else {
-      ret = 0;
-    }
 
     return (
       <div className="row">
@@ -566,6 +553,7 @@ export default class Oficina extends Component {
                   <div className="card card-border center-align gradient-45deg-purple-deep-orange">
                     <div className="card-content white-text">
                       <img
+                        id="avatarImage"
                         className="responsive-img circle z-depth-4"
                         width="100"
                         height="100"
@@ -589,7 +577,7 @@ export default class Oficina extends Component {
                     <div className="card-content center">
                       <img
                         src={"app-assets/images/rango-"+this.state.imageRango+".png"}
-                        alt="image rank"
+                        alt="rank"
                         className="width-40"
                       />
                       <h5 className="m-0 white-text lighten-4 mt-1">{this.state.rango}</h5>
