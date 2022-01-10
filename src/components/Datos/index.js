@@ -357,7 +357,7 @@ export default class Datos extends Component {
             </div>
 
             <div className="col l4 text-center text-white">
-              <h3>{(this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl+totalRangeWitdrawl).toFixed(2)} USDT</h3>
+              <h3>{(this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl+this.state.totalRangeWitdrawl).toFixed(2)} USDT</h3>
               <p>Global witdrawl</p>
             </div>
 
