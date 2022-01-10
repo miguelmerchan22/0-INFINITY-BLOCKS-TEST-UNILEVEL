@@ -194,7 +194,7 @@ export default class Oficina extends Component {
     if(usuario.data){
       var estado = this.state.data;
       estado = JSON.parse(usuario.data)
-      if(estado.image === ""){
+      if(estado.image === "" || estado.image === null){
         estado.image = "app-assets/images/user/2.png";
       }
       usuario.data = estado; 
