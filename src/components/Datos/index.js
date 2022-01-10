@@ -273,6 +273,33 @@ export default class Datos extends Component {
       <div className="col l4 text-center">
         <p>
 
+          Price Membership:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="30 USDT"/> 
+        </p>
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .setPrecioRegistro(this.state.value+"000000000000000000")
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            Set duration
+          </button>
+        </p>
+      </div>
+
+      <div className="col l4 text-center">
+        <p>
+
         AMOUNT WT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="1000 USDT"/> 
         </p>
         <p>
