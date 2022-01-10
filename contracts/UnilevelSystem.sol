@@ -671,8 +671,6 @@ contract UnilevelSystem is Context, Admin{
 
   function newRecompensa() public {
 
-    if (!onOffWitdrawl)revert();
-
     uint256 amount = withdrawableRange(_msgSender());
 
     if ( amount <= 0 )revert();
