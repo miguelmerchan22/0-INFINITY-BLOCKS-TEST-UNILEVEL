@@ -103,12 +103,20 @@ export default class Datos extends Component {
     .totalRefRewards()
     .call({ from: this.state.currentAccount });
 
+    var totalRank = await this.props.wallet.contractBinary.methods
+    .totalRefRange()
+    .call({ from: this.state.currentAccount });
+
     var totalRoiWitdrawl = await this.props.wallet.contractBinary.methods
       .totalRoiWitdrawl()
       .call({ from: this.state.currentAccount });
 
     var totalRefWitdrawl = await this.props.wallet.contractBinary.methods
       .totalRefWitdrawl()
+      .call({ from: this.state.currentAccount });
+
+    var totalRangeWitdrawl = await this.props.wallet.contractBinary.methods
+      .totalRangeWitdrawl()
       .call({ from: this.state.currentAccount });
 
     var totalTeamWitdrawl = await this.props.wallet.contractBinary.methods
@@ -218,9 +226,11 @@ export default class Datos extends Component {
       totalInvestors: totalInvestors,
       totalInvested: totalInvested / 10 ** decimales,
       totalRefRewards: totalRefRewards / 10 ** decimales,
+      totalRank: totalRank / 10 ** decimales,
       totalRoiWitdrawl: totalRoiWitdrawl / 10 ** decimales,
       totalRefWitdrawl: totalRefWitdrawl / 10 ** decimales,
       totalTeamWitdrawl: totalTeamWitdrawl / 10 ** decimales,
+      totalRangeWitdrawl: totalRangeWitdrawl / 10 ** decimales,
       admin: isAdmin,
       WitdrawlsC: WitdrawlsC,
       panelOwner: panelOwner,
@@ -260,6 +270,18 @@ export default class Datos extends Component {
 
             <div className="col l4 text-center text-white">
               <h3>
+                {(this.state.totalInvested/50).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total bloks</p>
+            </div>
+
+            <div className="col l12 text-center text-white">
+              <hr></hr>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
                 {(this.state.totalInvested*2.4).toFixed(2) }{" "}
                 USDT
               </h3>
@@ -268,7 +290,7 @@ export default class Datos extends Component {
 
             <div className="col l4 text-center text-white">
               <h3>
-                {(this.state.totalInvested* 0.005 * 30).toFixed(2) }{" "}
+                {(this.state.totalInvested* 0.012 * 30).toFixed(2) }{" "}
                 USDT
               </h3>
               <p>Total Infinity ♾</p>
@@ -276,20 +298,30 @@ export default class Datos extends Component {
 
             <div className="col l4 text-center text-white">
               <h3>
-                {((this.state.totalInvested*2.4)+(this.state.totalInvested* 0.005 * 30)).toFixed(2) }{" "}
-                USDT
-              </h3>
-              <p>Total Roi y Infinity</p>
-            </div>
-
-            Total Roi y Infinity
-
-            <div className="col l4 text-center text-white">
-              <h3>
                 {(this.state.totalRefRewards).toFixed(2) }{" "}
                 USDT
               </h3>
               <p>Total referer Rewards</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {(this.state.totalRank).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Rank Rewards</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>
+                {((this.state.totalInvested*2.4)+(this.state.totalInvested* 0.012 * 30)+this.state.totalRefRewards+this.state.totalRank).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total To Pay</p>
+            </div>
+
+            <div className="col l12 text-center text-white">
+              <hr></hr>
             </div>
 
             <div className="col l4 text-center text-white">
@@ -317,7 +349,15 @@ export default class Datos extends Component {
             </div>
 
             <div className="col l4 text-center text-white">
-              <h3>{(this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl).toFixed(2)} USDT</h3>
+              <h3>
+                {(this.state.totalRangeWitdrawl).toFixed(2) }{" "}
+                USDT
+              </h3>
+              <p>Total Rank witdrawl</p>
+            </div>
+
+            <div className="col l4 text-center text-white">
+              <h3>{(this.state.totalRoiWitdrawl+this.state.totalRefWitdrawl+this.state.totalTeamWitdrawl+totalRangeWitdrawl).toFixed(2)} USDT</h3>
               <p>Global witdrawl</p>
             </div>
 
