@@ -219,6 +219,11 @@ contract UnilevelSystem is Context, Admin{
     return true;
   }
 
+  function setduracionMembership(uint256 _duracionMembership) public onlyOwner returns(bool){
+    duracionMembership = _duracionMembership;
+    return true;
+  }
+
   function setDescuento(uint256 _descuento) public onlyOwner returns(bool){
     descuento = _descuento;
     return true;

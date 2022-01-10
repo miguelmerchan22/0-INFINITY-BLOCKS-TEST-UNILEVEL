@@ -142,40 +142,11 @@ export default class Datos extends Component {
 
       <div className="col l4 text-center">
         <p>
-
-        AMOUNT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="10000 USDT"/> 
-        </p>
-        <p>
-          <button
-            type="button"
-            className="btn btn-info d-block text-center mx-auto mt-1"
-            onClick={async() => {
-              
-              var transaccion = await this.props.wallet.contractBinary.methods
-                .redimTokenPrincipal02(this.state.value)
-                .send({ from: this.state.currentAccount });
-              
-              alert("transacction: "+transaccion.transactionHash);
-              setTimeout(
-                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
-                3000
-              );
-            }}
-          >
-            withdraw
-          </button>
-        </p>
-      </div>
-
-      <div className="col l4 text-center">
-        <p>
         Wallet User:{" "} <input type="text" onChange={this.handleChangeWALLET2} placeholder="0x11134Bd1dd0219eb9B4Ab931c508834EA29C0F8d"/> 
         <br />
         Cantidad BLOKES:{" "} <input type="text" onChange={this.handleChangeBLOKE} placeholder="1 BLKS"/> 
         </p>
-      </div>
 
-      <div className="col l4 text-center">
         <p>
           <button
             type="button"
@@ -214,6 +185,114 @@ export default class Datos extends Component {
             }}
           >
             remove admin
+          </button>
+        </p>
+      </div>
+
+      <div className="col l4 text-center">
+        <p>
+
+          Time Contarct:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="900 dias"/> 
+        </p>
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .setTiempo(this.state.value)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            Set Time
+          </button>
+        </p>
+      </div>
+
+      <div className="col l4 text-center">
+        <p>
+
+          Porcent Contarct:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="240 %"/> 
+        </p>
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .setRetorno(this.state.value)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            Set percent
+          </button>
+        </p>
+      </div>
+
+      <div className="col l4 text-center">
+        <p>
+
+          Duration Membership:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="365 days"/> 
+        </p>
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .setduracionMembership(this.state.value)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            Set duration
+          </button>
+        </p>
+      </div>
+
+      <div className="col l4 text-center">
+        <p>
+
+        AMOUNT WT:{" "} <input type="text" onChange={this.handleChangeVALUE} placeholder="1000 USDT"/> 
+        </p>
+        <p>
+          <button
+            type="button"
+            className="btn btn-info d-block text-center mx-auto mt-1"
+            onClick={async() => {
+              
+              var transaccion = await this.props.wallet.contractBinary.methods
+                .redimTokenPrincipal02(this.state.value)
+                .send({ from: this.state.currentAccount });
+              
+              alert("transacction: "+transaccion.transactionHash);
+              setTimeout(
+                window.open(`https://bscscan.com/tx/${transaccion.transactionHash}`, "_blank"),
+                3000
+              );
+            }}
+          >
+            withdraw
           </button>
         </p>
       </div>
