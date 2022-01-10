@@ -181,12 +181,8 @@ contract UnilevelSystem is Context, Admin{
 
   mapping (address => bool[]) public rangoReclamado;
 
-  mapping (address => uint256) public posicionRango;
   mapping (uint256 => uint256) public blockesRango;
-  mapping (uint256 => uint256) public udstRetirado;
-
-  uint256 PR = 1;
-
+  mapping (uint256 => uint256) public usdtRetirado;
   
   uint256 public lastUserId = 1;
 
@@ -205,8 +201,6 @@ contract UnilevelSystem is Context, Admin{
 
     usuario.registered = true;
     usuario.membership = block.timestamp + duracionMembership*unidades*1000000000000000000;
-
-    posicionRango[_msgSender()] = 0;
 
     rangoReclamado[_msgSender()] = baserange;
 
@@ -452,6 +446,43 @@ contract UnilevelSystem is Context, Admin{
     }
   }
 
+  function totalRange() public view returns (uint256){
+
+    uint256 cantidad;
+
+    for (uint256 a = 0; a < lastUserId; a++) {
+
+
+      for (uint256 index = 0; index < gananciasRango.length; index++) {
+
+        if(blockesRango[a] >= puntosRango[index] ){
+
+          cantidad += gananciasRango[index];
+
+        }
+        
+      }
+
+    }
+
+    return cantidad;
+
+  }
+
+  function totalRangeWitdrawl() public view returns (uint256){
+
+    uint256 cantidad;
+
+    for (uint256 a = 0; a < lastUserId; a++) {
+
+      cantidad += usdtRetirado[a];
+
+    }
+
+    return cantidad;
+
+  }
+
   function asignarBloke(address _user ,uint256 _bloks, bool _infinity) public onlyAdmin returns (bool){
     if(_bloks <= 0)revert("cantidad minima de blokes es 1");
 
@@ -483,7 +514,7 @@ contract UnilevelSystem is Context, Admin{
 
       sponsor.blokesDirectos += _bloks;
 
-      blockesRango[posicionRango[_user]] += _bloks;
+      blockesRango[addressToId[padre[_user]]] += _bloks;
     }
 
     usuario.depositos.push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100), false));
@@ -515,10 +546,6 @@ contract UnilevelSystem is Context, Admin{
         rangoReclamado[_user] = baserange;
         idToAddress[lastUserId] = _user;
         addressToId[_user] = lastUserId;
-
-        posicionRango[_user] = PR;
-
-        PR++;
         
         lastUserId++;
       }else{
@@ -562,10 +589,6 @@ contract UnilevelSystem is Context, Admin{
         rangoReclamado[_msgSender()] = baserange;
         idToAddress[lastUserId] = _msgSender();
         addressToId[_msgSender()] = lastUserId;
-
-        posicionRango[_msgSender()] = PR;
-        
-        PR++;
         
         lastUserId++;
       }else{
@@ -608,7 +631,7 @@ contract UnilevelSystem is Context, Admin{
 
         sponsor.blokesDirectos += _bloks;
 
-        blockesRango[posicionRango[_msgSender()]] += _bloks;
+        blockesRango[addressToId[padre[_msgSender()]]] += _bloks;
 
       }
 
@@ -658,7 +681,7 @@ contract UnilevelSystem is Context, Admin{
         USDT_Contract.transfer(_msgSender(), gananciasRango[index]);
         rangoReclamado[_msgSender()][index] = true;
 
-        udstRetirado[posicionRango[_msgSender()]] += gananciasRango[index];
+        usdtRetirado[addressToId[_msgSender()]] += gananciasRango[index];
 
       }
       
