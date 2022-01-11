@@ -7,7 +7,7 @@
     "build": "node scripts/build.js && npx rimraf docs && npx move-cli build docs"
   },
   "license": "Apache-2.0",
-  "homepage": "https://infinityblockscb.com/new",
+  "homepage": "https://infinityblockscb.com/",
   "dependencies": {
     "@babel/core": "7.8.4",
     "@svgr/webpack": "4.3.3",
