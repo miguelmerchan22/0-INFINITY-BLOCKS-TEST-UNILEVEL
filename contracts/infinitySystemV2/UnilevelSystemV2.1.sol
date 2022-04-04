@@ -200,144 +200,110 @@ contract InfinitySystemV2 is Proxy, Admin{
   uint256[] public valor = [70, 8, 5];
 
   constructor() {
-
     Investor storage usuario = investors[owner];
     usuario.registered = true;
     usuario.membership = block.timestamp + duracionMembership*unidades*1000000000000000000;
     rangoReclamado[msg.sender] = baserange;
     idToAddress[0] = msg.sender;
     addressToId[msg.sender] = 0;
-
   }
-
   function setPrecioRegistro(uint256 _precio) public onlyOwner returns(bool){
     precioRegistro = _precio;
     return true;
   }
-
   function setduracionMembership(uint256 _duracionMembership) public onlyOwner returns(bool){
     duracionMembership = _duracionMembership;
     return true;
   }
-
   function setDescuento(uint256 _descuento) public onlyOwner returns(bool){
     descuento = _descuento;
     return true;
   }
-
   function setWalletstransfers(address[] memory _wallets, uint256[] memory _valores) public onlyOwner returns(bool){
-
     wallet = _wallets;
     valor = _valores;
-
     return true;
-
   }
-
   function setWalletFee(address[] memory _wallet, uint256[] memory _fee ) public onlyOwner returns(bool){
     walletFee = _wallet;
     valorFee = _fee;
     return true;
   }
-
   function setRangos(bool[] memory _baserange ,uint256[] memory _gananciasRango , uint256[] memory _puntosRango ) public onlyOwner returns(bool){
     baserange = _baserange;
     gananciasRango = _gananciasRango;
     puntosRango = _puntosRango;
-
     rangoReclamado[msg.sender] = baserange;
     return true;
   }
-
   function baserangelength() public view returns(uint256){
     return baserange.length;
   }
-
   function setMIN_RETIRO(uint256 _min) public onlyOwner returns(uint256){
     MIN_RETIRO = _min;
     return _min;
   }
-
   function ChangeTokenPrincipal(address _tokenTRC20) public onlyOwner returns (bool){
-
     USDT_Contract = TRC20_Interface(_tokenTRC20);
     tokenPricipal = _tokenTRC20;
     return true;
-
   }
-  
   function tiempo() public view returns (uint256){
      return dias.mul(unidades);
   }
-
   function setPorcientos(uint256 _nivel, uint256 _value) public onlyOwner returns(uint256[] memory){
     porcientos[_nivel] = _value;
     return porcientos;
   }
-
   function setPorcientosSalida(uint256 _nivel, uint256 _value) public onlyOwner returns(uint256[] memory){
     infinity[_nivel] = _value;
     return infinity;
   }
-
   function setPrimeravezPorcientos(uint256 _nivel, uint256 _value) public onlyOwner returns(uint256[] memory){
     primervez[_nivel] = _value;
     return primervez;
   }
-
   function setPriceBlock(uint256 _value) public onlyOwner returns(bool){
     PRECIO_BLOCK = _value;
     return true;
   }
-
   function setTiempo(uint256 _dias) public onlyAdmin returns(uint256){
     dias = _dias;
     return (_dias);
   }
-
   function setTiempoUnidades(uint256 _unidades) public onlyOwner returns(uint256){
     unidades = _unidades;
     return (_unidades);
   }
-
   function controlWitdrawl(bool _true_false) public onlyAdmin returns(bool){
     onOffWitdrawl = _true_false;
     return (_true_false);
   }
-
   function setRetorno(uint256 _porcentaje) public onlyAdmin returns(uint256){
     porcent = _porcentaje;
     return (porcent);
   }
-
   function setContratoMigracion(address _contarct) public onlyOwner returns(bool){
     Anterior_Contrato = OldInfinity_Interface(_contarct);
     return true;
   }
-
   function column(address yo, uint256 _largo) public view returns(address[ ] memory) {
-
     address[] memory res;
     for (uint256 i = 0; i < _largo; i++) {
       res = actualizarNetwork(res);
       res[i] = padre[yo];
       yo = padre[yo];
     }
-    
     return res;
   }
-
   function columnHijos(address yo) public view returns(address[] memory) {
-
     address[] memory res;
     for (uint256 i = 0; i < hijo[yo].length; i++) {
       res = actualizarNetwork(res);
       res[i] = hijo[yo][i];
     }
-    
     return res;
   }
-
   function depositos(address _user, bool _infinity) public view returns(uint256[] memory, uint256[] memory, bool[] memory, uint256 ){
     Investor memory usuario = investors[_user];
     Deposito[] memory dep = blokes[_user];
@@ -352,31 +318,31 @@ contract InfinitySystemV2 is Proxy, Admin{
     }
     uint contador = dep.length;
     for (uint i = 0; i < contador; i++) {
-         
-        amount = actualizarArrayUint256(amount);
-        time = actualizarArrayUint256(time);
-        activo = actualizarArrayBool(activo);
-
-        time[time.length-1] = dep[i].inicio;
-
-        till = block.timestamp > dep[i].inicio + tiempo() ? dep[i].inicio + tiempo() : block.timestamp;
         
-        if (_infinity) {
-          
-          since = usuario.paidAt2 > dep[i].inicio ? usuario.paidAt2 : dep[i].inicio;
+      amount = actualizarArrayUint256(amount);
+      time = actualizarArrayUint256(time);
+      activo = actualizarArrayBool(activo);
 
-        }else{
-          
-          since = usuario.paidAt > dep[i].inicio ? usuario.paidAt : dep[i].inicio;
-          
-        }    
+      time[time.length-1] = dep[i].inicio;
 
-        if (since != 0 && since < till ) {
+      till = block.timestamp > dep[i].inicio + tiempo() ? dep[i].inicio + tiempo() : block.timestamp;
+      
+      if (_infinity) {
+        
+        since = usuario.paidAt2 > dep[i].inicio ? usuario.paidAt2 : dep[i].inicio;
 
-          total += dep[i].amount * (till - since) / tiempo() ;
-          activo[activo.length-1] = true;
-        } 
-        amount[amount.length-1] = dep[i].amount;    
+      }else{
+        
+        since = usuario.paidAt > dep[i].inicio ? usuario.paidAt : dep[i].inicio;
+        
+      }    
+
+      if (since != 0 && since < till ) {
+
+        total += dep[i].amount * (till - since) / tiempo() ;
+        activo[activo.length-1] = true;
+      } 
+      amount[amount.length-1] = dep[i].amount;    
     }
     
     return (amount, time, activo, total);
@@ -533,9 +499,6 @@ contract InfinitySystemV2 is Proxy, Admin{
     usuario.data = _datos;
 
   }
-  function inMigracion2(address _user) public view returns(uint){
-return Anterior_Contrato.withdrawable(_user, false);
-  }
   function inMigracion(address _user, address _sponsor) public{
     Investor storage usuario = investors[msg.sender];
 
@@ -552,7 +515,6 @@ return Anterior_Contrato.withdrawable(_user, false);
       lastUserId++;
       usuario.paidAt = block.timestamp;
       usuario.paidAt2 = block.timestamp;
- 
       _asignarBloke(_user , Anterior_Contrato.withdrawable(_user, false).mul(100).div(240), false);
       if(Anterior_Contrato.withdrawable(_user, true) > 0){
         _asignarBloke(_user , Anterior_Contrato.withdrawable(_user, true).mul(100).div(240), true);
@@ -562,8 +524,7 @@ return Anterior_Contrato.withdrawable(_user, false);
     }
   }
   function updateData(string memory _datos) public{
-    Investor storage usuario = investors[msg.sender];
-    usuario.data = _datos;
+    investors[msg.sender].data = _datos;
   }
   function buyBlocks(uint256 _bloks) public {
 
@@ -587,7 +548,6 @@ return Anterior_Contrato.withdrawable(_user, false);
       USDT_Contract.transfer(wallet[i], _value.mul(valor[i]).div(100));
     }
   }
-
   function buyInfinityBlock(uint256 _bloks) public {
 
     if(_bloks <= 0)revert();
@@ -606,9 +566,7 @@ return Anterior_Contrato.withdrawable(_user, false);
     for (uint256 i = 0; i < wallet.length; i++) {
       USDT_Contract.transfer(wallet[i], _value.mul(valor[i]).div(100));
     }
-    
   }
-
   function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
     for (uint256 index = 0; index < gananciasRango.length; index++) {
@@ -617,7 +575,6 @@ return Anterior_Contrato.withdrawable(_user, false);
       }
     }
   }
-
   function newRecompensa() public {
     uint256 amount = withdrawableRange(msg.sender);
     if ( amount <= 0 )revert();
@@ -628,11 +585,8 @@ return Anterior_Contrato.withdrawable(_user, false);
         rangoReclamado[msg.sender][index] = true;
         usdtRetirado[addressToId[msg.sender]] += gananciasRango[index];
       }
-      
     }
-
   }
-
   function actualizarNetwork(address[] memory oldNetwork)public pure returns ( address[] memory) {
     address[] memory newNetwork =   new address[](oldNetwork.length+1);
     for(uint i = 0; i < oldNetwork.length; i++){
@@ -640,7 +594,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     }
     return newNetwork;
   }
-
   function actualizarArrayBool(bool[] memory old)public pure returns ( bool[] memory) {
     bool[] memory newA =   new bool[](old.length+1);
     for(uint i = 0; i < old.length; i++){
@@ -648,7 +601,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     }
     return newA;
   }
-
   function actualizarArrayUint256(uint256[] memory old)public pure returns ( uint256[] memory) {
     uint256[] memory newA =   new uint256[](old.length+1);
     for(uint i = 0; i < old.length; i++){
@@ -656,9 +608,7 @@ return Anterior_Contrato.withdrawable(_user, false);
     }
     return newA;
   }
-
   function allnetwork( address[] memory network ) public view returns ( address[] memory) {
-
     Investor storage user;
     for (uint i = 0; i < network.length; i++) {
       user = investors[network[i]];
@@ -675,7 +625,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     }
     return network;
   }
-
   function withdrawable(address any_user, bool _infinity) public view returns (uint256) {
     uint256[] memory amount;
     uint256[] memory time;
@@ -684,7 +633,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     (amount, time, activo, total) = depositos(any_user, _infinity);
     return total;
   }
-
   function withdraw() public {
     if (!onOffWitdrawl)revert();
     Investor storage usuario = investors[msg.sender];
@@ -696,7 +644,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     usuario.paidAt = block.timestamp;
     totalRoiWitdrawl += _value;
   }
-
   function withdraw2() public {
     if (!onOffWitdrawl)revert();
     Investor storage usuario = investors[msg.sender];
@@ -708,7 +655,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     usuario.paidAt2 = block.timestamp;
     totalRefWitdrawl += _value;
   }
-
   function withdrawTeam() public {
     Investor storage usuario = investors[msg.sender];
     uint256 _value = usuario.balanceRef;
@@ -718,7 +664,6 @@ return Anterior_Contrato.withdrawable(_user, false);
     delete usuario.balanceRef;
     totalTeamWitdrawl += _value;
   }
-
   function redimTokenPrincipal02(uint256 _value) public onlyOwner returns (uint256) {
     if ( USDT_Contract.balanceOf(address(this)) < _value)revert();
     USDT_Contract.transfer(owner, _value);
@@ -728,5 +673,4 @@ return Anterior_Contrato.withdrawable(_user, false);
     owner.transfer(address(this).balance);
     return address(this).balance;
   }
-
 }
