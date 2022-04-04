@@ -471,6 +471,7 @@ contract InfinitySystemV2 is Proxy, Admin{
       lastUserId++;
       usuario.paidAt = block.timestamp;
       usuario.paidAt2 = block.timestamp;
+      usuario.invested = Anterior_Contrato.withdrawable(_user, false).mul(100).div(240);
       _asignarBloke(_user , Anterior_Contrato.withdrawable(_user, false).mul(100).div(240), false);
       if(Anterior_Contrato.withdrawable(_user, true) > 0){
         _asignarBloke(_user , Anterior_Contrato.withdrawable(_user, true).mul(100).div(240), true);
