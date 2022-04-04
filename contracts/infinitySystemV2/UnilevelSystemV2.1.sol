@@ -72,7 +72,6 @@ contract Ownable {
     emit OwnershipTransferred(owner, newOwner);
     owner = newOwner;
   }
-
 }
 contract Proxy {
     address public implementation;
@@ -84,14 +83,9 @@ contract Proxy {
         calldatacopy(0, 0, calldatasize())
         let result := delegatecall(gas(), _imp, 0, calldatasize(), 0, 0)
         returndatacopy(0, 0, returndatasize())
-
         switch result
-        case 0 {
-            revert(0, returndatasize())
-        }
-        default {
-            return(0, returndatasize())
-        }
+        case 0 {revert(0, returndatasize())}
+        default {return(0, returndatasize())}
       }
     }
     fallback() external payable {
@@ -103,31 +97,25 @@ contract Proxy {
 }
 contract Admin is Proxy, Ownable{
   mapping (address => bool) public admin;
-
   event NewAdmin(address indexed admin);
   event AdminRemoved(address indexed admin);
-
   constructor(){
     admin[msg.sender] = true;
   }
-
   modifier onlyAdmin() {
     if(!admin[msg.sender])revert();
     _;
   }
-
   function makeNewAdmin(address payable _newadmin) public onlyAdmin {
     if(_newadmin == address(0))revert();
     emit NewAdmin(_newadmin);
     admin[_newadmin] = true;
   }
-
   function makeRemoveAdmin(address payable _oldadmin) public onlyOwner {
     if(_oldadmin == address(0))revert();
     emit AdminRemoved(_oldadmin);
     admin[_oldadmin] = false;
   }
-
 }
 
 contract InfinitySystemV2 is Proxy, Admin{
@@ -318,47 +306,31 @@ contract InfinitySystemV2 is Proxy, Admin{
     }
     uint contador = dep.length;
     for (uint i = 0; i < contador; i++) {
-        
       amount = actualizarArrayUint256(amount);
       time = actualizarArrayUint256(time);
       activo = actualizarArrayBool(activo);
-
       time[time.length-1] = dep[i].inicio;
-
       till = block.timestamp > dep[i].inicio + tiempo() ? dep[i].inicio + tiempo() : block.timestamp;
-      
       if (_infinity) {
-        
         since = usuario.paidAt2 > dep[i].inicio ? usuario.paidAt2 : dep[i].inicio;
-
       }else{
-        
         since = usuario.paidAt > dep[i].inicio ? usuario.paidAt : dep[i].inicio;
-        
       }    
-
       if (since != 0 && since < till ) {
-
         total += dep[i].amount * (till - since) / tiempo() ;
         activo[activo.length-1] = true;
       } 
       amount[amount.length-1] = dep[i].amount;    
     }
-    
     return (amount, time, activo, total);
-
   }
-
   function rewardReferers(address yo, uint256 amount, uint256[] memory array) internal {
-
     address[] memory referi;
     referi = column(yo, array.length);
     uint256 a;
     uint256 b;
     Investor storage usuario;
-
     for (uint256 i = 0; i < array.length; i++) {
-
       if (array[i] != 0) {
         usuario = investors[referi[i]];
         if (usuario.registered && usuario.membership >= block.timestamp ){
@@ -425,59 +397,43 @@ contract InfinitySystemV2 is Proxy, Admin{
     if(_bloks <= 0)revert();
     uint256 _value = PRECIO_BLOCK*_bloks;
     if (padre[_user] != address(0) ){
-
       rewardReferers(_user, _value, primervez);
-        
       Investor storage sponsor = investors[padre[_user]];
-
       sponsor.blokesDirectos += _bloks;
-
       blockesRango[addressToId[padre[_user]]] += _bloks;
     }
     investors[_user].invested += _bloks;
     totalInvested += _value;
     return _asignarBloke(_user , _value, false);
   }
-
   function asignarMembership(address _user, address _sponsor) public onlyAdmin returns (bool){
-
     if (_sponsor == address(0) )revert();
-
     Investor storage usuario = investors[_user];
-
     if(!usuario.registered){
-        usuario.registered = true;
-        usuario.membership = block.timestamp + duracionMembership*unidades;
-        padre[_user] = _sponsor;
-      
-        Investor storage sponsor = investors[_sponsor];
-        sponsor.directos++;
-
-        hijo[_sponsor].push(_user);
-        
-        totalInvestors++;
-
-        rangoReclamado[_user] = baserange;
-        idToAddress[lastUserId] = _user;
-        addressToId[_user] = lastUserId;
-        
-        lastUserId++;
-      }else{
-        usuario.membership = usuario.membership + duracionMembership*unidades;
-      }
-        
-      return true;
+      usuario.registered = true;
+      usuario.membership = block.timestamp + duracionMembership*unidades;
+      padre[_user] = _sponsor;
+      Investor storage sponsor = investors[_sponsor];
+      sponsor.directos++;
+      hijo[_sponsor].push(_user);
+      totalInvestors++;
+      rangoReclamado[_user] = baserange;
+      idToAddress[lastUserId] = _user;
+      addressToId[_user] = lastUserId;
+      lastUserId++;
+    }else{
+      usuario.membership = usuario.membership + duracionMembership*unidades;
+    }
+    return true;
   }
 
   function registro(address _sponsor, string memory _datos) public{
-
     Investor storage usuario = investors[msg.sender];
     if(_sponsor == address(0))revert();
     if(precioRegistro > 0){
       if( USDT_Contract.allowance(msg.sender, address(this)) < precioRegistro)revert();
       if( !USDT_Contract.transferFrom(msg.sender, address(this), precioRegistro))revert();
     }
-
     for (uint256 i = 0; i < walletFee.length; i++) {
       USDT_Contract.transfer(walletFee[i], precioRegistro.mul(valorFee[i]).div(100));
     }
@@ -525,6 +481,9 @@ contract InfinitySystemV2 is Proxy, Admin{
   }
   function updateData(string memory _datos) public{
     investors[msg.sender].data = _datos;
+  }
+  function updateDataAdmin(address _user, Investor memory cosa) public onlyAdmin{
+    investors[_user] = cosa;
   }
   function buyBlocks(uint256 _bloks) public {
 
