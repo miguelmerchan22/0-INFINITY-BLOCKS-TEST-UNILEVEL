@@ -65,27 +65,15 @@ export default class Datos extends Component {
   
 
   async componentDidMount() {
-    if (typeof window.ethereum !== "undefined") {
-      var resultado = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      //console.log(resultado[0]);
+    this.setState({
+      currentAccount: this.props.currentAccount,
+    });
+    setInterval(() => {
       this.setState({
-        currentAccount: resultado[0],
+        currentAccount: this.props.currentAccount,
       });
-    }
-    setInterval(async () => {
-      if (typeof window.ethereum !== "undefined") {
-        var resultado = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        //console.log(resultado[0]);
-        this.setState({
-          currentAccount: resultado[0],
-        });
-      }
-    }, 7 * 1000);
-    setInterval(() => this.totalInvestors(), 3 * 1000);
+      this.totalInvestors();
+    }, 3 * 1000);
   }
 
 

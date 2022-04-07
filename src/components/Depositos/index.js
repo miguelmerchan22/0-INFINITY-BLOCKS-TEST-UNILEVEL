@@ -54,29 +54,20 @@ export default class Depositos extends Component {
   }
 
   async componentDidMount() {
-    if (typeof window.ethereum !== 'undefined') {           
-      var resultado = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        //console.log(resultado[0]);
-        this.setState({
-          currentAccount: resultado[0]
-        })
 
-    }
-    setInterval(async() => {
-      if (typeof window.ethereum !== 'undefined') {           
-        var resultado = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          //console.log(resultado[0]);
-          this.setState({
-            currentAccount: resultado[0]
-          })
-  
-      }
-
-    },7*1000);
-    setInterval(() => this.Investors2(),3*1000);
-    setInterval(() => this.Investors3(),3*1000);
-    setInterval(() => this.Investors(),3*1000);
-    setInterval(() => this.Link(),3*1000);
+    this.setState({
+      currentAccount: this.props.currentAccount,
+    });
+    
+    setInterval(() => {
+      this.setState({
+        currentAccount: this.props.currentAccount,
+      });
+      this.Investors2();
+      this.Investors3();
+      this.Investors();
+      this.Link();
+    },3*1000);
     
   };
 

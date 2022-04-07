@@ -10,14 +10,14 @@ export default class Home extends Component {
   render() {
 
       return (
-        <>
-          <Oficina contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
+        <> 
+          <Oficina contractAddress={this.props.contractAddress} wallet={this.props.wallet} currentAccount={this.props.currentAccount}/>
 
-          <CrowdFunding contractAddress={this.props.contractAddress}  wallet={this.props.wallet} />
+          <CrowdFunding contractAddress={this.props.contractAddress}  wallet={this.props.wallet} currentAccount={this.props.currentAccount}/>
 
-          <Datos admin={this.props.admin} contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
+          <Datos admin={this.props.admin} contractAddress={this.props.contractAddress} wallet={this.props.wallet} currentAccount={this.props.currentAccount}/>
 
-          <Depositos contractAddress={this.props.contractAddress} wallet={this.props.wallet} />
+          <Depositos contractAddress={this.props.contractAddress} wallet={this.props.wallet} currentAccount={this.props.currentAccount}/>
 
         </>
       );

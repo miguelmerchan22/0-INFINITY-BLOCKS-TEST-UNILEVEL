@@ -93,29 +93,15 @@ export default class CrowdFunding extends Component {
   }
 
   async componentDidMount() {
-    if (typeof window.ethereum !== "undefined") {
-      var resultado = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      //console.log(resultado[0]);
-      this.setState({
-        currentAccount: resultado[0],
-      });
-    }
-    setInterval(async () => {
-      if (typeof window.ethereum !== "undefined") {
-        var resultado = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        //console.log(resultado[0]);
-        this.setState({
-          currentAccount: resultado[0],
-        });
-      }
-    }, 3 * 1000);
-
-    setInterval(() => this.estado(), 3 * 1000);
+    
+    this.setState({
+      currentAccount: this.props.currentAccount,
+    });
     setInterval(() => {
+      this.setState({
+        currentAccount: this.props.currentAccount,
+      });
+      this.estado();
       this.estado2();
       this.hijos();
     }, 3 * 1000);

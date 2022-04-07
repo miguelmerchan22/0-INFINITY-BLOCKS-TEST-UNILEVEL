@@ -65,28 +65,15 @@ export default class Oficina extends Component {
   }
 
   async componentDidMount() {
-    if (typeof window.ethereum !== "undefined") {
-      var resultado = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      //console.log(resultado[0]);
-      this.setState({
-        currentAccount: resultado[0],
-      });
-    }
-    setInterval(async () => {
-      if (typeof window.ethereum !== "undefined") {
-        var resultado = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        //console.log(resultado[0]);
-        this.setState({
-          currentAccount: resultado[0],
-        });
-      }
-    }, 7 * 1000);
+    
+    this.setState({
+      currentAccount: this.props.currentAccount,
+    });
 
     setInterval(() => {
+      this.setState({
+        currentAccount: this.props.currentAccount,
+      });
       this.Investors2();
       this.Investors3();
       this.Investors();

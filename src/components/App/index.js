@@ -18,7 +18,7 @@ class App extends Component {
       admin: false,
       metamask: false,
       conectado: false,
-      currentAccount: null,
+      currentAccount: "0x0000000000000000000000000000000000000000",
       binanceM:{
         web3: null,
         contractToken: null,
@@ -131,11 +131,51 @@ class App extends Component {
       </>
       );
 
-      return(
-        <div className="row">
-          <Home admin={this.state.admin} contractAddress={cons.SC} version="5" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
-        </div>
-      );
+      var getString = "";
+      var loc = document.location.href;
+      var verWallet = cons.WS;
+      //console.log(loc);
+      if(loc.indexOf('?')>0){
+                
+        getString = loc.split('?')[1];
+        getString = getString.split('#')[0];
+        getString = getString.split('&')[0];
+
+        verWallet = getString.split('=')[1];
+        
+        getString = getString.split('=')[0];
+
+        console.log(getString)
+  
+      }
+    
+    switch (getString) {
+      case "view":
+        return(
+          <div className="row">
+            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={this.state.binanceM} currentAccount={verWallet}/>
+          </div>
+        );
+      case "old":
+        return(
+          <div className="row">
+            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={{
+          web3: this.state.binanceM.web3,
+          contractToken: this.state.binanceM.contractToken,
+          contractBinary: this.state.binanceM.contractInfinity,
+          contractInfinity: this.state.binanceM.contractInfinity
+        }}  currentAccount={verWallet}/>
+          </div>
+        );
+      default:
+        return(
+          <div className="row">
+            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
+          </div>
+        );
+    }
+
+      
   
   }
 }
