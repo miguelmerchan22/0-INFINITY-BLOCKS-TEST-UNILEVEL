@@ -398,8 +398,7 @@ contract InfinitySystemV2 is Proxy, Admin{
     uint256 _value = PRECIO_BLOCK*_bloks;
     if (padre[_user] != address(0) ){
       rewardReferers(_user, _value, primervez);
-      Investor storage sponsor = investors[padre[_user]];
-      sponsor.blokesDirectos += _bloks;
+      investors[padre[_user]].blokesDirectos += _bloks;
       blockesRango[addressToId[padre[_user]]] += _bloks;
     }
     investors[_user].invested += _bloks;
@@ -413,8 +412,7 @@ contract InfinitySystemV2 is Proxy, Admin{
       usuario.registered = true;
       usuario.membership = block.timestamp + duracionMembership*unidades;
       padre[_user] = _sponsor;
-      Investor storage sponsor = investors[_sponsor];
-      sponsor.directos++;
+      investors[_sponsor].directos++;
       hijo[_sponsor].push(_user);
       totalInvestors++;
       rangoReclamado[_user] = baserange;
@@ -441,8 +439,7 @@ contract InfinitySystemV2 is Proxy, Admin{
       usuario.registered = true;
       usuario.membership = block.timestamp + duracionMembership*unidades;
       padre[msg.sender] = _sponsor;
-      Investor storage sponsor = investors[_sponsor];
-      sponsor.directos++;
+      investors[_sponsor].directos++;
       hijo[_sponsor].push(msg.sender);
       totalInvestors++;
       rangoReclamado[msg.sender] = baserange;
@@ -509,13 +506,9 @@ contract InfinitySystemV2 is Proxy, Admin{
     }
   }
   function buyInfinityBlock(uint256 _bloks) public {
-
-    if(_bloks <= 0)revert();
     Investor storage usuario = investors[msg.sender];
-    if (!usuario.registered)revert();
-    if (block.timestamp >= usuario.membership )revert();
     uint256 _value = PRECIO_BLOCK*_bloks;
-    if( usuario.balanceInfinit < _value)revert();
+    if (!usuario.registered || block.timestamp >= usuario.membership || _bloks == 0 ||usuario.balanceInfinit < _value)revert();
     usuario.balanceInfinit -= _value;
     if (padre[msg.sender] != address(0) ){
       rewardReferers(msg.sender, _value, primervez);
@@ -523,9 +516,6 @@ contract InfinitySystemV2 is Proxy, Admin{
       blockesRango[addressToId[padre[msg.sender]]] += _bloks;
     }
     infinityBlokes[msg.sender].push(Deposito(block.timestamp,(_value.mul(porcent)).div(100),(_value.mul(porcent)).div(100)));
-    for (uint256 i = 0; i < wallet.length; i++) {
-      USDT_Contract.transfer(wallet[i], _value.mul(valor[i]).div(100));
-    }
   }
   function withdrawableRange(address any_user) public view returns (uint256 amount) {
     Investor memory user = investors[any_user];
