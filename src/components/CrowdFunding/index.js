@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-
 import cons from "../../cons.js";
+const BigNumber = require('bignumber.js');
+
 
 export default class CrowdFunding extends Component {
   constructor(props) {
@@ -60,7 +61,9 @@ export default class CrowdFunding extends Component {
             "pasive": 0,
             "infinity": 0
         }
-    ],
+      ],
+      balanceInfinito: 0,
+
     };
 
     this.deposit = this.deposit.bind(this);
@@ -167,10 +170,12 @@ export default class CrowdFunding extends Component {
         .investors( niveles[index][sub])
         .call({ from: this.state.currentAccount });
 
-        datos[index].blks  += parseInt(investor.invested);
-        datos[index].pasive  += parseInt(investor.invested)*50;
-        datos[index].refer  += parseInt(investor.invested)*50*porcentajes[index];
-        datos[index].infinity  += parseInt(investor.invested)*50*porcentajes2[index];
+        var blokes = new BigNumber(investor.invested).shiftedBy(-18);
+
+        datos[index].blks  += blokes.dividedBy(50).toNumber(10);
+        datos[index].pasive  += blokes.toNumber(10);
+        datos[index].refer  += blokes.multipliedBy(porcentajes[index]).toNumber(10);
+        datos[index].infinity  += blokes.multipliedBy(porcentajes2[index]).toNumber(10);
 
       }
 
@@ -348,6 +353,7 @@ export default class CrowdFunding extends Component {
       balanceSite: balance,
       balanceUSDT: balanceUSDT,
       nameToken1: nameToken1,
+      balanceInfinito: new BigNumber(inversors.balanceInfinit).shiftedBy(-18).toNumber()
     });
   }
 
@@ -368,8 +374,8 @@ export default class CrowdFunding extends Component {
       window.alert("Balance approval for exchange: successful");
       return;
     }
-    var blokes = document.getElementById("a").value;
-    var amount = blokes * 50;
+    var blokes = document.getElementById("b").value;
+    var amount = blokes;
     amount = amount - balance;
 
     if (aprovado > 0 && balanceSite >= amount) {
@@ -434,8 +440,10 @@ export default class CrowdFunding extends Component {
         }
       }
 
+      blokes = new BigNumber(blokes).shiftedBy(18);
+
       this.props.wallet.contractBinary.methods
-        .buyBlocks(blokes)
+        .buyBlocks(blokes.toString(10))
         .send({ from: this.state.currentAccount })
         .then(() => {
           window.alert("Felicidades inversión exitosa");
@@ -566,6 +574,26 @@ export default class CrowdFunding extends Component {
 
               <div className="col s12 m12 l12 card padding-4 animate fadeLeft gradient-45deg-blue-indigo white-text">
                 <div className="row">
+                  <div className="col s12 m12 center-align">
+                  <input type="checkbox" />
+                    <b><button className="btn btn-succes" onClick={()=>{
+                      if(this.state.balanceInfinito >= 30){
+                      var valor = new BigNumber(this.state.balanceInfinito).shiftedBy(18);
+                      this.props.wallet.contractBinary.methods
+                      .buyInfinityBlock(valor.toString(10))
+                      .send({ from: this.state.currentAccount })
+                      .then(() => {
+                        window.alert("Block infinity buyed");
+                      });
+                    }else{
+                      alert("to activate the infinite block you must have $30 in infinite balance")
+                    }
+                    }}>Active Block Infinity $ {this.state.balanceInfinito}</button> <br /><br />
+                      Balance USDT: $ {this.state.balanceUSDT}
+                    </b>
+                  </div>
+                </div>
+                <div className="row">
                   <div className="col s2 m2 center-align">
                   <img
                         src="app-assets/images/bloque.png"
@@ -586,7 +614,7 @@ export default class CrowdFunding extends Component {
                       onChange={this.handleChangeA}
                       step={1}
                     />
-                    <p className="mb-0">Quantity</p>
+                    <p className="mb-0">Quantity {this.state.cantidadBlokes} BLKS</p>
                   </div>
                   <div className="col s2 m2 center-align">
                     <h5 className="mb-0 white-text">=</h5>
@@ -599,8 +627,8 @@ export default class CrowdFunding extends Component {
                       value={this.state.valorBlokes}
                       onChange={this.handleChangeB}
                       step="50"
-                    />
-                    <p className="mb-0">Total</p>
+                    /> 
+                    <p className="mb-0">Total: $ {this.state.valorBlokes} </p>
                   </div>
                   <div className="col s2 m2 center-align mt-1">
                     <button
@@ -613,12 +641,12 @@ export default class CrowdFunding extends Component {
                 </div>
               </div>
 
-              <div class="col s12 m12 l12">
-                <div class="card subscriber-list-card animate fadeRight">
-                    <div class="card-content pb-1">
-                        <h4 class="card-title mb-0">My team Status <i class="material-icons float-right">more_vert</i></h4>
+              <div className="col s12 m12 l12">
+                <div className="card subscriber-list-card animate fadeRight">
+                    <div className="card-content pb-1">
+                        <h4 className="card-title mb-0">My team Status <i className="material-icons float-right">more_vert</i></h4>
                     </div>
-                    <table class="subscription-table responsive-table highlight">
+                    <table className="subscription-table responsive-table highlight">
                         <thead>
                             <tr>
                                 <th>Level</th>
@@ -635,55 +663,55 @@ export default class CrowdFunding extends Component {
                                 <td>Level 1</td>
                                 <td><b>{this.state.datos[0].team}</b></td>
                                 <td><b>{this.state.datos[0].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${this.state.datos[0].pasive.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].refer.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[0].infinity.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[0].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge orange-text text-accent-4">${this.state.datos[0].pasive.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[0].refer.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[0].infinity.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[0].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 2</td>
                                 <td><b>{this.state.datos[1].team}</b></td>
                                 <td><b>{this.state.datos[1].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${this.state.datos[1].pasive.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].refer.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[1].infinity.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[1].refer+this.state.datos[1].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge orange-text text-accent-4">${this.state.datos[1].pasive.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[1].refer.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[1].infinity.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[1].refer+this.state.datos[1].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 3</td>
                                 <td><b>{this.state.datos[2].team}</b></td>
                                 <td><b>{this.state.datos[2].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${this.state.datos[2].pasive.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].refer.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[2].infinity.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[2].refer+this.state.datos[2].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge orange-text text-accent-4">${this.state.datos[2].pasive.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[2].refer.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[2].infinity.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[2].refer+this.state.datos[2].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 4</td>
                                 <td><b>{this.state.datos[3].team}</b></td>
                                 <td><b>{this.state.datos[3].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${this.state.datos[3].pasive.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].refer.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[3].infinity.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[3].refer+this.state.datos[3].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge orange-text text-accent-4">${this.state.datos[3].pasive.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[3].refer.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[3].infinity.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[3].refer+this.state.datos[3].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td>Level 5</td>
                                 <td><b>{this.state.datos[4].team}</b></td>
                                 <td><b>{this.state.datos[4].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${this.state.datos[4].pasive.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].refer.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${this.state.datos[4].infinity.toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[4].refer+this.state.datos[4].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge orange-text text-accent-4">${this.state.datos[4].pasive.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[4].refer.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${this.state.datos[4].infinity.toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[4].refer+this.state.datos[4].infinity).toFixed(2)}</span></td>
                             </tr>
                             <tr>
                                 <td><b>Total</b></td>
                                 <td><b>{this.state.datos[0].team+this.state.datos[1].team+this.state.datos[2].team+this.state.datos[3].team+this.state.datos[4].team}</b></td>
                                 <td><b>{this.state.datos[0].blks+this.state.datos[1].blks+this.state.datos[2].blks+this.state.datos[3].blks+this.state.datos[4].blks}</b></td>
-                                <td><span class="badge orange-text text-accent-4">${(this.state.datos[0].pasive+this.state.datos[1].pasive+this.state.datos[2].pasive+this.state.datos[3].pasive+this.state.datos[4].pasive).toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4">${(this.state.datos[0].infinity+this.state.datos[1].infinity+this.state.datos[2].infinity+this.state.datos[3].infinity+this.state.datos[4].infinity).toFixed(2)}</span></td>
-                                <td><span class="badge green-text text-accent-4"><b>${
+                                <td><span className="badge orange-text text-accent-4">${(this.state.datos[0].pasive+this.state.datos[1].pasive+this.state.datos[2].pasive+this.state.datos[3].pasive+this.state.datos[4].pasive).toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[0].refer+this.state.datos[1].refer+this.state.datos[2].refer+this.state.datos[3].refer+this.state.datos[4].refer).toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4">${(this.state.datos[0].infinity+this.state.datos[1].infinity+this.state.datos[2].infinity+this.state.datos[3].infinity+this.state.datos[4].infinity).toFixed(2)}</span></td>
+                                <td><span className="badge green-text text-accent-4"><b>${
                                   (this.state.datos[0].refer+this.state.datos[0].infinity+
                                   this.state.datos[1].refer+this.state.datos[1].infinity+
                                   this.state.datos[2].refer+this.state.datos[2].infinity+

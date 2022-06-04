@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+const BigNumber = require('bignumber.js');
 
 export default class Oficina extends Component {
   constructor(props) {
@@ -200,7 +201,7 @@ export default class Oficina extends Component {
       registered: usuario.registered,
       balanceRef: usuario.balanceRef / 10 ** decimales,
       totalRef: usuario.totalRef / 10 ** decimales,
-      invested: usuario.invested,
+      invested: new BigNumber(usuario.invested).shiftedBy(-18).dividedBy(50),
       paidAt: usuario.paidAt / 10 ** decimales,
       my: usuario.withdrawable,
       withdrawableInfinity: withdrawableInfinity / 10**decimales,
@@ -340,15 +341,15 @@ export default class Oficina extends Component {
         .investors( this.state.currentAccount )
         .call({ from: this.state.currentAccount });
 
-    var rango = investor.blokesDirectos ;
+    var rango = (new BigNumber(investor.blokesDirectos).shiftedBy(-18).toNumber())/50;
     var rangoArray = [];
     var rangoEstilo = "btn-secondary";
     var gananciasRango = "Claimed";
     var funcionRango = () => {};
     var cantidad = "";
     var imageRango = 0;
-    var netxRango = [0, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
-    var nameRango = ["","Infinity Lord / Madame","Infinity Baron / Baroness",
+    var netxRango = [0, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 100000, 300000, 500000];
+    var nameRango = ["","BABY","SENIOR","MASTER","Infinity Lord / Madame","Infinity Baron / Baroness",
     "Infinity Duke / Duchess","Infinity King / Queen 👑","Infinity Emperor/ Empress",
     "Infinity Conqueror","Infinity World Lord / Madame","Infinity GOD" ]
 

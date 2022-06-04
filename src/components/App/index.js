@@ -7,8 +7,9 @@ import TronLinkGuide from "../TronLinkGuide";
 import cons from "../../cons"
 
 import abiToken from "../../token";
-import abiBinario from "../../unilevel";
 import abiInfinity from "../../infinity-abi";
+
+var chainId = cons.chainId;
 
 class App extends Component {
   constructor(props) {
@@ -30,7 +31,11 @@ class App extends Component {
 
   async componentDidMount() {
 
-      if (typeof window.ethereum !== 'undefined') {           
+      if (typeof window.ethereum !== 'undefined') {        
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: chainId}],
+        });       
         var resultado = await window.ethereum.request({ method: 'eth_requestAccounts' });
           //console.log(resultado[0]);
           this.setState({
@@ -47,7 +52,11 @@ class App extends Component {
       }
 
       setInterval(async() => {
-        if (typeof window.ethereum !== 'undefined') {           
+        if (typeof window.ethereum !== 'undefined') {        
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainId}],
+          });       
           var resultado = await window.ethereum.request({ method: 'eth_requestAccounts' });
             //console.log(resultado[0]);
             this.setState({
@@ -55,6 +64,34 @@ class App extends Component {
               metamask: true,
               conectado: true
             })
+
+            try {         
+              var web3 = new Web3(window.web3.currentProvider);// mainet... metamask
+              var contractToken = new web3.eth.Contract(
+                abiToken,
+                cons.TOKEN
+              );
+              var contractBinary = new web3.eth.Contract(
+                abiInfinity,
+                cons.INFINITY
+        
+              );
+        
+              var isAdmin = await contractBinary.methods.admin(this.state.currentAccount).call({from:this.state.currentAccount});
+        
+                this.setState({
+                  binanceM:{
+                    web3: web3,
+                    contractToken: contractToken,
+                    contractBinary: contractBinary
+                  },
+                  admin: isAdmin,
+                })
+        
+              //web3 = new Web3(new Web3.providers.HttpProvider("https://data-seed-prebsc-1-s1.binance.org:8545/"));
+            } catch (error) {
+                alert(error);
+            } 
   
         } else {          
           this.setState({
@@ -66,50 +103,7 @@ class App extends Component {
       },7*1000);
 
 
-    try {         
-      var web3 = new Web3(window.web3.currentProvider);// mainet... metamask
-      var contractToken = new web3.eth.Contract(
-        abiToken,
-        cons.TOKEN
-      );
-      var contractBinary = new web3.eth.Contract(
-        abiInfinity,
-        cons.INFINITY
-
-      );
-      var contractInfinity = new web3.eth.Contract(
-        abiBinario,
-        cons.SC
-
-      );
-
-      var isAdmin = await contractBinary.methods.admin(this.state.currentAccount).call({from:this.state.currentAccount});
-      var sponsor = await contractBinary.methods.padre(this.state.currentAccount).call({from:this.state.currentAccount});
-
-      var user = await contractBinary.methods.investors(this.state.currentAccount).call({from:this.state.currentAccount});
-      var userInfinity = await contractInfinity.methods.investors(this.state.currentAccount).call({from:this.state.currentAccount});
-
-      if(userInfinity.invested > 0 && !user.registered){
-        alert("there was an adjustment in the smart contract if you agree to the new terms please accept the following transaction to migrate the remaining blocks to this new contract, we are sorry for the inconvenience if you want to recover your progress please contact one of our leaders, happy earnings, we keep working for you.")
-        contractBinary.methods.inMigracion(this.state.currentAccount, sponsor).send({from:this.state.currentAccount})
-        .then(()=>{alert("thanks for updating the terms of the contract")})
-        .catch(()=>{alert("there were problems updating please contact support")})
-        
-      }
-
-      this.setState({
-        binanceM:{
-          web3: web3,
-          contractToken: contractToken,
-          contractBinary: contractBinary,
-          contractInfinity: contractInfinity
-        },
-        admin: isAdmin,
-      })
-      //web3 = new Web3(new Web3.providers.HttpProvider("https://data-seed-prebsc-1-s1.binance.org:8545/"));
-    } catch (error) {
-        alert(error);
-    }  
+     
 
   }
 
@@ -153,24 +147,13 @@ class App extends Component {
       case "view":
         return(
           <div className="row">
-            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={this.state.binanceM} currentAccount={verWallet}/>
-          </div>
-        );
-      case "old":
-        return(
-          <div className="row">
-            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={{
-          web3: this.state.binanceM.web3,
-          contractToken: this.state.binanceM.contractToken,
-          contractBinary: this.state.binanceM.contractInfinity,
-          contractInfinity: this.state.binanceM.contractInfinity
-        }}  currentAccount={verWallet}/>
+            <Home admin={this.state.admin} contractAddress={cons.INFINITY} version="2" wallet={this.state.binanceM} currentAccount={verWallet}/>
           </div>
         );
       default:
         return(
           <div className="row">
-            <Home admin={this.state.admin} contractAddress={cons.SC} version="2" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
+            <Home admin={this.state.admin} contractAddress={cons.INFINITY} version="2" wallet={this.state.binanceM} currentAccount={this.state.currentAccount}/>
           </div>
         );
     }
